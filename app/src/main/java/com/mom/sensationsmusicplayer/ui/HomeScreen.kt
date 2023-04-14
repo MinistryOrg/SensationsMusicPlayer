@@ -19,10 +19,13 @@ fun HomeScreen(){
         modifier = Modifier
             .fillMaxSize()
     ) {
-        Background()
+        Column {
+            Background()
+        }
     }
 }
 
+//Background Color Composable and image.
 @Composable
 fun Background(){
     Box(
@@ -52,4 +55,9 @@ fun Background(){
         }
 
     }
+}
+
+@Composable
+fun TabBar(){
+
 }
