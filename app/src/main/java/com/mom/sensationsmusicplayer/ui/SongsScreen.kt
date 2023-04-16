@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
+import com.mom.sensationsmusicplayer.ui.theme.TextWhite
 
 @Composable
 fun SongScreen(viewModel: MainViewModel){
@@ -47,7 +48,7 @@ fun SongScreen(viewModel: MainViewModel){
                     textAlign = TextAlign.Center,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = TextWhite
                     )
                 }
         }

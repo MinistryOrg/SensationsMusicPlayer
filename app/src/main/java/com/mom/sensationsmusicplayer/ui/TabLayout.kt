@@ -14,10 +14,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mom.sensationsmusicplayer.ui.theme.DividerClr
 import com.mom.sensationsmusicplayer.ui.theme.MainBackgroundColor
+import com.mom.sensationsmusicplayer.ui.theme.NotSelectedTabOption
+import com.mom.sensationsmusicplayer.ui.theme.SelectedTabOption
+import com.mom.sensationsmusicplayer.ui.theme.TextWhite
 
 @Composable
 fun TabLayout(viewModel: MainViewModel) {
@@ -33,7 +36,7 @@ fun TabLayout(viewModel: MainViewModel) {
                 .background(MainBackgroundColor)
                 .clickable( interactionSource = interactionSource,
                     indication = null){},
-            contentColor = Color.White,
+            contentColor = TextWhite,
             indicator = {  },
             divider = {}
         ) {
@@ -50,8 +53,8 @@ fun TabLayout(viewModel: MainViewModel) {
                             text = title,
                             fontSize = if(selected) 18.sp
                             else 16.sp,
-                            color = if (selected) Color.Red
-                            else Color(0xFFC9C9C9)
+                            color = if (selected) SelectedTabOption
+                            else NotSelectedTabOption
                         )
                     },
                     selected = selected,
@@ -63,7 +66,7 @@ fun TabLayout(viewModel: MainViewModel) {
         Divider(
             modifier = Modifier
                 .padding(horizontal = 15.dp),
-            color = Color(0xFF8C95A2),
+            color = DividerClr,
             thickness = 2.dp
         )
         when (tabIndex.value) {
