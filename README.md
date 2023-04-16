@@ -1,2 +1,2 @@
 # SensationsMusicPlayer
- A music player for everyday use
+ A music player for everyday use..
