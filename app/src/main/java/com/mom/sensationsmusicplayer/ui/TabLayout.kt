@@ -69,10 +69,12 @@ fun TabLayout(viewModel: MainViewModel) {
             color = DividerClr,
             thickness = 2.dp
         )
+
         when (tabIndex.value) {
             0 -> SongScreen(viewModel = viewModel)
             1 -> PlaylistScreen(viewModel = viewModel)
             2 -> FolderScreen(viewModel = viewModel)
         }
+
     }
 }

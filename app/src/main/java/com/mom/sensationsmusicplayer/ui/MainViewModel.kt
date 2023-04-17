@@ -6,7 +6,6 @@ import androidx.compose.foundation.gestures.DraggableState
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _tabIndex: MutableLiveData<Int> = MutableLiveData(0)
@@ -27,7 +26,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             false -> Math.floorMod(_tabIndex.value!!.minus(1), tabs.size)
         }
     }
-
     fun updateTabIndex(i: Int) {
         _tabIndex.value = i
     }
