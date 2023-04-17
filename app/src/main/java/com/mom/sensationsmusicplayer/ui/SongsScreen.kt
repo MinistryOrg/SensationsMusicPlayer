@@ -1,11 +1,14 @@
 package com.mom.sensationsmusicplayer.ui
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -13,17 +16,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.data.Song
-import com.mom.sensationsmusicplayer.repository.SongsRepo
 import com.mom.sensationsmusicplayer.repository.SongsRepoImpl
-import com.mom.sensationsmusicplayer.ui.theme.TextWhite
+import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
+import com.mom.sensationsmusicplayer.ui.theme.UnknownSongBackground
 
 @Composable
 fun SongScreen(viewModel: MainViewModel) {
@@ -59,20 +64,59 @@ fun SongScreen(viewModel: MainViewModel) {
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
         ) {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(start = 7.5.dp, end = 7.5.dp, bottom = 100.dp),
+                modifier = Modifier
+                    .fillMaxHeight()
+            ) {
                 items(songsState.value) { song ->
-                    Text(
-                        text = song.title,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = TextWhite,
-                        modifier = Modifier
-                            .padding(16.dp)
-                    )
+
+                    SongItem(song = song.title)
                 }
             }
-
         }
+    }
+}
+
+@Composable
+fun SongItem(
+    song: String
+){
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .padding(horizontal = 15.dp, vertical = 15.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .clip(RoundedCornerShape(15.dp))
+        ) {
+            Box(
+                modifier = Modifier
+                    .background(UnknownSongBackground)
+                    .clip(RoundedCornerShape(12.dp))
+                    .width(140.dp)
+                    .height(135.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.song_icon), // Replace with your image resource
+                    contentDescription = "Image",
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                )
+            }
+        }
+        Text(
+            text = song,
+            fontSize = 14.sp,
+            modifier = Modifier
+                .padding(top = 10.dp),
+            color = TextForArtist,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }
 

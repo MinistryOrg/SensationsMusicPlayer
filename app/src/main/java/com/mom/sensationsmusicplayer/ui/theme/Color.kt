@@ -20,7 +20,8 @@ val UnknownSongBackground = Color(0xFF101D31)
 val SongIconColor = Color(0xFF284A7C)
 
 val MainBackgroundColor = Color(0xFF14243C)
-
+//Color for player Bar
+val PlayerBarClr = Color(0xFF3A3A3A)
 
 
 val PurpleGrey80 = Color(0xFFCCC2DC)
