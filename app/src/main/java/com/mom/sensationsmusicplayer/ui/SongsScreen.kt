@@ -23,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.repository.SongsRepoImpl
+import com.mom.sensationsmusicplayer.ui.theme.SelectedSongTitle
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.UnknownSongBackground
 import kotlinx.coroutines.Dispatchers
@@ -97,6 +99,8 @@ fun SongItem(
     val albumArtBitMap = remember {
         mutableStateOf<ImageBitmap?>(null) // initialize bit map
     }
+    //Prospatheia mhpws otan clickareis to tragoudi na ginetai kokkinos o titlos kai otan clickareis se allo tragoudi na epanerxetai sto aspro
+    val isSelected  = remember { mutableStateOf(false) }
 
     // is going to re-run every time the albumCover value changes
     LaunchedEffect(song.albumCover) {
@@ -112,14 +116,15 @@ fun SongItem(
         Column(
             modifier = Modifier
                 .clip(RoundedCornerShape(15.dp))
+
         ) {
             Box(
                 modifier = Modifier
                     .background(UnknownSongBackground)
-                    .clip(RoundedCornerShape(12.dp))
                     .width(140.dp)
                     .height(135.dp)
                     .clickable {
+                        isSelected.value = !isSelected.value // toggle selection state
                         musicViewModel.playSong(context, song.songUri)
                     }
             ) {
@@ -145,7 +150,11 @@ fun SongItem(
             fontSize = 14.sp,
             modifier = Modifier
                 .padding(top = 10.dp),
-            color = TextForArtist,
+            color = if (isSelected.value){
+                SelectedSongTitle // set desired color when selected
+            } else {
+                TextForArtist // set default color
+            },
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
