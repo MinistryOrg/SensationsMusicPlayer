@@ -1,5 +1,9 @@
 package com.mom.sensationsmusicplayer.ui
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
@@ -19,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -29,6 +35,8 @@ import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.repository.SongsRepoImpl
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.UnknownSongBackground
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun SongScreen(viewModel: MainViewModel) {
@@ -71,8 +79,7 @@ fun SongScreen(viewModel: MainViewModel) {
                     .fillMaxHeight()
             ) {
                 items(songsState.value) { song ->
-
-                    SongItem(song = song.title)
+                    SongItem(song = song.title, song.artist, song.albumCover, context)
                 }
             }
         }
@@ -81,8 +88,20 @@ fun SongScreen(viewModel: MainViewModel) {
 
 @Composable
 fun SongItem(
-    song: String
+    song: String,
+    artist : String,
+    albumCover : String,
+    context: Context
 ){
+    val albumArtBitMap = remember {
+        mutableStateOf<ImageBitmap?>(null) // initialize bit map
+    }
+
+    // is going to re-run every time the albumCover value changes
+    LaunchedEffect(albumCover) {
+        albumArtBitMap.value = loadAlbumArtBitmap(albumCover, context)?.asImageBitmap()
+    }
+
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -100,12 +119,21 @@ fun SongItem(
                     .width(140.dp)
                     .height(135.dp)
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.song_icon), // Replace with your image resource
-                    contentDescription = "Image",
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                )
+                if (albumArtBitMap.value != null){
+                    Image(
+                        bitmap = albumArtBitMap.value!!, // Replace with your image resource
+                        contentDescription = "Image",
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                    )
+                } else {
+                    Image(
+                        painter = painterResource(id = R.drawable.song_icon), // Replace with your image resource
+                        contentDescription = "Image",
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                    )
+                }
             }
         }
         Text(
@@ -120,3 +148,14 @@ fun SongItem(
     }
 }
 
+private suspend fun loadAlbumArtBitmap(uri: String, context: Context): Bitmap? {
+    return withContext(Dispatchers.IO) {
+        try {
+            // loading the album art bitmap from the album art URI
+            val inputStream = context.contentResolver.openInputStream(Uri.parse(uri))
+            BitmapFactory.decodeStream(inputStream)
+        } catch (e: Exception) {
+            null
+        }
+    }
+}

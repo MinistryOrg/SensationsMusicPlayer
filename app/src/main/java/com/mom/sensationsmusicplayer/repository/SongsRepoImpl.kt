@@ -1,6 +1,8 @@
 package com.mom.sensationsmusicplayer.repository
 
+import android.content.ContentUris
 import android.content.Context
+import android.net.Uri
 import android.provider.MediaStore
 import com.mom.sensationsmusicplayer.data.Song
 
@@ -13,9 +15,10 @@ class SongsRepoImpl : SongsRepo{
             MediaStore.Audio.Media.TITLE,
             MediaStore.Audio.Media.ARTIST,
             MediaStore.Audio.Media.ALBUM,
-            MediaStore.Audio.Media.DURATION,
+            MediaStore.Audio.Media.DURATION
         )
         val sortOrder = "${MediaStore.Audio.Media.TITLE} ASC"
+        val albumArtUri = Uri.parse("content://media/external/audio/albumart")
 
         context.contentResolver.query(uri, projection, null, null, sortOrder)?.use { cursor ->
             val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
@@ -31,7 +34,9 @@ class SongsRepoImpl : SongsRepo{
                 val duration = cursor.getLong(durationColumn)
                 val album = cursor.getString(albumColumns)
 
-                val song = Song(id, title, artist,album, duration)
+                val albumCover = ContentUris.withAppendedId(albumArtUri, id)
+
+                val song = Song(id, title, artist,album,albumCover.toString(), duration)
                 println(song.title)
                 songsList.add(song)
             }
