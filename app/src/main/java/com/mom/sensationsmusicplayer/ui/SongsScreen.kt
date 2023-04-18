@@ -3,9 +3,11 @@ package com.mom.sensationsmusicplayer.ui
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.media.MediaPlayer
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.*
@@ -39,7 +41,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
-fun SongScreen(viewModel: MainViewModel) {
+fun SongScreen(viewModel: MainViewModel, musicViewModel: MusicViewModel) {
     val context = LocalContext.current
     val songsState = remember { mutableStateOf(listOf<Song>()) }
 
@@ -79,7 +81,7 @@ fun SongScreen(viewModel: MainViewModel) {
                     .fillMaxHeight()
             ) {
                 items(songsState.value) { song ->
-                    SongItem(song = song.title, song.artist, song.albumCover, context)
+                    SongItem(song = song, context, musicViewModel)
                 }
             }
         }
@@ -88,18 +90,17 @@ fun SongScreen(viewModel: MainViewModel) {
 
 @Composable
 fun SongItem(
-    song: String,
-    artist : String,
-    albumCover : String,
-    context: Context
+    song: Song,
+    context: Context,
+    musicViewModel: MusicViewModel
 ){
     val albumArtBitMap = remember {
         mutableStateOf<ImageBitmap?>(null) // initialize bit map
     }
 
     // is going to re-run every time the albumCover value changes
-    LaunchedEffect(albumCover) {
-        albumArtBitMap.value = loadAlbumArtBitmap(albumCover, context)?.asImageBitmap()
+    LaunchedEffect(song.albumCover) {
+        albumArtBitMap.value = loadAlbumArtBitmap(song.albumCover, context)?.asImageBitmap()
     }
 
     Column(
@@ -118,6 +119,9 @@ fun SongItem(
                     .clip(RoundedCornerShape(12.dp))
                     .width(140.dp)
                     .height(135.dp)
+                    .clickable {
+                        musicViewModel.playSong(context, song.songUri)
+                    }
             ) {
                 if (albumArtBitMap.value != null){
                     Image(
@@ -137,7 +141,7 @@ fun SongItem(
             }
         }
         Text(
-            text = song,
+            text = song.title,
             fontSize = 14.sp,
             modifier = Modifier
                 .padding(top = 10.dp),

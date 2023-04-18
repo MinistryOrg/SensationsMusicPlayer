@@ -9,14 +9,16 @@ import com.mom.sensationsmusicplayer.data.Song
 class SongsRepoImpl : SongsRepo{
     override fun getSongs(context: Context): List<Song> {
         val songsList = mutableListOf<Song>()
-        val uri = MediaStore.Audio.Media.INTERNAL_CONTENT_URI
+        val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+
         val projection = arrayOf(
             MediaStore.Audio.Media._ID,
             MediaStore.Audio.Media.TITLE,
             MediaStore.Audio.Media.ARTIST,
             MediaStore.Audio.Media.ALBUM,
-            MediaStore.Audio.Media.DURATION
+            MediaStore.Audio.Media.DURATION,
         )
+
         val sortOrder = "${MediaStore.Audio.Media.TITLE} ASC"
         val albumArtUri = Uri.parse("content://media/external/audio/albumart")
 
@@ -33,15 +35,14 @@ class SongsRepoImpl : SongsRepo{
                 val artist = cursor.getString(artistColumn)
                 val duration = cursor.getLong(durationColumn)
                 val album = cursor.getString(albumColumns)
-
                 val albumCover = ContentUris.withAppendedId(albumArtUri, id)
+                val songUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id)
 
-                val song = Song(id, title, artist,album,albumCover.toString(), duration)
-                println(song.title)
+                val song = Song(id, title, artist,album,albumCover.toString(), duration, songUri)
+
                 songsList.add(song)
             }
         }
-
         return songsList
     }
 }

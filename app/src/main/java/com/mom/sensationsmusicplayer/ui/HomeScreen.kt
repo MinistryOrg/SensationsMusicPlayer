@@ -33,13 +33,14 @@ import com.mom.sensationsmusicplayer.ui.theme.UnknownSongBackground
 @Composable
 fun HomeScreen(){
     val viewModel: MainViewModel = viewModel()
+    val musicViewModel : MusicViewModel = viewModel()
             Scaffold(
                 modifier =  Modifier.background(MainBackgroundColor),
                 topBar = {
                     Column(modifier = Modifier.background(MainBackgroundColor)){
                         CenterAlignedTopAppBar({ ImgLogo() }, colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                             MainBackgroundColor))
-                        TabLayout(viewModel = viewModel)
+                        TabLayout(viewModel = viewModel, musicViewModel)
                     } },
                 bottomBar = {
                             PlayerBar(

@@ -23,7 +23,7 @@ import com.mom.sensationsmusicplayer.ui.theme.SelectedTabOption
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
 
 @Composable
-fun TabLayout(viewModel: MainViewModel) {
+fun TabLayout(viewModel: MainViewModel, musicViewModel: MusicViewModel) {
     val tabIndex = viewModel.tabIndex.observeAsState()
     val interactionSource = remember { MutableInteractionSource() }
     Column(
@@ -71,7 +71,7 @@ fun TabLayout(viewModel: MainViewModel) {
         )
 
         when (tabIndex.value) {
-            0 -> SongScreen(viewModel = viewModel)
+            0 -> SongScreen(viewModel = viewModel, musicViewModel)
             1 -> PlaylistScreen(viewModel = viewModel)
             2 -> FolderScreen(viewModel = viewModel)
         }
