@@ -9,7 +9,7 @@ import com.mom.sensationsmusicplayer.data.Song
 class SongsRepoImpl : SongsRepo{
     override fun getSongs(context: Context): List<Song> {
         val songsList = mutableListOf<Song>()
-        val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+        val uri = MediaStore.Audio.Media.INTERNAL_CONTENT_URI
         val projection = arrayOf(
             MediaStore.Audio.Media._ID,
             MediaStore.Audio.Media.TITLE,
