@@ -21,7 +21,8 @@ val SongIconColor = Color(0xFF284A7C)
 
 val MainBackgroundColor = Color(0xFF14243C)
 //Color for player Bar
-val PlayerBarClr = Color(0xFF3A3A3A)
+val PlayerBarClr = Color(0xFF121212)
+val PlayPauseBtnClr = Color(0xFF810105)
 
 
 val PurpleGrey80 = Color(0xFFCCC2DC)

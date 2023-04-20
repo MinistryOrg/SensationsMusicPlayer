@@ -73,7 +73,6 @@ fun TabLayout(viewModel: MainViewModel, musicViewModel: MusicViewModel) {
         when (tabIndex.value) {
             0 -> SongScreen(viewModel = viewModel, musicViewModel)
             1 -> PlaylistScreen(viewModel = viewModel)
-            2 -> FolderScreen(viewModel = viewModel)
         }
 
     }

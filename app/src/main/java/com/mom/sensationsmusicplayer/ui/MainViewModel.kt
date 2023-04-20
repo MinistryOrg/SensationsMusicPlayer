@@ -10,7 +10,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _tabIndex: MutableLiveData<Int> = MutableLiveData(0)
     val tabIndex: LiveData<Int> = _tabIndex
-    val tabs = listOf("Songs", "Playlists", "Folders")
+    val tabs = listOf("Songs", "Playlists")
 
     var isSwipeToTheLeft: Boolean = false
     private val draggableState = DraggableState { delta ->
