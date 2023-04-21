@@ -134,7 +134,7 @@ fun SongItem(
                     .height(135.dp)
                     .clickable {
                         isSelected.value = !isSelected.value // toggle selection state
-                        musicViewModel.playSong(context, song.songUri, song)
+                        musicViewModel.playSong(context, song)
                     }
             ) {
                 if (albumArtBitMap.value != null){

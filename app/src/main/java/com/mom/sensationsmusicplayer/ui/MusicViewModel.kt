@@ -5,7 +5,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
-import android.net.Uri
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModel
@@ -18,37 +17,56 @@ class MusicViewModel : ViewModel() {
 
     private var mediaPlayer: MediaPlayer? = null
 
-    fun playSong(context: Context, songUri: Uri, song: Song) {
+    fun playSong(context: Context, song: Song) {
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer()
         } else {
             mediaPlayer?.reset()
         }
 
-        mediaPlayer?.setDataSource(context, songUri)
+        mediaPlayer?.setDataSource(context, song.songUri)
         mediaPlayer?.prepare()
         mediaPlayer?.start()
-        playingInTheBackground(context, songUri, song)
+        
+        playingInTheBackground(context, song)
+    }
+
+    fun nextSong(context: Context, songList: List<Song>, song: Song){
+        val songPos = songList.indexOf(song)
+        val newSongPos = songPos + 1
+        if (songPos != -1 && newSongPos <= songList.size){
+            val nextSong = songList[songPos+1]
+            playSong(context, nextSong)
+        }
+    }
+
+    fun prevSong(context: Context, songList: List<Song>, song: Song){
+        val songPos = songList.indexOf(song)
+        val nextSongPos = songPos-1
+        if (nextSongPos > 0){
+            val prevSong = songList[nextSongPos]
+            playSong(context, prevSong)
+        }
     }
 
     fun stopSong() {
         mediaPlayer?.stop()
     }
 
-    fun playingInTheBackground(context: Context, songUri: Uri, song: Song) {
+    fun playingInTheBackground(context: Context, song: Song) {
         val intent = Intent(context, MusicService::class.java)
-        intent.putExtra("songUri", songUri.toString())
+        intent.putExtra("songUri", song.songUri.toString())
 
         context.startService(intent)
 
-        val notification = createNotification(context, songUri, song)
+        val notification = createNotification(context,  song)
         val notificationManager = getSystemService(context, NotificationManager::class.java)
         notificationManager?.notify(1, notification)
     }
 
     // TODO ADD A BETTER DESIGN HERE :)
 
-    private fun createNotification(context: Context, songUri: Uri, song: Song): Notification {
+    private fun createNotification(context: Context, song: Song): Notification {
         val notificationIntent = Intent(context, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             context,
