@@ -6,9 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
-import android.widget.GridView
-import androidx.compose.foundation.layout.Row
-import androidx.compose.ui.graphics.Color
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModel
@@ -16,7 +13,6 @@ import com.mom.sensationsmusicplayer.MainActivity
 import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.service.MusicService
-import com.mom.sensationsmusicplayer.ui.theme.MainBackgroundColor
 
 class MusicViewModel : ViewModel() {
 
