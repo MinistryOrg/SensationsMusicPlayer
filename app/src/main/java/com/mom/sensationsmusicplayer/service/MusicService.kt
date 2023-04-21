@@ -6,7 +6,7 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.IBinder
-
+// TODO Μάλλον άχρηστο
 class MusicService : Service() {
     private var mediaPlayer: MediaPlayer? = null
 
