@@ -6,16 +6,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -27,20 +22,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.ui.theme.MainBackgroundColor
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mom.sensationsmusicplayer.ui.theme.PlayPauseBtnClr
 import com.mom.sensationsmusicplayer.ui.theme.PlayerBarClr
-import com.mom.sensationsmusicplayer.ui.theme.SelectedSongTitle
 import com.mom.sensationsmusicplayer.ui.theme.SensationsMusicPlayerTheme
-import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
 import com.mom.sensationsmusicplayer.ui.theme.UnknownSongBackground
 
@@ -99,6 +91,7 @@ fun PlayerBar(
     } else {
         R.drawable.pause_icon
     }
+
     Card(
         modifier = modifier
             .clip(RoundedCornerShape(15.dp))
@@ -113,16 +106,17 @@ fun PlayerBar(
         Box(
             modifier = Modifier.fillMaxSize()
         ){
-                Icon(
+                Icon( // go to next song
                     painter = painterResource(id = R.drawable.skip_next_icon),
-                    contentDescription = "Skip Next Song" ,
+                    contentDescription = "Next Song" ,
                     tint = TextWhite,
                     modifier = Modifier
                         .size(40.dp)
                         .align(Alignment.CenterEnd)
 
                 )
-                Icon(
+
+                Icon( // play and pause
                     painter = painterResource(id = icon),
                     contentDescription = "Play Button" ,
                     tint = PlayPauseBtnClr,
@@ -132,15 +126,17 @@ fun PlayerBar(
                         .padding(end = 40.dp)
                         .clickable(onClick = { isPlaying = !isPlaying }),
                 )
+
                 Icon(
                     painter = painterResource(id = R.drawable.skip_previous_icon),
-                    contentDescription = "Play Button" ,
+                    contentDescription = "Previous song" ,
                     tint = TextWhite,
                     modifier = Modifier
                         .size(120.dp)
                         .align(Alignment.CenterEnd)
                         .padding(end = 80.dp),
                 )
+
                 Box(
                     modifier = Modifier
                         .padding(start = 7.dp)
@@ -169,7 +165,6 @@ fun PlayerBar(
 
     }
 }
-
 
 @Preview
 @Composable

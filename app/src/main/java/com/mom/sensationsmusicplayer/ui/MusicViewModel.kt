@@ -27,6 +27,10 @@ class MusicViewModel : ViewModel() {
         mediaPlayer?.stop()
     }
 
+    fun playingInTheBackground(){
+
+    }
+
     override fun onCleared() {
         mediaPlayer?.release()
         super.onCleared()

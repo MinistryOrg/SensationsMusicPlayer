@@ -26,6 +26,7 @@ import com.mom.sensationsmusicplayer.ui.theme.TextWhite
 fun TabLayout(viewModel: MainViewModel, musicViewModel: MusicViewModel) {
     val tabIndex = viewModel.tabIndex.observeAsState()
     val interactionSource = remember { MutableInteractionSource() }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
