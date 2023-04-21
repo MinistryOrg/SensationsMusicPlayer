@@ -16,7 +16,7 @@ val NotSelectedTabOption = Color(0xFFC9C9C9)
 val DividerClr = Color(0xFF8C95A2)
 
 //Colors for songs without album cover
-val UnknownSongBackground = Color(0xFF101D31)
+val UnknownSongBackground = Color(0xFF010711)
 val SongIconColor = Color(0xFF284A7C)
 
 val MainBackgroundColor = Color(0xFF14243C)

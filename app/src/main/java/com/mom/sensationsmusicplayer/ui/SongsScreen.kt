@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -44,9 +45,10 @@ import androidx.compose.ui.unit.sp
 import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.repository.MusicRepoImpl
+import com.mom.sensationsmusicplayer.ui.theme.SelectedSongArtist
 import com.mom.sensationsmusicplayer.ui.theme.SelectedSongTitle
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
-import com.mom.sensationsmusicplayer.ui.theme.UnknownSongBackground
+import com.mom.sensationsmusicplayer.ui.theme.TextWhite
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -110,7 +112,6 @@ fun SongItem(
     }
     //Prospatheia mhpws otan clickareis to tragoudi na ginetai kokkinos o titlos kai otan clickareis se allo tragoudi na epanerxetai sto aspro
     val isSelected  = remember { mutableStateOf(false) }
-
     // is going to re-run every time the albumCover value changes
     LaunchedEffect(song.albumCover) {
         albumArtBitMap.value = loadAlbumArtBitmap(song.albumCover, context)?.asImageBitmap()
@@ -125,11 +126,9 @@ fun SongItem(
         Column(
             modifier = Modifier
                 .clip(RoundedCornerShape(15.dp))
-
         ) {
             Box(
                 modifier = Modifier
-                    .background(UnknownSongBackground)
                     .width(140.dp)
                     .height(135.dp)
                     .clickable {
@@ -142,11 +141,12 @@ fun SongItem(
                         bitmap = albumArtBitMap.value!!, // Replace with your image resource
                         contentDescription = "Image",
                         modifier = Modifier
-                            .align(Alignment.Center)
+                            .align(Alignment.Center),
+                        contentScale = ContentScale.Crop
                     )
                 } else {
                     Image(
-                        painter = painterResource(id = R.drawable.song_icon), // Replace with your image resource
+                        painter = painterResource(id = R.drawable.unknown_song), // Replace with your image resource
                         contentDescription = "Image",
                         modifier = Modifier
                             .align(Alignment.Center)
@@ -161,6 +161,19 @@ fun SongItem(
                 .padding(top = 10.dp),
             color = if (isSelected.value){
                 SelectedSongTitle // set desired color when selected
+            } else {
+                TextWhite // set default color
+            },
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        Text(
+            text = song.artist,
+            fontSize = 14.sp,
+            modifier = Modifier
+                .padding(top = 10.dp),
+            color = if (isSelected.value){
+                SelectedSongArtist // set desired color when selected
             } else {
                 TextForArtist // set default color
             },
@@ -181,6 +194,3 @@ private suspend fun loadAlbumArtBitmap(uri: String, context: Context): Bitmap? {
         }
     }
 }
-
-
-

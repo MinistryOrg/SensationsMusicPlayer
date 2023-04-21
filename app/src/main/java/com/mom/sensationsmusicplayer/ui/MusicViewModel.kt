@@ -6,6 +6,9 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
+import android.widget.GridView
+import androidx.compose.foundation.layout.Row
+import androidx.compose.ui.graphics.Color
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.ViewModel
@@ -13,6 +16,7 @@ import com.mom.sensationsmusicplayer.MainActivity
 import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.service.MusicService
+import com.mom.sensationsmusicplayer.ui.theme.MainBackgroundColor
 
 class MusicViewModel : ViewModel() {
 
@@ -64,16 +68,35 @@ class MusicViewModel : ViewModel() {
         val importance = NotificationManager.IMPORTANCE_DEFAULT
         val channel = NotificationChannel(channelId, channelName, importance)
         getSystemService(context, NotificationManager::class.java)?.createNotificationChannel(channel)
+
+
         // TODO ΕΔΩ ΦΤΙΑΧΝΕΙΣ ΤΟ DESIGN ΔΕΝ ΞΕΡΩ ΑΝ ΜΠΟΡΕΙΣ ΝΑ ΚΑΛΕΣΕΙΣ COMPOSABLE Η ΑΝ ΕΧΕΙ ΚΑΤΙ DEFAULT
-        return NotificationCompat.Builder(context, "MusicPlayerBar")
-            .setContentTitle(song.title)
-            .setSmallIcon(R.drawable.song_icon)
+//        val snoozeIntent = Intent(this, MyBroadcastReceiver::class.java).apply {
+//            action = ACTION_SNOOZE
+//            putExtra(EXTRA_NOTIFICATION_ID, 0)
+//        }
+//        val snoozePendingIntent: PendingIntent =
+//            PendingIntent.getBroadcast(this, 0, snoozeIntent, 0)
+
+
+        val notificationUI = NotificationCompat.Builder(context, "MusicPlayerBar")
+             .setSmallIcon(R.drawable.notif_icon)
+             .setContentTitle(song.title)
+             .setContentText(song.artist)
             .setContentIntent(pendingIntent)
-            .build()
+//             .addAction(R.drawable.ic_snooze, getString(R.string.snooze),
+//                 snoozePendingIntent)
+             .build()
+
+
+        return notificationUI
     }
+
+
 
     override fun onCleared() {
         mediaPlayer?.release()
         super.onCleared()
     }
 }
+
