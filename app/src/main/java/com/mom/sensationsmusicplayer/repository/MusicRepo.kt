@@ -3,6 +3,6 @@ package com.mom.sensationsmusicplayer.repository
 import android.content.Context
 import com.mom.sensationsmusicplayer.data.Song
 
-interface SongsRepo {
+interface MusicRepo {
     fun getSongs(context: Context) : List <Song>
 }

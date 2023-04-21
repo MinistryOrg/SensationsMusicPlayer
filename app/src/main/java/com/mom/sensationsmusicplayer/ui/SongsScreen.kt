@@ -1,5 +1,6 @@
 package com.mom.sensationsmusicplayer.ui
 
+import MusicViewModel
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -42,7 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.data.Song
-import com.mom.sensationsmusicplayer.repository.SongsRepoImpl
+import com.mom.sensationsmusicplayer.repository.MusicRepoImpl
 import com.mom.sensationsmusicplayer.ui.theme.SelectedSongTitle
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.UnknownSongBackground
@@ -55,7 +56,7 @@ fun SongScreen(viewModel: MainViewModel, musicViewModel: MusicViewModel) {
     val songsState = remember { mutableStateOf(listOf<Song>()) }
 
     LaunchedEffect(Unit) {
-        val songs = SongsRepoImpl().getSongs(context)
+        val songs = MusicRepoImpl().getSongs(context)
         songsState.value = songs
     }
 
@@ -133,7 +134,7 @@ fun SongItem(
                     .height(135.dp)
                     .clickable {
                         isSelected.value = !isSelected.value // toggle selection state
-                        musicViewModel.playSong(context, song.songUri)
+                        musicViewModel.playSong(context, song.songUri, song)
                     }
             ) {
                 if (albumArtBitMap.value != null){

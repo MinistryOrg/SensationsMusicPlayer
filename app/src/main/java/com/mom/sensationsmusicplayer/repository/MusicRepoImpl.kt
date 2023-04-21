@@ -5,7 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
 import com.mom.sensationsmusicplayer.data.Song
-class SongsRepoImpl : SongsRepo{
+class MusicRepoImpl : MusicRepo{
     override fun getSongs(context: Context): List<Song> {
         val songsList = mutableListOf<Song>()
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
