@@ -68,7 +68,6 @@ fun HomeScreen(){
                 },
                 content = {  }
             )
-
 }
 
 // Logo at the top bar. We use column to avoid overlaping with tabrow
@@ -99,7 +98,6 @@ fun PlayerBar(
         R.drawable.play_arrow_icon
     } else {
         R.drawable.pause_icon
-
     }
     Card(
         modifier = modifier
@@ -115,7 +113,6 @@ fun PlayerBar(
         Box(
             modifier = Modifier.fillMaxSize()
         ){
-
                 Icon(
                     painter = painterResource(id = R.drawable.skip_next_icon),
                     contentDescription = "Skip Next Song" ,
@@ -123,7 +120,7 @@ fun PlayerBar(
                     modifier = Modifier
                         .size(40.dp)
                         .align(Alignment.CenterEnd)
-                        ,
+
                 )
                 Icon(
                     painter = painterResource(id = icon),
