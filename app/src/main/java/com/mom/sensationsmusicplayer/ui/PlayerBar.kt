@@ -1,5 +1,7 @@
 package com.mom.sensationsmusicplayer.ui
 
+import MusicViewModel
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,23 +24,26 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mom.sensationsmusicplayer.R
+import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.ui.theme.PlayPauseBtnClr
 import com.mom.sensationsmusicplayer.ui.theme.PlayerBarClr
 import com.mom.sensationsmusicplayer.ui.theme.SensationsMusicPlayerTheme
-import com.mom.sensationsmusicplayer.ui.theme.TextWhite
-import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
+import com.mom.sensationsmusicplayer.ui.theme.TextWhite
 
 @Composable
 fun PlayerBar(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    musicViewModel: MusicViewModel,
+    context: Context,
+    songsList: List<Song>,
+    song : Song
 ){
     var isPlaying by remember { mutableStateOf(false) }
 
@@ -72,7 +77,7 @@ fun PlayerBar(
                     .align(Alignment.CenterEnd)
                     .clickable(
                         onClick = {
-                            //TODO EDW THA VALEIS TIS LEITOURGIES
+                           musicViewModel.nextSong(context = context, songsList, song)
                         }
                     )
             )
@@ -87,7 +92,11 @@ fun PlayerBar(
                     .clickable(
                         onClick = {
                             isPlaying = !isPlaying
-                            //TODO EDW THA VALEIS TIS LEITOURGIES
+                            if (isPlaying){        // the user want to pause
+                                musicViewModel.stopSong()
+                            } else{
+                                musicViewModel.playSong(context, song)
+                            }
                         }
                     ),
             )
@@ -101,7 +110,7 @@ fun PlayerBar(
                     .padding(end = 80.dp)
                     .clickable(
                         onClick = {
-                            //TODO EDW THA VALEIS TIS LEITOURGIES
+                           musicViewModel.prevSong(context, songsList, song)
                         }
                     )
             )
@@ -119,7 +128,7 @@ fun PlayerBar(
                     .align(Alignment.CenterStart)
             ){
                 Text(
-                    text = "Song Title",//TODO EDW THA MPEI TO song.title
+                    text = song.title,
                     fontSize = 14.sp,
                     modifier = Modifier,
                     color = TextWhite,
@@ -127,7 +136,7 @@ fun PlayerBar(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "Artist",//TODO EDW THA MPEI TO song.artist (h opws to exeis)
+                    text = song.artist,
                     fontSize = 14.sp,
                     modifier = Modifier
                         .padding(top = 18.dp),
@@ -137,14 +146,6 @@ fun PlayerBar(
                 )
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun PlayerBarPreview(){
-    SensationsMusicPlayerTheme {
-        PlayerBar()
     }
 }
 

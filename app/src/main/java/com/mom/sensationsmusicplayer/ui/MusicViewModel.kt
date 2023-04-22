@@ -86,29 +86,17 @@ class MusicViewModel : ViewModel() {
         getSystemService(context, NotificationManager::class.java)?.createNotificationChannel(channel)
 
 
-        // TODO ΕΔΩ ΦΤΙΑΧΝΕΙΣ ΤΟ DESIGN ΔΕΝ ΞΕΡΩ ΑΝ ΜΠΟΡΕΙΣ ΝΑ ΚΑΛΕΣΕΙΣ COMPOSABLE Η ΑΝ ΕΧΕΙ ΚΑΤΙ DEFAULT
-//        val snoozeIntent = Intent(this, MyBroadcastReceiver::class.java).apply {
-//            action = ACTION_SNOOZE
-//            putExtra(EXTRA_NOTIFICATION_ID, 0)
-//        }
-//        val snoozePendingIntent: PendingIntent =
-//            PendingIntent.getBroadcast(this, 0, snoozeIntent, 0)
-
 
         val notificationUI = NotificationCompat.Builder(context, "MusicPlayerBar")
              .setSmallIcon(R.drawable.notif_icon)
              .setContentTitle(song.title)
              .setContentText(song.artist)
-            .setContentIntent(pendingIntent)
-//             .addAction(R.drawable.ic_snooze, getString(R.string.snooze),
-//                 snoozePendingIntent)
+             .setContentIntent(pendingIntent)
              .build()
 
 
         return notificationUI
     }
-
-
 
     override fun onCleared() {
         mediaPlayer?.release()
