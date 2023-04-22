@@ -53,10 +53,12 @@ fun PlayerBar(
             .background(PlayerBarClr)
             .padding(horizontal = 5.dp, vertical = 5.dp)
             .height(55.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+        ,
         colors = CardDefaults.cardColors(
             containerColor = PlayerBarClr,
-        )
+        ),
+
     ){
         Box(
             modifier = Modifier.fillMaxSize()

@@ -1,6 +1,5 @@
 package com.mom.sensationsmusicplayer.ui
 
-import MusicViewModel
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,19 +36,20 @@ fun HomeScreen(){
                         CenterAlignedTopAppBar({ TopNavBarLogo() }, colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                             MainBackgroundColor))
                         TabLayout(viewModel = viewModel, musicViewModel)
-                    } },
-                bottomBar = {
-                    PlayerBar(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(15.dp))
-                            .background(brush = Brush.verticalGradient(
-                                colors = listOf(Color(0x0), Color(0xA6000000)),
-                                startY = 0f,
-                                endY = Float.POSITIVE_INFINITY
-                            ))
-                            .padding(bottom = 20.dp, start = 7.dp, end = 7.dp)
-                    )
-                },
+                    } }
+                ,
+//                bottomBar = {
+//                    PlayerBar(
+//                        modifier = Modifier
+//                            .clip(RoundedCornerShape(15.dp))
+//                            .background(brush = Brush.verticalGradient(
+//                                colors = listOf(Color(0x0), Color(0xA6000000)),
+//                                startY = 0f,
+//                                endY = Float.POSITIVE_INFINITY
+//                            ))
+//                            .padding(bottom = 20.dp, start = 7.dp, end = 7.dp)
+//                    )
+//                },
                 content = {  }
             )
 }

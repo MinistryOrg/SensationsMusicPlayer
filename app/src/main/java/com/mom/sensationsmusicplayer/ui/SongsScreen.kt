@@ -1,6 +1,6 @@
 package com.mom.sensationsmusicplayer.ui
 
-import MusicViewModel
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -52,6 +53,7 @@ import com.mom.sensationsmusicplayer.ui.theme.TextWhite
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun SongScreen(viewModel: MainViewModel, musicViewModel: MusicViewModel) {
     val context = LocalContext.current
@@ -62,43 +64,61 @@ fun SongScreen(viewModel: MainViewModel, musicViewModel: MusicViewModel) {
         songsState.value = songs
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(Color(0xFF14243C), Color(0xFF0B1422)),
-                    startY = 0f,
-                    endY = Float.POSITIVE_INFINITY
-                )
-            )
-            .draggable(
-                state = viewModel.dragState.value!!,
-                orientation = Orientation.Horizontal,
-                onDragStarted = { },
-                onDragStopped = {
-                    viewModel.updateTabIndexBasedOnSwipe()
-                }),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Row(
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-        ) {
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(start = 7.5.dp, end = 7.5.dp, bottom = 100.dp),
+    Scaffold(
+        bottomBar = {
+            PlayerBar(
                 modifier = Modifier
-                    .fillMaxHeight()
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(Color(0x0), Color(0xA6000000)),
+                            startY = 0f,
+                            endY = Float.POSITIVE_INFINITY
+                        )
+                    )
+                    .padding(bottom = 20.dp, start = 7.dp, end = 7.dp)
+            )
+        },
+        content = {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(Color(0xFF14243C), Color(0xFF0B1422)),
+                            startY = 0f,
+                            endY = Float.POSITIVE_INFINITY
+                        )
+                    )
+                    .draggable(
+                        state = viewModel.dragState.value!!,
+                        orientation = Orientation.Horizontal,
+                        onDragStarted = { },
+                        onDragStopped = {
+                            viewModel.updateTabIndexBasedOnSwipe()
+                        }),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                items(songsState.value) { song ->
-                    // call the bar to add the song
-                    SongItem(song = song, context, musicViewModel)
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                ) {
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        contentPadding = PaddingValues(start = 7.5.dp, end = 7.5.dp, bottom = 100.dp),
+                        modifier = Modifier
+                            .fillMaxHeight()
+                    ) {
+                        items(songsState.value) { song ->
+                            // call the bar to add the song
+                            SongItem(song = song, context, musicViewModel)
+                        }
+                    }
                 }
+
             }
         }
-    }
+    )
 }
 
 @Composable
