@@ -1,6 +1,5 @@
 package com.mom.sensationsmusicplayer.ui
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -24,12 +23,12 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,90 +45,76 @@ import androidx.compose.ui.unit.sp
 import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.repository.MusicRepoImpl
-import com.mom.sensationsmusicplayer.ui.theme.SelectedSongArtist
 import com.mom.sensationsmusicplayer.ui.theme.SelectedSongTitle
-import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+
 @Composable
 fun SongScreen(viewModel: MainViewModel, musicViewModel: MusicViewModel) {
     val context = LocalContext.current
-    val songsState = remember { mutableStateOf(listOf<Song>()) }
+    val songsState = rememberSaveable { mutableStateOf(listOf<Song>()) }
+    val _selectSongIndex  = remember{ mutableStateOf(-1) }
 
     LaunchedEffect(Unit) {
         val songs = MusicRepoImpl().getSongs(context)
         songsState.value = songs
     }
 
-    Scaffold(
-        bottomBar = {
-            PlayerBar(
-                modifier = Modifier
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(Color(0x0), Color(0xA6000000)),
-                            startY = 0f,
-                            endY = Float.POSITIVE_INFINITY
-                        )
-                    )
-                    .padding(bottom = 20.dp, start = 7.dp, end = 7.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(Color(0xFF14243C), Color(0xFF0B1422)),
+                    startY = 0f,
+                    endY = Float.POSITIVE_INFINITY
+                )
             )
-        },
-        content = {
-            Column(
+            .draggable(
+                state = viewModel.dragState.value!!,
+                orientation = Orientation.Horizontal,
+                onDragStarted = { },
+                onDragStopped = {
+                    viewModel.updateTabIndexBasedOnSwipe()
+                }),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Row(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+        ) {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(start = 7.5.dp, end = 7.5.dp, bottom = 100.dp),
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(
-                        brush = Brush.verticalGradient(
-                            colors = listOf(Color(0xFF14243C), Color(0xFF0B1422)),
-                            startY = 0f,
-                            endY = Float.POSITIVE_INFINITY
-                        )
-                    )
-                    .draggable(
-                        state = viewModel.dragState.value!!,
-                        orientation = Orientation.Horizontal,
-                        onDragStarted = { },
-                        onDragStopped = {
-                            viewModel.updateTabIndexBasedOnSwipe()
-                        }),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                    .fillMaxHeight()
             ) {
-                Row(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                ) {
-                    LazyVerticalGrid(
-                        columns = GridCells.Fixed(2),
-                        contentPadding = PaddingValues(start = 7.5.dp, end = 7.5.dp, bottom = 100.dp),
-                        modifier = Modifier
-                            .fillMaxHeight()
-                    ) {
-                        items(songsState.value) { song ->
-                            // call the bar to add the song
-                            SongItem(song = song, context, musicViewModel)
-                        }
-                    }
+                items(songsState.value) { song ->
+                    // call the bar to add the song
+                    SongItem(song = song,songsState.value.indexOf(song), context, musicViewModel, _selectSongIndex.value)
                 }
-
             }
         }
-    )
+    }
 }
 
 @Composable
 fun SongItem(
     song: Song,
+    index : Int,
     context: Context,
-    musicViewModel: MusicViewModel
+    musicViewModel: MusicViewModel,
+    _selectedSongIndex : Int
 ){
+    var selectedSongIndex : Int = _selectedSongIndex
+
     val albumArtBitMap = remember {
         mutableStateOf<ImageBitmap?>(null) // initialize bit map
     }
+
     //Prospatheia mhpws otan clickareis to tragoudi na ginetai kokkinos o titlos kai otan clickareis se allo tragoudi na epanerxetai sto aspro
     val isSelected  = remember { mutableStateOf(false) }
     // is going to re-run every time the albumCover value changes
@@ -153,6 +138,7 @@ fun SongItem(
                     .height(135.dp)
                     .clickable {
                         isSelected.value = !isSelected.value // toggle selection state
+                        selectedSongIndex = index
                         musicViewModel.playSong(context, song)
                     }
             ) {
@@ -179,23 +165,10 @@ fun SongItem(
             fontSize = 14.sp,
             modifier = Modifier
                 .padding(top = 10.dp),
-            color = if (isSelected.value){
+            color = if (selectedSongIndex == index){
                 SelectedSongTitle // set desired color when selected
             } else {
                 TextWhite // set default color
-            },
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-        Text(
-            text = song.artist,
-            fontSize = 14.sp,
-            modifier = Modifier
-                .padding(top = 10.dp),
-            color = if (isSelected.value){
-                SelectedSongArtist // set desired color when selected
-            } else {
-                TextForArtist // set default color
             },
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
