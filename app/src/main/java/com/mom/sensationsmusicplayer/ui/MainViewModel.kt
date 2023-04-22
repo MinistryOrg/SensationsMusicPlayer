@@ -1,6 +1,5 @@
 package com.mom.sensationsmusicplayer.ui
 
-
 import android.app.Application
 import androidx.compose.foundation.gestures.DraggableState
 import androidx.lifecycle.AndroidViewModel
@@ -26,6 +25,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             false -> Math.floorMod(_tabIndex.value!!.minus(1), tabs.size)
         }
     }
+
     fun updateTabIndex(i: Int) {
         _tabIndex.value = i
     }

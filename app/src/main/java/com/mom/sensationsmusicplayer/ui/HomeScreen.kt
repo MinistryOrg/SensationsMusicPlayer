@@ -4,17 +4,12 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -39,18 +34,6 @@ fun HomeScreen(){
                         TabLayout(viewModel = viewModel, musicViewModel)
                     } }
                 ,
-//                bottomBar = {
-//                    PlayerBar(
-//                        modifier = Modifier
-//                            .clip(RoundedCornerShape(15.dp))
-//                            .background(brush = Brush.verticalGradient(
-//                                colors = listOf(Color(0x0), Color(0xA6000000)),
-//                                startY = 0f,
-//                                endY = Float.POSITIVE_INFINITY
-//                            ))
-//                            .padding(bottom = 20.dp, start = 7.dp, end = 7.dp)
-//                    )
-//                },
                 content = {  }
             )
 }

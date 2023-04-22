@@ -25,7 +25,6 @@ class MusicViewModel : ViewModel() {
         } else {
             mediaPlayer?.reset()
         }
-
         mediaPlayer?.setDataSource(context, song.songUri)
         mediaPlayer?.prepare()
         mediaPlayer?.start()
