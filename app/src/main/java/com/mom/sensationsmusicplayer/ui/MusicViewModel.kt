@@ -28,23 +28,23 @@ class MusicViewModel : ViewModel() {
         mediaPlayer?.setDataSource(context, song.songUri)
         mediaPlayer?.prepare()
         mediaPlayer?.start()
-        
+
         playingInTheBackground(context, song)
     }
 
-    fun nextSong(context: Context, songList: List<Song>, song: Song){
+    fun nextSong(context: Context, songList: List<Song>, song: Song) {
         val songPos = songList.indexOf(song)
         val newSongPos = songPos + 1
-        if (songPos != -1 && newSongPos <= songList.size){
-            val nextSong = songList[songPos+1]
+        if (songPos != -1 && newSongPos < songList.size) {
+            val nextSong = songList[newSongPos]
             playSong(context, nextSong)
         }
     }
 
-    fun prevSong(context: Context, songList: List<Song>, song: Song){
+    fun prevSong(context: Context, songList: List<Song>, song: Song) {
         val songPos = songList.indexOf(song)
-        val nextSongPos = songPos-1
-        if (nextSongPos > 0){
+        val nextSongPos = songPos - 1
+        if (nextSongPos > 0) {
             val prevSong = songList[nextSongPos]
             playSong(context, prevSong)
         }
@@ -60,7 +60,7 @@ class MusicViewModel : ViewModel() {
 
         context.startService(intent)
 
-        val notification = createNotification(context,  song)
+        val notification = createNotification(context, song)
         val notificationManager = getSystemService(context, NotificationManager::class.java)
         notificationManager?.notify(1, notification)
     }
@@ -82,16 +82,17 @@ class MusicViewModel : ViewModel() {
 
         val importance = NotificationManager.IMPORTANCE_DEFAULT
         val channel = NotificationChannel(channelId, channelName, importance)
-        getSystemService(context, NotificationManager::class.java)?.createNotificationChannel(channel)
-
+        getSystemService(context, NotificationManager::class.java)?.createNotificationChannel(
+            channel
+        )
 
 
         val notificationUI = NotificationCompat.Builder(context, "MusicPlayerBar")
-             .setSmallIcon(R.drawable.notif_icon)
-             .setContentTitle(song.title)
-             .setContentText(song.artist)
-             .setContentIntent(pendingIntent)
-             .build()
+            .setSmallIcon(R.drawable.notif_icon)
+            .setContentTitle(song.title)
+            .setContentText(song.artist)
+            .setContentIntent(pendingIntent)
+            .build()
 
 
         return notificationUI

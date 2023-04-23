@@ -44,7 +44,7 @@ fun PlayerBar(
     context: Context,
     songsList: List<Song>,
     song: Song,
-    onSongSelected : (Song) -> Unit
+    onSongSelected: (Song) -> Unit
 ) {
     var isPlaying by remember { mutableStateOf(false) }
     var index by remember { mutableStateOf(songsList.indexOf(song)) }
@@ -83,7 +83,9 @@ fun PlayerBar(
                     .clickable(
                         onClick = {
                             musicViewModel.nextSong(context = context, songsList, songsList[index])
-                            index += 1
+                            if (index != -1 && index + 1 < songsList.size) {
+                                index += 1
+                            }
                             onSongSelected(songsList[index])
                         }
                     )
@@ -120,7 +122,9 @@ fun PlayerBar(
                     .clickable(
                         onClick = {
                             musicViewModel.prevSong(context, songsList, songsList[index])
-                            index -= 1
+                            if (index - 1 > 0) {
+                                index -= 1
+                            }
                             onSongSelected(songsList[index])
                         }
                     )
