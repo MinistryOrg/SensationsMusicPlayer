@@ -21,6 +21,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,18 +29,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.ui.theme.PlayPauseBtnClr
 import com.mom.sensationsmusicplayer.ui.theme.PlayerBarClr
-import com.mom.sensationsmusicplayer.ui.theme.SensationsMusicPlayerTheme
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
+import com.mom.sensationsmusicplayer.utill.Utill
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -107,7 +110,7 @@ fun PlayerBar(
                     .clickable(
                         onClick = {
                             isPlaying = !isPlaying
-                            if (isPlaying) {        // the user want to pause
+                            if (isPlaying) {     // == to true because is Boolean? and maybe return null
                                 musicViewModel.stopSong()
                             } else {
                                 onSongSelected(songsList[index])
@@ -140,7 +143,7 @@ fun PlayerBar(
                     .align(Alignment.CenterStart)
                     .clip(RoundedCornerShape(12.dp))
             ) {
-                SongBox()
+                SongBox(song, context)
             }
             Box(
                 modifier = Modifier
@@ -185,36 +188,39 @@ fun PlayerBar(
 }
 
 @Composable
-fun SongBox() {
+fun SongBox(
+    song: Song,
+    context: Context
+) {
+    val utill = Utill()
+
     Box(
-        //TODO EDW THA MPEI WS PARAMETROS TO ALBUM COVER H KAI OXI IDK
         modifier = Modifier
-            .clip(RoundedCornerShape(15.dp))
+            .clip(RoundedCornerShape(15.dp)),
     ) {
-        //TODO EDW THA GINEI ALLAGH TOU ALBUM COVER
-//        if (albumArtBitMap.value != null){
-//            Image(
-//                bitmap = albumArtBitMap.value!!, // Replace with your image resource
-//                contentDescription = "Image",
-//                modifier = Modifier
-//                    .align(Alignment.Center),
-//                contentScale = ContentScale.Crop
-//            )
-//        } else {
+        val albumArtBitMap = remember {
+            mutableStateOf<ImageBitmap?>(null) // initialize bit map
+        }
+        // is going to re-run every time the albumCover value changes
+        LaunchedEffect(song.albumCover) {
+            albumArtBitMap.value = utill.loadAlbumArtBitmap(song.albumCover, context)?.asImageBitmap()
+        }
+        if (albumArtBitMap.value != null){
+            Image(
+                bitmap = albumArtBitMap.value!!, // Replace with your image resource
+                contentDescription = "Image",
+                modifier = Modifier
+                    .align(Alignment.Center),
+                contentScale = ContentScale.Crop
+            )
+        } else {
         Image(
             painter = painterResource(id = R.drawable.unknown_song), // Replace with your image resource
             contentDescription = "Image",
             modifier = Modifier
                 .align(Alignment.Center)
         )
-//    }
+    }
     }
 }
 
-@Preview
-@Composable
-fun SongBoxPreview() {
-    SensationsMusicPlayerTheme {
-        SongBox()
-    }
-}

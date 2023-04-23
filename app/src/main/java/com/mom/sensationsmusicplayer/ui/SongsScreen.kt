@@ -51,6 +51,7 @@ import com.mom.sensationsmusicplayer.ui.theme.SelectedSongArtist
 import com.mom.sensationsmusicplayer.ui.theme.SelectedSongTitle
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
+import com.mom.sensationsmusicplayer.utill.Utill
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -151,11 +152,14 @@ fun SongItem(
     val albumArtBitMap = remember {
         mutableStateOf<ImageBitmap?>(null) // initialize bit map
     }
+
+    val utill  = Utill()
+
     //Prospatheia mhpws otan clickareis to tragoudi na ginetai kokkinos o titlos kai otan clickareis se allo tragoudi na epanerxetai sto aspro
     val isSelected = remember { mutableStateOf(false) }
     // is going to re-run every time the albumCover value changes
     LaunchedEffect(song.albumCover) {
-        albumArtBitMap.value = loadAlbumArtBitmap(song.albumCover, context)?.asImageBitmap()
+        albumArtBitMap.value = utill.loadAlbumArtBitmap(song.albumCover, context)?.asImageBitmap()
     }
 
     Column(
@@ -222,14 +226,4 @@ fun SongItem(
     }
 }
 
-private suspend fun loadAlbumArtBitmap(uri: String, context: Context): Bitmap? {
-    return withContext(Dispatchers.IO) {
-        try {
-            // loading the album art bitmap from the album art URI
-            val inputStream = context.contentResolver.openInputStream(Uri.parse(uri))
-            BitmapFactory.decodeStream(inputStream)
-        } catch (e: Exception) {
-            null
-        }
-    }
-}
+

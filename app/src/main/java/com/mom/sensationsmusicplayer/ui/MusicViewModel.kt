@@ -16,7 +16,6 @@ import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.service.MusicService
 
 class MusicViewModel : ViewModel() {
-
     private var mediaPlayer: MediaPlayer? = null
 
     fun playSong(context: Context, song: Song) {
@@ -52,6 +51,10 @@ class MusicViewModel : ViewModel() {
 
     fun stopSong() {
         mediaPlayer?.stop()
+    }
+
+    fun pauseSong(){
+        mediaPlayer?.pause()
     }
 
     fun playingInTheBackground(context: Context, song: Song) {
