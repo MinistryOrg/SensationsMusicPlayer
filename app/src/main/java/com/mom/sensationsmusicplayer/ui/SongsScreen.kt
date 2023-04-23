@@ -64,7 +64,8 @@ fun SongScreen(viewModel: MainViewModel, musicViewModel: MusicViewModel) {
     songsState.value = songs
     val selectedSongState = remember { mutableStateOf(songsState.value[0]) }
 
-    Scaffold(bottomBar = {
+    Scaffold(
+        bottomBar = {
         PlayerBar(modifier = Modifier
             .background(
                 brush = Brush.verticalGradient(
