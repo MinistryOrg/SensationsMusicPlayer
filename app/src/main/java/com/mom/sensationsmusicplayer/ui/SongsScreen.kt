@@ -63,65 +63,82 @@ fun SongScreen(viewModel: MainViewModel, musicViewModel: MusicViewModel) {
     val songs = MusicRepoImpl().getSongs(context)
     songsState.value = songs
     val selectedSongState = remember { mutableStateOf(songsState.value[0]) }
-
+    //[START OF SCAFFOLD]
     Scaffold(
+        //[START OF BOTTOM BAR (PLAYER BAR)]
         bottomBar = {
-        PlayerBar(modifier = Modifier
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(Color(0x0), Color(0xA6000000)),
-                    startY = 0f,
-                    endY = Float.POSITIVE_INFINITY
-                )
-            )
-            .padding(bottom = 20.dp, start = 7.dp, end = 7.dp),
-            context = context,
-            musicViewModel = musicViewModel,
-            song = selectedSongState.value,
-            songsList = songsState.value,
-            onSongSelected = { selectedSong ->
-                selectedSongState.value = selectedSong // update the selected song
-                Log.d("VALUE TO BE IN THE PLAYER BAR BRO", selectedSongState.value.title)
-            })
-    }, content = {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(Color(0xFF14243C), Color(0xFF0B1422)),
-                        startY = 0f,
-                        endY = Float.POSITIVE_INFINITY
+            //We Call The PlayerBar Composable from PlayerBar.kt and pass the parameters
+            PlayerBar(
+                modifier = Modifier
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(Color(0x0), Color(0xA6000000)),
+                            startY = 0f,
+                            endY = Float.POSITIVE_INFINITY
+                        )
                     )
-                )
-                .draggable(state = viewModel.dragState.value!!,
-                    orientation = Orientation.Horizontal,
-                    onDragStarted = { },
-                    onDragStopped = {
-                        viewModel.updateTabIndexBasedOnSwipe()
-                    }),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Row(
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                    .padding(bottom = 20.dp, start = 7.dp, end = 7.dp),
+                context = context,
+                musicViewModel = musicViewModel,
+                song = selectedSongState.value,
+                songsList = songsState.value,
+                onSongSelected = { selectedSong ->
+                    selectedSongState.value = selectedSong // update the selected song
+                    Log.d("VALUE TO BE IN THE PLAYER BAR BRO", selectedSongState.value.title)
+                })
+        }, //[END OF BOTTOM BAR (PLAYER BAR)]
+        content = {
+            //[START OF MAIN CONTENT OF THE SCREEN (SONG SCREEN)]
+            Column(
+                modifier = Modifier
+                    .fillMaxSize() // To fill the max size of the screen
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(Color(0xFF14243C), Color(0xFF0B1422)),
+                            startY = 0f,
+                            endY = Float.POSITIVE_INFINITY
+                        )
+                    )
+                    .draggable(
+                        state = viewModel.dragState.value!!,
+                        orientation = Orientation.Horizontal,
+                        onDragStarted = { },
+                        onDragStopped = {
+                            viewModel.updateTabIndexBasedOnSwipe()
+                        }),
+                //Center the column
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2), contentPadding = PaddingValues(
-                        start = 7.5.dp, end = 7.5.dp, bottom = 100.dp
-                    ), modifier = Modifier.fillMaxHeight()
+                Row(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
                 ) {
-                    items(songsState.value) { song ->
-                        // call the bar to add the song
-                        SongItem(song = song, context, musicViewModel,onSongSelected = { selectedSong ->
-                            selectedSongState.value = selectedSong // update the selected song
-                        })
-                        Log.d("SELECTED SONG STATE ", selectedSongState.value.title)
+                    //[START OF LAZY VERTICAL GRID]
+                    LazyVerticalGrid(
+                        columns = GridCells.Fixed(2),
+                        contentPadding = PaddingValues(
+                            start = 7.5.dp,
+                            end = 7.5.dp,
+                            bottom = 100.dp
+                        ),
+                        modifier = Modifier
+                            .fillMaxHeight()
+                    ) {
+                        items(songsState.value) { song ->
+                            // call the bar to add the song
+                            SongItem(song = song, context, musicViewModel,onSongSelected = { selectedSong ->
+                                selectedSongState.value = selectedSong // update the selected song
+                            })
+                            Log.d("SELECTED SONG STATE ", selectedSongState.value.title)
+                        }
                     }
+                    //[END OF LAZY VERTICAL GRID]
                 }
             }
-        }
-    })
+            //[END OF MAIN CONTENT OF THE SCREEN (SONG SCREEN)]
+        })
+    //[END OF SCAFFOLD]
 }
 
 @Composable
@@ -144,10 +161,12 @@ fun SongItem(
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.padding(horizontal = 15.dp, vertical = 15.dp)
+        modifier = Modifier
+            .padding(horizontal = 15.dp, vertical = 15.dp)
     ) {
         Column(
-            modifier = Modifier.clip(RoundedCornerShape(15.dp))
+            modifier = Modifier
+                .clip(RoundedCornerShape(15.dp))
         ) {
             Box(modifier = Modifier
                 .width(140.dp)
@@ -167,7 +186,9 @@ fun SongItem(
                 } else {
                     Image(
                         painter = painterResource(id = R.drawable.unknown_song), // Replace with your image resource
-                        contentDescription = "Image", modifier = Modifier.align(Alignment.Center)
+                        contentDescription = "Image",
+                        modifier = Modifier
+                            .align(Alignment.Center)
                     )
                 }
             }
@@ -175,7 +196,8 @@ fun SongItem(
         Text(
             text = song.title,
             fontSize = 14.sp,
-            modifier = Modifier.padding(top = 10.dp),
+            modifier = Modifier
+                .padding(top = 10.dp),
             color = if (isSelected.value) {
                 SelectedSongTitle // set desired color when selected
             } else {
@@ -187,7 +209,8 @@ fun SongItem(
         Text(
             text = song.artist,
             fontSize = 14.sp,
-            modifier = Modifier.padding(top = 10.dp),
+            modifier = Modifier
+                .padding(top = 10.dp),
             color = if (isSelected.value) {
                 SelectedSongArtist // set desired color when selected
             } else {

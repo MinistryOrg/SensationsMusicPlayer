@@ -13,6 +13,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SensationsMusicPlayerTheme {
+                //We Call the HomeScreen of the App
                 HomeScreen()
 
             }

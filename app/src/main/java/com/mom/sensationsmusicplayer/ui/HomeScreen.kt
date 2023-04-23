@@ -25,23 +25,31 @@ import com.mom.sensationsmusicplayer.ui.theme.MainBackgroundColor
 fun HomeScreen(){
     val viewModel: MainViewModel = viewModel()
     val musicViewModel : MusicViewModel = viewModel()
+    //[START-TOP BAR]
             Scaffold(
-                modifier =  Modifier.background(MainBackgroundColor),
+                modifier =  Modifier.background(MainBackgroundColor), //To Change the background color
                 topBar = {
                     Column(modifier = Modifier.background(MainBackgroundColor)){
-                        CenterAlignedTopAppBar({ TopNavBarLogo() }, colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                            MainBackgroundColor))
+                        //Center the image logo
+                        CenterAlignedTopAppBar(
+                            { TopNavBarLogo() },
+                            //Change default background color
+                            colors = TopAppBarDefaults
+                                .centerAlignedTopAppBarColors(MainBackgroundColor)
+                        )
+                        //We call the tab layout
                         TabLayout(viewModel = viewModel, musicViewModel)
                     } }
                 ,
                 content = {  }
             )
+    //[END-TOP BAR]
 }
 
-// Logo at the top bar. We use column to avoid overlaping with tabrow
+// [START COMPOSABLE IMAGE-LOGO]
 @Composable
 fun TopNavBarLogo(){
-    Column(
+    Column( //we use column to avoid operlaping the top bar with the image
         modifier = Modifier
             .fillMaxWidth()
             .background(MainBackgroundColor)
@@ -55,3 +63,4 @@ fun TopNavBarLogo(){
         )
     }
 }
+// [END COMPOSABLE IMAGE-LOGO]
