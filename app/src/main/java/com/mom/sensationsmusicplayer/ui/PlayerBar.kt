@@ -2,8 +2,12 @@ package com.mom.sensationsmusicplayer.ui
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.MarqueeAnimationMode
+import androidx.compose.foundation.MarqueeSpacing
 import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,6 +41,7 @@ import com.mom.sensationsmusicplayer.ui.theme.SensationsMusicPlayerTheme
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PlayerBar(
     modifier: Modifier = Modifier,
@@ -139,7 +144,7 @@ fun PlayerBar(
             }
             Box(
                 modifier = Modifier
-                    .padding(start = 70.dp)
+                    .padding(start = 70.dp, end = 35.dp)
                     .align(Alignment.CenterStart)
             ) {
 
@@ -147,16 +152,29 @@ fun PlayerBar(
                 Text(
                     text = songsList[index].title,
                     fontSize = 14.sp,
-                    modifier = Modifier,
-                    color = TextWhite,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    modifier = Modifier
+                        .padding(end = 90.dp)
+                        .basicMarquee(
+                            iterations = Int.MAX_VALUE,
+                            animationMode = MarqueeAnimationMode.Immediately,
+                            delayMillis = 2,
+                            spacing = MarqueeSpacing(20.dp),
+                            velocity = 20.dp
+                        ),
+                    color = TextWhite
                 )
                 Text(
                     text = songsList[index].artist,
                     fontSize = 14.sp,
                     modifier = Modifier
-                        .padding(top = 18.dp),
+                        .padding(top = 18.dp)
+                        .basicMarquee(
+                            iterations = Int.MAX_VALUE,
+                            animationMode = MarqueeAnimationMode.Immediately,
+                            delayMillis = 2,
+                            spacing = MarqueeSpacing(20.dp),
+                            velocity = 20.dp
+                        ),
                     color = TextForArtist,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
