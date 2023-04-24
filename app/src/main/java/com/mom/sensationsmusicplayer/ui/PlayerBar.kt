@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -81,6 +82,56 @@ fun PlayerBar(
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
+
+            Box(
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .width(100.dp)
+                    .height(50.dp)
+                    .align(Alignment.CenterStart)
+                    .clip(RoundedCornerShape(12.dp))
+            ) {
+                SongBox(song, context)
+            }
+            Box(
+                modifier = Modifier
+                    .padding(start = 70.dp, end = 35.dp)
+                    .align(Alignment.CenterStart)
+            ) {
+
+                Log.d("Song  title ", songsList[index].title)
+                Text(
+                    text = songsList[index].title,
+                    fontSize = 14.sp,
+                    modifier = Modifier
+                        .padding(end = 90.dp)
+                        .basicMarquee(
+                            iterations = Int.MAX_VALUE,
+                            animationMode = MarqueeAnimationMode.Immediately,
+                            delayMillis = 2,
+                            spacing = MarqueeSpacing(20.dp),
+                            velocity = 20.dp
+                        ),
+                    color = TextWhite
+                )
+                Text(
+                    text = songsList[index].artist,
+                    fontSize = 14.sp,
+                    modifier = Modifier
+                        .padding(top = 18.dp)
+                        .basicMarquee(
+                            iterations = Int.MAX_VALUE,
+                            animationMode = MarqueeAnimationMode.Immediately,
+                            delayMillis = 2,
+                            spacing = MarqueeSpacing(20.dp),
+                            velocity = 20.dp
+                        ),
+                    color = TextForArtist,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
             Icon( // go to next song
                 painter = painterResource(id = R.drawable.skip_next_icon),
                 contentDescription = "Next Song",
@@ -137,52 +188,6 @@ fun PlayerBar(
                         }
                     )
             )
-            Box(
-                modifier = Modifier
-                    .padding(start = 3.dp)
-                    .align(Alignment.CenterStart)
-                    .clip(RoundedCornerShape(12.dp))
-            ) {
-                SongBox(song, context)
-            }
-            Box(
-                modifier = Modifier
-                    .padding(start = 70.dp, end = 35.dp)
-                    .align(Alignment.CenterStart)
-            ) {
-
-                Log.d("Song  title ", songsList[index].title)
-                Text(
-                    text = songsList[index].title,
-                    fontSize = 14.sp,
-                    modifier = Modifier
-                        .padding(end = 90.dp)
-                        .basicMarquee(
-                            iterations = Int.MAX_VALUE,
-                            animationMode = MarqueeAnimationMode.Immediately,
-                            delayMillis = 2,
-                            spacing = MarqueeSpacing(20.dp),
-                            velocity = 20.dp
-                        ),
-                    color = TextWhite
-                )
-                Text(
-                    text = songsList[index].artist,
-                    fontSize = 14.sp,
-                    modifier = Modifier
-                        .padding(top = 18.dp)
-                        .basicMarquee(
-                            iterations = Int.MAX_VALUE,
-                            animationMode = MarqueeAnimationMode.Immediately,
-                            delayMillis = 2,
-                            spacing = MarqueeSpacing(20.dp),
-                            velocity = 20.dp
-                        ),
-                    color = TextForArtist,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
         }
     }
 }
@@ -193,33 +198,33 @@ fun SongBox(
     context: Context
 ) {
     val utill = Utill()
-
+    val albumArtBitMap = remember {
+        mutableStateOf<ImageBitmap?>(null) // initialize bit map
+    }
+    // is going to re-run every time the albumCover value changes
+    LaunchedEffect(song.albumCover) {
+        albumArtBitMap.value = utill.loadAlbumArtBitmap(song.albumCover, context)?.asImageBitmap()
+    }
     Box(
         modifier = Modifier
-            .clip(RoundedCornerShape(15.dp)),
+            .clip(RoundedCornerShape(12.dp)),
     ) {
-        val albumArtBitMap = remember {
-            mutableStateOf<ImageBitmap?>(null) // initialize bit map
-        }
-        // is going to re-run every time the albumCover value changes
-        LaunchedEffect(song.albumCover) {
-            albumArtBitMap.value = utill.loadAlbumArtBitmap(song.albumCover, context)?.asImageBitmap()
-        }
+
         if (albumArtBitMap.value != null){
             Image(
                 bitmap = albumArtBitMap.value!!, // Replace with your image resource
                 contentDescription = "Image",
                 modifier = Modifier
                     .align(Alignment.Center),
-                contentScale = ContentScale.Crop
+//                contentScale = ContentScale.Crop
             )
         } else {
-        Image(
-            painter = painterResource(id = R.drawable.unknown_song), // Replace with your image resource
-            contentDescription = "Image",
-            modifier = Modifier
-                .align(Alignment.Center)
-        )
+            Image(
+                painter = painterResource(id = R.drawable.unknown_song), // Replace with your image resource
+                contentDescription = "Image",
+                modifier = Modifier
+                    .align(Alignment.Center)
+            )
     }
     }
 }

@@ -58,7 +58,7 @@ fun TopNavBarLogo(){
             painter = painterResource(id = R.drawable.logo), // Replace with your image resource
             contentDescription = "Image",
             modifier = Modifier
-                .width(1000.dp)
+                .width(500.dp)
                 .height(60.dp) // Set the desired height of the image
         )
     }
