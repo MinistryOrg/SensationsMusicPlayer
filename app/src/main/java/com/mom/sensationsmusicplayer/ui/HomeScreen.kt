@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.ui.theme.MainBackgroundColor
 
@@ -22,7 +23,7 @@ import com.mom.sensationsmusicplayer.ui.theme.MainBackgroundColor
 )
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(){
+fun HomeScreen(navController : NavController){
     val viewModel: MainViewModel = viewModel()
     val musicViewModel : MusicViewModel = viewModel()
     //[START-TOP BAR]
@@ -38,7 +39,7 @@ fun HomeScreen(){
                                 .centerAlignedTopAppBarColors(MainBackgroundColor)
                         )
                         //We call the tab layout
-                        TabLayout(viewModel = viewModel, musicViewModel)
+                        TabLayout(viewModel = viewModel, musicViewModel,navController)
                     } }
                 ,
                 content = {  }

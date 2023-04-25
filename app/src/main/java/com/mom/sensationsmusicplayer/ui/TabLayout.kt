@@ -17,6 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.mom.sensationsmusicplayer.ui.theme.DividerClr
 import com.mom.sensationsmusicplayer.ui.theme.MainBackgroundColor
 import com.mom.sensationsmusicplayer.ui.theme.NotSelectedTabOption
@@ -24,7 +25,7 @@ import com.mom.sensationsmusicplayer.ui.theme.SelectedTabOption
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
 
 @Composable
-fun TabLayout(viewModel: MainViewModel, musicViewModel: MusicViewModel) {
+fun TabLayout(viewModel: MainViewModel, musicViewModel: MusicViewModel, navController : NavController) {
     val tabIndex = viewModel.tabIndex.observeAsState()
     val interactionSource = remember { MutableInteractionSource() }
 
@@ -73,7 +74,7 @@ fun TabLayout(viewModel: MainViewModel, musicViewModel: MusicViewModel) {
         )
 
         when (tabIndex.value) {
-            0 -> SongScreen(viewModel = viewModel, musicViewModel)
+            0 -> SongScreen(viewModel = viewModel, musicViewModel, navController =  navController)
             1 -> PlaylistScreen(viewModel = viewModel)
         }
 

@@ -44,6 +44,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.repository.MusicRepoImpl
@@ -57,7 +58,7 @@ import kotlinx.coroutines.withContext
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SongScreen(viewModel: MainViewModel, musicViewModel: MusicViewModel) {
+fun SongScreen(viewModel: MainViewModel, musicViewModel: MusicViewModel, navController : NavController) {
     val context = LocalContext.current
     val songsState = remember { mutableStateOf(listOf<Song>()) }
 
@@ -86,7 +87,7 @@ fun SongScreen(viewModel: MainViewModel, musicViewModel: MusicViewModel) {
                 onSongSelected = { selectedSong ->
                     selectedSongState.value = selectedSong // update the selected song
                     Log.d("VALUE TO BE IN THE PLAYER BAR BRO", selectedSongState.value.title)
-                })
+                }, navController = navController)
         }, //[END OF BOTTOM BAR (PLAYER BAR)]
         content = {
             //[START OF MAIN CONTENT OF THE SCREEN (SONG SCREEN)]

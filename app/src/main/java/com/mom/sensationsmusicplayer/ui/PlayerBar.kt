@@ -1,7 +1,6 @@
 package com.mom.sensationsmusicplayer.ui
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.MarqueeAnimationMode
@@ -32,11 +31,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.ui.theme.PlayPauseBtnClr
@@ -53,7 +52,8 @@ fun PlayerBar(
     context: Context,
     songsList: List<Song>,
     song: Song,
-    onSongSelected: (Song) -> Unit
+    onSongSelected: (Song) -> Unit,
+    navController: NavController
 ) {
     var isPlaying by remember { mutableStateOf(false) }
     var index by remember { mutableStateOf(songsList.indexOf(song)) }
@@ -91,7 +91,7 @@ fun PlayerBar(
                     .align(Alignment.CenterStart)
                     .clip(RoundedCornerShape(12.dp))
             ) {
-                SongBox(song, context)
+                SongBox(song, context, navController)
             }
             Box(
                 modifier = Modifier
@@ -99,7 +99,6 @@ fun PlayerBar(
                     .align(Alignment.CenterStart)
             ) {
 
-                Log.d("Song  title ", songsList[index].title)
                 Text(
                     text = songsList[index].title,
                     fontSize = 14.sp,
@@ -195,7 +194,8 @@ fun PlayerBar(
 @Composable
 fun SongBox(
     song: Song,
-    context: Context
+    context: Context,
+    navController: NavController
 ) {
     val utill = Utill()
     val albumArtBitMap = remember {
@@ -215,15 +215,22 @@ fun SongBox(
                 bitmap = albumArtBitMap.value!!, // Replace with your image resource
                 contentDescription = "Image",
                 modifier = Modifier
-                    .align(Alignment.Center),
-//                contentScale = ContentScale.Crop
+                    .align(Alignment.Center)
+                    .clickable {
+                        //open the new screen
+                        navController.navigate(Screen.MusicPlayerScreen.route)
+                    }
             )
+
         } else {
             Image(
                 painter = painterResource(id = R.drawable.unknown_song), // Replace with your image resource
                 contentDescription = "Image",
                 modifier = Modifier
                     .align(Alignment.Center)
+                    .clickable {
+
+                    }
             )
     }
     }
