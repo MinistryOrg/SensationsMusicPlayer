@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 val TextWhite = Color(0xffeeeeee)
 
 //Colors for Songs
+val TextSong = Color(0xFFDDDDDD)
 val TextForArtist = Color(0xFFB8B7B7)
 val SelectedSongTitle = Color(0xFFEF3036)
 val SelectedSongArtist = Color(0xFF6D1A1D)
