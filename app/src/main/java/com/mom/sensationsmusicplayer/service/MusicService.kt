@@ -74,10 +74,6 @@ class MusicService : Service() {
 
     }
 
-    private fun testing(){
-        
-    }
-
     private fun playingInTheBackground(context: Context, song: Song) {
         val intent = Intent(context, MusicService::class.java)
         intent.putExtra("songUri", song.songUri.toString())
