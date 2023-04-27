@@ -5,17 +5,24 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.mom.sensationsmusicplayer.R
+import com.mom.sensationsmusicplayer.ui.theme.DividerClr
 import com.mom.sensationsmusicplayer.ui.theme.MainBackgroundColor
+import com.mom.sensationsmusicplayer.ui.theme.SelectedTabOption
 
 
 @SuppressLint("UnrememberedMutableState", "UnusedMaterial3ScaffoldPaddingParameter",
@@ -39,10 +46,14 @@ fun HomeScreen(navController : NavController){
                                 .centerAlignedTopAppBarColors(MainBackgroundColor)
                         )
                         //We call the tab layout
-                        TabLayout(viewModel = viewModel, musicViewModel,navController)
+                        TitleOfTopBar()
+                        SongScreen(viewModel = viewModel, musicViewModel,navController)
                     } }
                 ,
-                content = {  }
+                content = {
+
+
+                }
             )
     //[END-TOP BAR]
 }
@@ -65,3 +76,29 @@ fun TopNavBarLogo(){
     }
 }
 // [END COMPOSABLE IMAGE-LOGO]
+
+@Composable
+fun TitleOfTopBar(){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Songs",
+            fontSize = 18.sp,
+            color = SelectedTabOption,
+            fontWeight = FontWeight.Bold
+        )
+    }
+    Column() {
+        Divider(
+            modifier = Modifier
+                .padding(horizontal = 15.dp, vertical = 5.dp),
+            color = DividerClr,
+            thickness = 2.dp
+        )
+    }
+}

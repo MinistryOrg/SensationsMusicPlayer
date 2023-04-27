@@ -22,6 +22,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,8 +46,11 @@ import androidx.navigation.NavController
 import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.repository.MusicRepoImpl
+import com.mom.sensationsmusicplayer.ui.theme.DividerClr
+import com.mom.sensationsmusicplayer.ui.theme.NotSelectedTabOption
 import com.mom.sensationsmusicplayer.ui.theme.SelectedSongArtist
 import com.mom.sensationsmusicplayer.ui.theme.SelectedSongTitle
+import com.mom.sensationsmusicplayer.ui.theme.SelectedTabOption
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
 import com.mom.sensationsmusicplayer.utill.Utill
@@ -138,6 +142,10 @@ fun SongScreen(viewModel: MainViewModel, musicViewModel: MusicViewModel, navCont
         })
     //[END OF SCAFFOLD]
 }
+
+
+
+
 
 @Composable
 fun SongItem(
