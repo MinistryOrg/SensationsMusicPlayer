@@ -22,7 +22,7 @@ import androidx.navigation.NavController
 import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.ui.theme.DividerClr
 import com.mom.sensationsmusicplayer.ui.theme.MainBackgroundColor
-import com.mom.sensationsmusicplayer.ui.theme.SelectedTabOption
+import com.mom.sensationsmusicplayer.ui.theme.TitleClr
 
 
 @SuppressLint("UnrememberedMutableState", "UnusedMaterial3ScaffoldPaddingParameter",
@@ -91,7 +91,7 @@ fun TitleOfTopBar(){
         Text(
             text = "Songs",
             fontSize = 18.sp,
-            color = SelectedTabOption,
+            color = TitleClr,
             fontWeight = FontWeight.Bold
         )
     }
