@@ -64,7 +64,9 @@ fun TopNavBarLogo(){
     Column( //we use column to avoid operlaping the top bar with the image
         modifier = Modifier
             .fillMaxWidth()
-            .background(MainBackgroundColor)
+            .background(MainBackgroundColor),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
             painter = painterResource(id = R.drawable.logo), // Replace with your image resource
