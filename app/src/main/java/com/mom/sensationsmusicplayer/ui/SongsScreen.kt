@@ -86,7 +86,6 @@ fun SongScreen(viewModel: MainViewModel, musicViewModel: MusicViewModel, navCont
                 songsList = songsState.value,
                 onSongSelected = { selectedSong ->
                     selectedSongState.value = selectedSong // update the selected song
-                    Log.d("VALUE TO BE IN THE PLAYER BAR BRO", selectedSongState.value.title)
                 }, navController = navController)
         }, //[END OF BOTTOM BAR (PLAYER BAR)]
         content = {

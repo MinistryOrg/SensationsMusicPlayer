@@ -9,13 +9,17 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.IBinder
+import android.os.SystemClock
+import android.support.v4.media.MediaMetadataCompat
+import android.support.v4.media.session.MediaSessionCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
+import androidx.media.session.MediaButtonReceiver
 import com.mom.sensationsmusicplayer.MainActivity
 import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.data.Song
 
-// TODO Μάλλον άχρηστο
 class MusicService : Service() {
     private var mediaPlayer: MediaPlayer? = null
 
@@ -70,7 +74,11 @@ class MusicService : Service() {
 
     }
 
-    fun playingInTheBackground(context: Context, song: Song) {
+    private fun testing(){
+        
+    }
+
+    private fun playingInTheBackground(context: Context, song: Song) {
         val intent = Intent(context, MusicService::class.java)
         intent.putExtra("songUri", song.songUri.toString())
 
@@ -90,27 +98,62 @@ class MusicService : Service() {
             notificationIntent,
             PendingIntent.FLAG_IMMUTABLE
         )
+        val mediaSession = MediaSessionCompat(context, "tag")
 
-        //  must have the same names
+        // Set the metadata for the media session
+        val metadataBuilder = MediaMetadataCompat.Builder()
+        metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, song.title)
+        metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, song.artist)
+        metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, song.album)
+        mediaSession.setMetadata(metadataBuilder.build())
+
+        // Set the playback state for the media session
+        val playbackStateBuilder = PlaybackStateCompat.Builder()
+        playbackStateBuilder.setActions(
+            PlaybackStateCompat.ACTION_PLAY or
+                    PlaybackStateCompat.ACTION_PAUSE or
+                    PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
+                    PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+        )
+        playbackStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING, 0, 1.0f, SystemClock.elapsedRealtime())
+        mediaSession.setPlaybackState(playbackStateBuilder.build())
+
+        //  must have the same names.
         val channelId = "MusicPlayerBar"
         val channelName = "MusicPlayerBar"
 
-        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val importance = NotificationManager.IMPORTANCE_LOW
         val channel = NotificationChannel(channelId, channelName, importance)
         ContextCompat.getSystemService(context, NotificationManager::class.java)?.createNotificationChannel(
             channel
         )
 
+        val mediaStyle = androidx.media.app.NotificationCompat.MediaStyle()
+            .setShowActionsInCompactView(0, 1, 2)
+            .setMediaSession(mediaSession.sessionToken)
+
+        // TODO kapos etsi kaneis ta koumpia alla den exo idea pws mporo na valo functionality
+        val pauseAction = NotificationCompat.Action(
+            R.drawable.pause_icon,
+            "Back",
+            MediaButtonReceiver.buildMediaButtonPendingIntent(
+                context,
+                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+            )
+        )
 
         val notificationUI = NotificationCompat.Builder(context, "MusicPlayerBar")
             .setSmallIcon(R.drawable.notif_icon)
             .setContentTitle(song.title)
             .setContentText(song.artist)
             .setContentIntent(pendingIntent)
+            .setStyle(mediaStyle)
+            .addAction(pauseAction)
             .build()
 
         return notificationUI
     }
+
 
     override fun onDestroy() {
         mediaPlayer?.release()

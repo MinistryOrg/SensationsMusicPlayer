@@ -28,9 +28,6 @@ class MainActivity : ComponentActivity() {
                         MusicPlayerScreen()
                     }
                 }
-                //We Call the HomeScreen of the App
-               // HomeScreen()
-
             }
         }
     }
