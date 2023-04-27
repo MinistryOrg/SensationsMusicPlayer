@@ -52,12 +52,12 @@ fun MusicPlayerScreen(){
             .background(MainBackgroundColor)//To Change the background color
         ,
         topBar = {
-            Column(modifier = Modifier
-                .background(MainBackgroundColor)
-            ){
+            Column(
+                modifier = Modifier
+                    .background(MainBackgroundColor)
+            ) {
                 //Center the image logo
                 CenterAlignedTopAppBar(
-
                     { MusicPlIcon() },
                     //Change default background color
                     colors = TopAppBarDefaults
@@ -70,12 +70,12 @@ fun MusicPlayerScreen(){
                                 tint = BackBtnClr,
                                 modifier = Modifier
                                     .size(100.dp),
-                            )
+                                )
+                            }
                         }
-                    }
-                )
-            } }
-        ,
+                    )
+                }
+            },
         content = { MainBody() }
     )
 }
@@ -152,7 +152,6 @@ fun AlbumDetails(
             color = TextForArtist,
             modifier = Modifier
                 .padding(top=30.dp, start = 25.dp)
-
         )
     }
 }
@@ -183,17 +182,6 @@ fun PlayerBtns(){
                     tint = TextWhite,
                     modifier = Modifier
                         .size(40.dp)
-
-//                        .align(Alignment.CenterEnd)
-//                        .clickable(
-//                            onClick = {
-//                                musicViewModel.nextSong(context = context, songsList, songsList[index])
-//                                if (index != -1 && index + 1 < songsList.size) {
-//                                    index += 1
-//                                }
-//                                onSongSelected(songsList[index])
-//                            }
-//                        )
                 )
             }
             Column() {
@@ -203,16 +191,6 @@ fun PlayerBtns(){
                     tint = TextWhite,
                     modifier = Modifier
                         .size(40.dp)
-//                        .align(Alignment.CenterEnd)
-//                        .clickable(
-//                            onClick = {
-//                                musicViewModel.nextSong(context = context, songsList, songsList[index])
-//                                if (index != -1 && index + 1 < songsList.size) {
-//                                    index += 1
-//                                }
-//                                onSongSelected(songsList[index])
-//                            }
-//                        )
                 )
             }
             Column() {
@@ -222,16 +200,6 @@ fun PlayerBtns(){
                     tint = MainPlayPauseBtn,
                     modifier = Modifier
                         .size(60.dp)
-//                        .align(Alignment.CenterEnd)
-//                        .clickable(
-//                            onClick = {
-//                                musicViewModel.nextSong(context = context, songsList, songsList[index])
-//                                if (index != -1 && index + 1 < songsList.size) {
-//                                    index += 1
-//                                }
-//                                onSongSelected(songsList[index])
-//                            }
-//                        )
                 )
             }
             Column() {
@@ -241,16 +209,6 @@ fun PlayerBtns(){
                     tint = TextWhite,
                     modifier = Modifier
                         .size(40.dp)
-//                        .align(Alignment.CenterEnd)
-//                        .clickable(
-//                            onClick = {
-//                                musicViewModel.nextSong(context = context, songsList, songsList[index])
-//                                if (index != -1 && index + 1 < songsList.size) {
-//                                    index += 1
-//                                }
-//                                onSongSelected(songsList[index])
-//                            }
-//                        )
                 )
             }
             Column() {
@@ -260,16 +218,6 @@ fun PlayerBtns(){
                     tint = TextWhite,
                     modifier = Modifier
                         .size(40.dp)
-//                        .align(Alignment.CenterEnd)
-//                        .clickable(
-//                            onClick = {
-//                                musicViewModel.nextSong(context = context, songsList, songsList[index])
-//                                if (index != -1 && index + 1 < songsList.size) {
-//                                    index += 1
-//                                }
-//                                onSongSelected(songsList[index])
-//                            }
-//                        )
                 )
             }
 
