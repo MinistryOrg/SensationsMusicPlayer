@@ -54,8 +54,6 @@ import com.mom.sensationsmusicplayer.ui.theme.SelectedTabOption
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
 import com.mom.sensationsmusicplayer.utill.Utill
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
