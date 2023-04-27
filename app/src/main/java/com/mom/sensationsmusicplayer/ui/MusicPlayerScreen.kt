@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.ui.theme.BackBtnClr
 import com.mom.sensationsmusicplayer.ui.theme.MainBackgroundColor
+import com.mom.sensationsmusicplayer.ui.theme.MainPlayPauseBtn
 import com.mom.sensationsmusicplayer.ui.theme.SensationsMusicPlayerTheme
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.TextSong
@@ -111,7 +113,7 @@ fun MainBody(){
             )
             .padding(top = 140.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+//        verticalArrangement = Arrangement.Top
     ) {
         AlbumDetails()
         PlayerBtns()
@@ -164,36 +166,25 @@ fun ProgSliderWithText(){
 fun PlayerBtns(){
     Box(
         modifier = Modifier
-            .padding(20.dp)
+            .padding(vertical =20.dp, horizontal = 30.dp)
+            .fillMaxWidth(),
+        contentAlignment = Alignment.BottomCenter
     ){
         Row(
             modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(20.dp),
+            verticalAlignment = Alignment.Bottom
         ){
-            Box() {
-                Icon( // go to next song
+            Column() {
+                Icon( // stop song
                     painter = painterResource(id = R.drawable.stop_icon),
                     contentDescription = "Stop",
                     tint = TextWhite,
                     modifier = Modifier
                         .size(40.dp)
-                        .align(Alignment.CenterEnd)
-//                        .clickable(
-//                            onClick = {
-//                                musicViewModel.nextSong(context = context, songsList, songsList[index])
-//                                if (index != -1 && index + 1 < songsList.size) {
-//                                    index += 1
-//                                }
-//                                onSongSelected(songsList[index])
-//                            }
-//                        )
-                )
-                Icon( // go to next song
-                    painter = painterResource(id = R.drawable.skip_next_icon),
-                    contentDescription = "Next Song",
-                    tint = TextWhite,
-                    modifier = Modifier
-                        .size(40.dp)
-                        .align(Alignment.CenterEnd)
+
+//                        .align(Alignment.CenterEnd)
 //                        .clickable(
 //                            onClick = {
 //                                musicViewModel.nextSong(context = context, songsList, songsList[index])
@@ -205,6 +196,83 @@ fun PlayerBtns(){
 //                        )
                 )
             }
+            Column() {
+                Icon( // skip to previous song
+                    painter = painterResource(id = R.drawable.skip_previous_icon),
+                    contentDescription = "Stop",
+                    tint = TextWhite,
+                    modifier = Modifier
+                        .size(40.dp)
+//                        .align(Alignment.CenterEnd)
+//                        .clickable(
+//                            onClick = {
+//                                musicViewModel.nextSong(context = context, songsList, songsList[index])
+//                                if (index != -1 && index + 1 < songsList.size) {
+//                                    index += 1
+//                                }
+//                                onSongSelected(songsList[index])
+//                            }
+//                        )
+                )
+            }
+            Column() {
+                Icon( // play and pause song
+                    painter = painterResource(id = R.drawable.play_circle_icon),
+                    contentDescription = "Stop",
+                    tint = MainPlayPauseBtn,
+                    modifier = Modifier
+                        .size(60.dp)
+//                        .align(Alignment.CenterEnd)
+//                        .clickable(
+//                            onClick = {
+//                                musicViewModel.nextSong(context = context, songsList, songsList[index])
+//                                if (index != -1 && index + 1 < songsList.size) {
+//                                    index += 1
+//                                }
+//                                onSongSelected(songsList[index])
+//                            }
+//                        )
+                )
+            }
+            Column() {
+                Icon( // go to next song
+                    painter = painterResource(id = R.drawable.skip_next_icon),
+                    contentDescription = "Next Song",
+                    tint = TextWhite,
+                    modifier = Modifier
+                        .size(40.dp)
+//                        .align(Alignment.CenterEnd)
+//                        .clickable(
+//                            onClick = {
+//                                musicViewModel.nextSong(context = context, songsList, songsList[index])
+//                                if (index != -1 && index + 1 < songsList.size) {
+//                                    index += 1
+//                                }
+//                                onSongSelected(songsList[index])
+//                            }
+//                        )
+                )
+            }
+            Column() {
+                Icon( // go to queue
+                    painter = painterResource(id = R.drawable.queue_music_icon),
+                    contentDescription = "Next Song",
+                    tint = TextWhite,
+                    modifier = Modifier
+                        .size(40.dp)
+//                        .align(Alignment.CenterEnd)
+//                        .clickable(
+//                            onClick = {
+//                                musicViewModel.nextSong(context = context, songsList, songsList[index])
+//                                if (index != -1 && index + 1 < songsList.size) {
+//                                    index += 1
+//                                }
+//                                onSongSelected(songsList[index])
+//                            }
+//                        )
+                )
+            }
+
         }
     }
 }

@@ -8,7 +8,7 @@ val TextWhite = Color(0xffeeeeee)
 val TextSong = Color(0xFFDDDDDD)
 val TextForArtist = Color(0xFFB8B7B7)
 val SelectedSongTitle = Color(0xFFEF3036)
-val SelectedSongArtist = Color(0xFF6D1A1D)
+val SelectedSongArtist = Color(0xFFA3262B)
 
 //Tab row colors
 val SelectedTabOption = Color(0xFFC73237)
@@ -24,8 +24,11 @@ val MainBackgroundColor = Color(0xFF14243C)
 //Color for player Bar
 val PlayerBarClr = Color(0xFF121212)
 val PlayPauseBtnClr = Color(0xFF810105)
-//Color for back button
+
+//Colors for MusicPlayer Screen
 val BackBtnClr = Color(0xFFEF3036)
+val MainPlayPauseBtn = Color(0xFFEF3036)
+
 
 val PurpleGrey80 = Color(0xFFCCC2DC)
 val Pink80 = Color(0xFFEFB8C8)
