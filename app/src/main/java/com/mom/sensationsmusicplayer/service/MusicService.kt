@@ -19,6 +19,7 @@ import androidx.media.session.MediaButtonReceiver
 import com.mom.sensationsmusicplayer.MainActivity
 import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.data.Song
+import com.mom.sensationsmusicplayer.utill.MusicPlayerNotificationReceiver
 
 class MusicService : Service() {
     private var mediaPlayer: MediaPlayer? = null
@@ -87,6 +88,7 @@ class MusicService : Service() {
     }
 
     private fun createNotification(context: Context, song: Song): Notification {
+        val musicPlayerNotificationReceiver = MusicPlayerNotificationReceiver()
         val notificationIntent = Intent(context, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             context,
@@ -131,7 +133,25 @@ class MusicService : Service() {
         // TODO kapos etsi kaneis ta koumpia alla den exo idea pws mporo na valo functionality
         val pauseAction = NotificationCompat.Action(
             R.drawable.pause_icon,
-            "Back",
+            "Pause",
+            MediaButtonReceiver.buildMediaButtonPendingIntent(
+                context,
+                PlaybackStateCompat.ACTION_PAUSE
+            )
+        )
+
+        val nextAction = NotificationCompat.Action(
+            R.drawable.skip_next_icon,
+            "Next",
+            MediaButtonReceiver.buildMediaButtonPendingIntent(
+                context,
+                PlaybackStateCompat.ACTION_SKIP_TO_NEXT
+            )
+        )
+
+        val prevAction = NotificationCompat.Action(
+            R.drawable.skip_previous_icon,
+            "Previous",
             MediaButtonReceiver.buildMediaButtonPendingIntent(
                 context,
                 PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
@@ -144,7 +164,9 @@ class MusicService : Service() {
             .setContentText(song.artist)
             .setContentIntent(pendingIntent)
             .setStyle(mediaStyle)
+            .addAction(prevAction)
             .addAction(pauseAction)
+            .addAction(nextAction)
             .build()
 
         return notificationUI
