@@ -45,22 +45,26 @@ class MusicService : Service() {
         playingInTheBackground(context, song)
     }
 
-    fun nextSong(context: Context, songList: List<Song>, song: Song) {
+    fun nextSong(context: Context, songList: List<Song>, song: Song): Song {
         val songPos = songList.indexOf(song)
         val newSongPos = songPos + 1
         if (songPos != -1 && newSongPos < songList.size) {
             val nextSong = songList[newSongPos]
             playSong(context, nextSong)
+            return nextSong
         }
+        return song
     }
 
-    fun prevSong(context: Context, songList: List<Song>, song: Song) {
+    fun prevSong(context: Context, songList: List<Song>, song: Song) : Song {
         val songPos = songList.indexOf(song)
         val nextSongPos = songPos - 1
         if (nextSongPos > 0) {
             val prevSong = songList[nextSongPos]
             playSong(context, prevSong)
+            return prevSong
         }
+        return  song
     }
 
     fun pauseSong(){

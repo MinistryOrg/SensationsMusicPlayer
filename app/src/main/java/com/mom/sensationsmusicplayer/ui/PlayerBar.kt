@@ -49,14 +49,15 @@ import com.mom.sensationsmusicplayer.utill.Utill
 fun PlayerBar(
     modifier: Modifier = Modifier,
     musicViewModel: MusicViewModel,
-    context: Context,
-    songsList: List<Song>,
-    song: Song,
     onSongSelected: (Song) -> Unit,
     navController: NavController
 ) {
+    val context = musicViewModel.context
+    val songsList = musicViewModel.songList
+    val song = musicViewModel.song
+
     var isPlaying by remember { mutableStateOf(false) }
-    var index by remember { mutableStateOf(songsList.indexOf(song)) }
+    var index by remember { mutableStateOf(songsList!!.indexOf(song)) }
 
     val icon = if (isPlaying) {
         R.drawable.play_arrow_icon
@@ -64,8 +65,8 @@ fun PlayerBar(
         R.drawable.pause_icon
     }
 
-    onSongSelected(song)
-    index = songsList.indexOf(song)
+    onSongSelected(song!!)
+    index = songsList!!.indexOf(song)
 
     Card(
         modifier = modifier
@@ -91,7 +92,7 @@ fun PlayerBar(
                     .align(Alignment.CenterStart)
                     .clip(RoundedCornerShape(12.dp))
             ) {
-                SongBox(song, context, navController)
+                SongBox(song, context!!, navController)
             }
             Box(
                 modifier = Modifier
@@ -140,7 +141,7 @@ fun PlayerBar(
                     .align(Alignment.CenterEnd)
                     .clickable(
                         onClick = {
-                            musicViewModel.nextSong(context = context, songsList, songsList[index])
+                            musicViewModel.nextSong()
                             if (index != -1 && index + 1 < songsList.size) {
                                 index += 1
                             }
@@ -164,7 +165,7 @@ fun PlayerBar(
                                 musicViewModel.stopSong()
                             } else {
                                 onSongSelected(songsList[index])
-                                musicViewModel.playSong(context, songsList[index])
+                                musicViewModel.playSong()
                             }
                         }
                     ),
@@ -179,7 +180,7 @@ fun PlayerBar(
                     .padding(end = 80.dp)
                     .clickable(
                         onClick = {
-                            musicViewModel.prevSong(context, songsList, songsList[index])
+                            musicViewModel.prevSong()
                             if (index - 1 > 0) {
                                 index -= 1
                             }
@@ -218,7 +219,7 @@ fun SongBox(
                     .align(Alignment.Center)
                     .clickable {
                         //open the new screen
-                        navController.navigate(Screen.MusicPlayerScreen.route)
+                        navController.navigate(Screen.MusicPlayerScreen.route )
                     }
             )
 
@@ -229,7 +230,7 @@ fun SongBox(
                 modifier = Modifier
                     .align(Alignment.Center)
                     .clickable {
-
+                        navController.navigate(Screen.MusicPlayerScreen.route)
                     }
             )
     }

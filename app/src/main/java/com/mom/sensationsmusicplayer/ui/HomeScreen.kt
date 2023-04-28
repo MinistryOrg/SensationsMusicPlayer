@@ -30,9 +30,7 @@ import com.mom.sensationsmusicplayer.ui.theme.TitleClr
 )
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController : NavController){
-    val viewModel: MainViewModel = viewModel()
-    val musicViewModel : MusicViewModel = viewModel()
+fun HomeScreen(navController : NavController, musicViewModel : MusicViewModel){
     //[START-TOP BAR]
             Scaffold(
                 modifier =  Modifier.background(MainBackgroundColor), //To Change the background color
@@ -47,7 +45,7 @@ fun HomeScreen(navController : NavController){
                         )
                         //We call the tab layout
                         TitleOfTopBar()
-                        SongScreen(viewModel = viewModel, musicViewModel,navController)
+                        SongScreen(musicViewModel,navController)
                     } }
                 ,
                 content = {

@@ -1,13 +1,10 @@
 package com.mom.sensationsmusicplayer.ui
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -53,14 +50,14 @@ import com.mom.sensationsmusicplayer.utill.Utill
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SongScreen(viewModel: MainViewModel, musicViewModel: MusicViewModel, navController : NavController) {
-    val context = LocalContext.current
+fun SongScreen(musicViewModel: MusicViewModel, navController : NavController) {
+    musicViewModel.context = LocalContext.current
     val songsState = remember { mutableStateOf(listOf<Song>()) }
-
-    val songs = MusicRepoImpl().getSongs(context)
-    songsState.value = songs
+    musicViewModel.songList = MusicRepoImpl().getSongs(musicViewModel.context!!)
+    songsState.value = musicViewModel.songList!!
     val selectedSongState = remember { mutableStateOf(songsState.value[0]) }
-    //[START OF SCAFFOLD]
+    musicViewModel.song = selectedSongState.value
+            //[START OF SCAFFOLD]
     Scaffold(
         //[START OF BOTTOM BAR (PLAYER BAR)]
         bottomBar = {
@@ -75,10 +72,7 @@ fun SongScreen(viewModel: MainViewModel, musicViewModel: MusicViewModel, navCont
                         )
                     )
                     .padding(bottom = 20.dp, start = 7.dp, end = 7.dp),
-                context = context,
                 musicViewModel = musicViewModel,
-                song = selectedSongState.value,
-                songsList = songsState.value,
                 onSongSelected = { selectedSong ->
                     selectedSongState.value = selectedSong // update the selected song
                 }, navController = navController)
@@ -95,16 +89,8 @@ fun SongScreen(viewModel: MainViewModel, musicViewModel: MusicViewModel, navCont
                             endY = Float.POSITIVE_INFINITY
                         )
                     )
-                    .draggable(
-                        state = viewModel.dragState.value!!,
-                        orientation = Orientation.Horizontal,
-                        onDragStarted = { },
-                        onDragStopped = {
-                            viewModel.updateTabIndexBasedOnSwipe()
-                        }),
-                //Center the column
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+
+
             ) {
                 Row(
                     modifier = Modifier
@@ -123,10 +109,9 @@ fun SongScreen(viewModel: MainViewModel, musicViewModel: MusicViewModel, navCont
                     ) {
                         items(songsState.value) { song ->
                             // call the bar to add the song
-                            SongItem(song = song, context, musicViewModel,onSongSelected = { selectedSong ->
+                            SongItem( musicViewModel, song, onSongSelected = { selectedSong ->
                                 selectedSongState.value = selectedSong // update the selected song
                             })
-                            Log.d("SELECTED SONG STATE ", selectedSongState.value.title)
                         }
                     }
                     //[END OF LAZY VERTICAL GRID]
@@ -137,17 +122,13 @@ fun SongScreen(viewModel: MainViewModel, musicViewModel: MusicViewModel, navCont
     //[END OF SCAFFOLD]
 }
 
-
-
-
-
 @Composable
 fun SongItem(
-    song: Song,
-    context: Context,
     musicViewModel: MusicViewModel,
+    song: Song,
     onSongSelected: (Song) -> Unit // new parameter to handle song selection
 ) {
+    val context = musicViewModel.context
     val albumArtBitMap = remember {
         mutableStateOf<ImageBitmap?>(null) // initialize bit map
     }
@@ -158,8 +139,9 @@ fun SongItem(
     val isSelected = remember { mutableStateOf(false) }
     // is going to re-run every time the albumCover value changes
     LaunchedEffect(song.albumCover) {
-        albumArtBitMap.value = utill.loadAlbumArtBitmap(song.albumCover, context)?.asImageBitmap()
+        albumArtBitMap.value = utill.loadAlbumArtBitmap(song.albumCover, context!!)?.asImageBitmap()
     }
+
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -177,7 +159,7 @@ fun SongItem(
                 .clickable {
                     isSelected.value = !isSelected.value // toggle selection state
                     onSongSelected(song)
-                    musicViewModel.playSong(context, song)
+                    musicViewModel.playSong()
                 }) {
                 if (albumArtBitMap.value != null) {
                     Image(
