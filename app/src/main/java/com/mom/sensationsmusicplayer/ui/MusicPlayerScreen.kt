@@ -24,27 +24,37 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.mom.sensationsmusicplayer.R
+import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.ui.theme.BackBtnClr
 import com.mom.sensationsmusicplayer.ui.theme.MainBackgroundColor
 import com.mom.sensationsmusicplayer.ui.theme.MainPlayPauseBtn
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.TextSong
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
+import com.mom.sensationsmusicplayer.utill.Utill
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MusicPlayerScreen(musicViewModel: MusicViewModel ){
-
+fun MusicPlayerScreen(musicViewModel: MusicViewModel, navController: NavController ){
     Scaffold(
         modifier =  Modifier
             .background(MainBackgroundColor)//To Change the background color
@@ -61,7 +71,7 @@ fun MusicPlayerScreen(musicViewModel: MusicViewModel ){
                     colors = TopAppBarDefaults
                         .centerAlignedTopAppBarColors(MainBackgroundColor),
                     navigationIcon = {
-                        IconButton(onClick = { /*TODO*/ }) {
+                        IconButton(onClick = { navController.navigate(Screen.HomeScreen.route) }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.back_icon),
                                 contentDescription = "Back",
@@ -120,19 +130,44 @@ fun MainBody(musicViewModel: MusicViewModel){
 
 @Composable
 fun AlbumDetails(
-    musicViewModel: MusicViewModel
+    musicViewModel: MusicViewModel,
 ){
+    val songsList = musicViewModel.songList
+    val song = musicViewModel.song
+
+    var index by remember { mutableStateOf(songsList!!.indexOf(song)) }
+    index = songsList!!.indexOf(musicViewModel.song)
+    musicViewModel.song = songsList[index]
+
+    val albumArtBitMap = remember {
+        mutableStateOf<ImageBitmap?>(null) // initialize bit map
+    }
+
+    val utill  = Utill()
+
+    // is going to re-run every time the albumCover value changes
+    LaunchedEffect(song!!.albumCover) {
+        albumArtBitMap.value = utill.loadAlbumArtBitmap(song!!.albumCover, musicViewModel.context!!)?.asImageBitmap()
+    }
+
     Box(modifier = Modifier
         .clip(RoundedCornerShape(10.dp))
     ){
-        Image(
-            painter = painterResource(id = R.drawable.unknown_song), // Replace with your image resource
-            contentDescription = musicViewModel.song?.albumCover,
-            modifier = Modifier
-                .width(1000.dp)
-                .height(276.dp)
-                .align(Alignment.TopCenter)
-        )
+        if (albumArtBitMap.value != null) {
+            Image(
+                bitmap = albumArtBitMap.value!!, // Replace with your image resource
+                contentDescription = "Image",
+                modifier = Modifier.align(Alignment.Center),
+                contentScale = ContentScale.Crop
+            )
+        } else {
+            Image(
+                painter = painterResource(id = R.drawable.unknown_song), // Replace with your image resource
+                contentDescription = "Image",
+                modifier = Modifier
+                    .align(Alignment.Center)
+            )
+        }
     }
     Box(
         modifier = Modifier
@@ -140,30 +175,19 @@ fun AlbumDetails(
 
     ) {
             Text(
-                musicViewModel.song!!.title,
+                songsList[index].title,
                 textAlign = TextAlign.Center,
                 color = TextSong
             )
-
-        musicViewModel.song?.let { song->
             Text(
-                song.artist,
+                songsList[index].artist,
                 textAlign = TextAlign.Center,
                 color = TextForArtist,
                 modifier = Modifier
                     .padding(top=30.dp, start = 25.dp)
             )
-        }
     }
-}
-
-@Composable
-fun ProgSliderWithText(){
-
-}
-
-@Composable
-fun PlayerButtons(musicViewModel: MusicViewModel){
+    // Player buttons
     Box(
         modifier = Modifier
             .padding(vertical = 20.dp, horizontal = 30.dp)
@@ -194,6 +218,9 @@ fun PlayerButtons(musicViewModel: MusicViewModel){
                         .size(40.dp)
                         .clickable {
                             musicViewModel.prevSong()
+                            if (index - 1 > 0) {
+                                index -= 1
+                            }
                         }
                 )
             }
@@ -218,6 +245,9 @@ fun PlayerButtons(musicViewModel: MusicViewModel){
                         .size(40.dp)
                         .clickable {
                             musicViewModel.nextSong()
+                            if (index != -1 && index + 1 < songsList!!.size) {
+                                index += 1
+                            }
                         }
                 )
             }
@@ -233,6 +263,16 @@ fun PlayerButtons(musicViewModel: MusicViewModel){
 
         }
     }
+}
+
+@Composable
+fun ProgSliderWithText(){
+
+}
+
+@Composable
+fun PlayerButtons(musicViewModel: MusicViewModel){
+
 }
 
 
