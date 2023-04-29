@@ -42,7 +42,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.mom.sensationsmusicplayer.R
-import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.ui.theme.BackBtnClr
 import com.mom.sensationsmusicplayer.ui.theme.MainBackgroundColor
 import com.mom.sensationsmusicplayer.ui.theme.MainPlayPauseBtn
@@ -121,7 +120,6 @@ fun MainBody(musicViewModel: MusicViewModel){
             )
             .padding(top = 140.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-//        verticalArrangement = Arrangement.Top
     ) {
         AlbumDetails(musicViewModel)
         PlayerButtons(musicViewModel = musicViewModel)
@@ -133,9 +131,8 @@ fun AlbumDetails(
     musicViewModel: MusicViewModel,
 ){
     val songsList = musicViewModel.songList
-    val song = musicViewModel.song
 
-    var index by remember { mutableStateOf(songsList!!.indexOf(song)) }
+    var index by remember { mutableStateOf(songsList!!.indexOf(musicViewModel.song)) }
     index = songsList!!.indexOf(musicViewModel.song)
     musicViewModel.song = songsList[index]
 
@@ -146,8 +143,8 @@ fun AlbumDetails(
     val utill  = Utill()
 
     // is going to re-run every time the albumCover value changes
-    LaunchedEffect(song!!.albumCover) {
-        albumArtBitMap.value = utill.loadAlbumArtBitmap(song!!.albumCover, musicViewModel.context!!)?.asImageBitmap()
+    LaunchedEffect(musicViewModel.song!!.albumCover) {
+        albumArtBitMap.value = utill.loadAlbumArtBitmap(musicViewModel.song!!.albumCover, musicViewModel.context!!)?.asImageBitmap()
     }
 
     Box(modifier = Modifier
@@ -245,7 +242,7 @@ fun AlbumDetails(
                         .size(40.dp)
                         .clickable {
                             musicViewModel.nextSong()
-                            if (index != -1 && index + 1 < songsList!!.size) {
+                            if (index != -1 && index + 1 < songsList.size) {
                                 index += 1
                             }
                         }

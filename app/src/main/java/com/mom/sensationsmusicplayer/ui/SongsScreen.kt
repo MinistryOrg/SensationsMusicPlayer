@@ -57,7 +57,7 @@ fun SongScreen(musicViewModel: MusicViewModel, navController : NavController) {
     songsState.value = musicViewModel.songList!!
     val selectedSongState = remember { mutableStateOf(songsState.value[0]) }
     musicViewModel.song = selectedSongState.value
-            //[START OF SCAFFOLD]
+    //[START OF SCAFFOLD]
     Scaffold(
         //[START OF BOTTOM BAR (PLAYER BAR)]
         bottomBar = {
@@ -129,6 +129,7 @@ fun SongItem(
     onSongSelected: (Song) -> Unit // new parameter to handle song selection
 ) {
     val context = musicViewModel.context
+
     val albumArtBitMap = remember {
         mutableStateOf<ImageBitmap?>(null) // initialize bit map
     }
@@ -158,6 +159,7 @@ fun SongItem(
                 .clickable {
                     isSelected.value = !isSelected.value // toggle selection state
                     onSongSelected(song)
+                    musicViewModel.song = song
                     musicViewModel.playSong()
                 }) {
                 if (albumArtBitMap.value != null) {

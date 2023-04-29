@@ -60,7 +60,6 @@ fun PlayerBar(
     var index by remember { mutableStateOf(songsList!!.indexOf(song)) }
 
     val icon = if (isPlaying) {
-        println("lol")
         R.drawable.play_arrow_icon
     } else {
         R.drawable.pause_icon
@@ -102,7 +101,7 @@ fun PlayerBar(
             ) {
 
                 Text(
-                    text = songsList[index].title,
+                    text = musicViewModel.song!!.title,
                     fontSize = 14.sp,
                     modifier = Modifier
                         .padding(end = 90.dp)
@@ -116,7 +115,7 @@ fun PlayerBar(
                     color = TextWhite
                 )
                 Text(
-                    text = songsList[index].artist,
+                    text = musicViewModel.song!!.artist,
                     fontSize = 14.sp,
                     modifier = Modifier
                         .padding(top = 18.dp)
@@ -143,10 +142,7 @@ fun PlayerBar(
                     .clickable(
                         onClick = {
                             musicViewModel.nextSong()
-                            if (index != -1 && index + 1 < songsList.size) {
-                                index += 1
-                            }
-                            onSongSelected(songsList[index])
+                            onSongSelected(musicViewModel.song!!)
                         }
                     )
             )
@@ -165,7 +161,7 @@ fun PlayerBar(
                             if (isPlaying) {     // == to true because is Boolean? and maybe return null
                                 musicViewModel.stopSong()
                             } else {
-                                onSongSelected(songsList[index])
+                                onSongSelected(musicViewModel.song!!)
                                 musicViewModel.playSong()
                             }
                         }
@@ -182,10 +178,7 @@ fun PlayerBar(
                     .clickable(
                         onClick = {
                             musicViewModel.prevSong()
-                            if (index - 1 > 0) {
-                                index -= 1
-                            }
-                            onSongSelected(songsList[index])
+                            onSongSelected(musicViewModel.song!!)
                         }
                     )
             )

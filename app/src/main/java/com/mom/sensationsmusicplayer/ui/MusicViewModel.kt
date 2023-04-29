@@ -1,6 +1,7 @@
 package com.mom.sensationsmusicplayer.ui
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.service.MusicService
@@ -12,6 +13,7 @@ class MusicViewModel : ViewModel() {
     var context : Context ?= null
 
     fun playSong() {
+        Log.d("PLAYING THE SONG ", song!!.title)
         musicService.playSong(context = context!!, song!!)
     }
 
