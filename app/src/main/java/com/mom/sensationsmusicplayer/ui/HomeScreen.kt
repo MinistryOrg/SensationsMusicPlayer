@@ -24,7 +24,6 @@ import com.mom.sensationsmusicplayer.ui.theme.DividerClr
 import com.mom.sensationsmusicplayer.ui.theme.MainBackgroundColor
 import com.mom.sensationsmusicplayer.ui.theme.TitleClr
 
-
 @SuppressLint("UnrememberedMutableState", "UnusedMaterial3ScaffoldPaddingParameter",
     "SuspiciousIndentation"
 )
@@ -49,7 +48,6 @@ fun HomeScreen(navController : NavController, musicViewModel : MusicViewModel){
                     } }
                 ,
                 content = {
-
 
                 }
             )

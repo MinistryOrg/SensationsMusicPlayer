@@ -6,7 +6,7 @@ import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.service.MusicService
 
 class MusicViewModel : ViewModel() {
-    private var musicService : MusicService = MusicService()
+    private val musicService : MusicService = MusicService()
     var song : Song ?= null
     var songList : List  <Song> ?= null
     var context : Context ?= null
@@ -16,7 +16,7 @@ class MusicViewModel : ViewModel() {
     }
 
     fun nextSong() {
-        song = musicService.nextSong(context = context!!, songList!!, song!!)
+        musicService.nextSong(context = context!!, songList!!, song!!)
     }
 
     fun prevSong() {

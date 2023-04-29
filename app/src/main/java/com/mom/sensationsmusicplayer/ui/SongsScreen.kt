@@ -142,7 +142,6 @@ fun SongItem(
         albumArtBitMap.value = utill.loadAlbumArtBitmap(song.albumCover, context!!)?.asImageBitmap()
     }
 
-
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,

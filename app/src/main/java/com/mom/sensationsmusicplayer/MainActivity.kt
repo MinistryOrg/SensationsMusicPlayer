@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
                         HomeScreen(navController, musicViewModel)
                     }
                     composable(Screen.MusicPlayerScreen.route) { backStackEntry ->
-                        MusicPlayerScreen(musicViewModel = musicViewModel,navController)
+                        MusicPlayerScreen(musicViewModel = musicViewModel, navController = navController)
                     }
 
                 }
