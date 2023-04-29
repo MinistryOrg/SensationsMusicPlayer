@@ -60,6 +60,7 @@ fun PlayerBar(
     var index by remember { mutableStateOf(songsList!!.indexOf(song)) }
 
     val icon = if (isPlaying) {
+        println("lol")
         R.drawable.play_arrow_icon
     } else {
         R.drawable.pause_icon
@@ -219,7 +220,7 @@ fun SongBox(
                     .align(Alignment.Center)
                     .clickable {
                         //open the new screen
-                        navController.navigate(Screen.MusicPlayerScreen.route )
+                        navController.navigate(Screen.MusicPlayerScreen.route)
                     }
             )
 
