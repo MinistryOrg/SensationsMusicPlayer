@@ -16,11 +16,11 @@ class MusicViewModel : ViewModel() {
     }
 
     fun nextSong() {
-        musicService.nextSong(context = context!!, songList!!, song!!)
+        song = musicService.nextSong(context = context!!, songList!!, song!!)
     }
 
     fun prevSong() {
-        musicService.prevSong(context!!, songList!!, song!!)
+        song = musicService.prevSong(context!!, songList!!, song!!)
     }
 
     fun stopSong() {
