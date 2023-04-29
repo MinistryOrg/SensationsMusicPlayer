@@ -56,7 +56,11 @@ fun SongScreen(musicViewModel: MusicViewModel, navController : NavController) {
     musicViewModel.songList = MusicRepoImpl().getSongs(musicViewModel.context!!)
     songsState.value = musicViewModel.songList!!
     val selectedSongState = remember { mutableStateOf(songsState.value[0]) }
-    musicViewModel.song = selectedSongState.value
+
+    if (musicViewModel.song == null){
+        musicViewModel.song = selectedSongState.value
+    }
+    
     //[START OF SCAFFOLD]
     Scaffold(
         //[START OF BOTTOM BAR (PLAYER BAR)]
