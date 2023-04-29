@@ -1,6 +1,7 @@
 package com.mom.sensationsmusicplayer.ui
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.MarqueeAnimationMode
@@ -66,7 +67,7 @@ fun PlayerBar(
     }
 
     onSongSelected(song!!)
-    index = songsList!!.indexOf(song)
+    index = songsList!!.indexOf(musicViewModel.song)
 
     Card(
         modifier = modifier
@@ -161,8 +162,8 @@ fun PlayerBar(
                             if (isPlaying) {     // == to true because is Boolean? and maybe return null
                                 musicViewModel.stopSong()
                             } else {
-                                onSongSelected(musicViewModel.song!!)
                                 musicViewModel.playSong()
+                                onSongSelected(musicViewModel.song!!)
                             }
                         }
                     ),

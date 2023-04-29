@@ -60,7 +60,7 @@ fun SongScreen(musicViewModel: MusicViewModel, navController : NavController) {
     if (musicViewModel.song == null){
         musicViewModel.song = selectedSongState.value
     }
-    
+
     //[START OF SCAFFOLD]
     Scaffold(
         //[START OF BOTTOM BAR (PLAYER BAR)]
@@ -80,6 +80,8 @@ fun SongScreen(musicViewModel: MusicViewModel, navController : NavController) {
                 onSongSelected = { selectedSong ->
                     selectedSongState.value = selectedSong // update the selected song
                 }, navController = navController)
+            Log.d("WTF", musicViewModel.song!!.title)
+            musicViewModel.song = selectedSongState.value
         }, //[END OF BOTTOM BAR (PLAYER BAR)]
         content = {
             //[START OF MAIN CONTENT OF THE SCREEN (SONG SCREEN)]
@@ -113,7 +115,7 @@ fun SongScreen(musicViewModel: MusicViewModel, navController : NavController) {
                     ) {
                         items(songsState.value) { song ->
                             // call the bar to add the song
-                            SongItem( musicViewModel, song, onSongSelected = { selectedSong ->
+                            SongItem( musicViewModel, song,selectedSongState.value, onSongSelected = { selectedSong ->
                                 selectedSongState.value = selectedSong // update the selected song
                             })
                         }
@@ -130,6 +132,7 @@ fun SongScreen(musicViewModel: MusicViewModel, navController : NavController) {
 fun SongItem(
     musicViewModel: MusicViewModel,
     song: Song,
+    selectedState : Song,
     onSongSelected: (Song) -> Unit // new parameter to handle song selection
 ) {
     val context = musicViewModel.context
