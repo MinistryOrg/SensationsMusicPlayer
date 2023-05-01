@@ -153,16 +153,21 @@ fun AlbumDetails(
         if (albumArtBitMap.value != null) {
             Image(
                 bitmap = albumArtBitMap.value!!, // Replace with your image resource
-                contentDescription = "Image",
-                modifier = Modifier.align(Alignment.Center),
+                contentDescription = "Album Cover Image",
+                modifier = Modifier
+                    .align(Alignment.Center)
+                    .height(300.dp)
+                    .width(300.dp),
                 contentScale = ContentScale.Crop
             )
         } else {
             Image(
                 painter = painterResource(id = R.drawable.unknown_song), // Replace with your image resource
-                contentDescription = "Image",
+                contentDescription = "No Album Cover Image",
                 modifier = Modifier
                     .align(Alignment.Center)
+                    .height(300.dp)
+                    .width(300.dp)
             )
         }
     }
