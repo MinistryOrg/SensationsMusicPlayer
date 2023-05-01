@@ -1,19 +1,21 @@
 package com.mom.sensationsmusicplayer.ui
 
 import android.content.Context
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.service.MusicService
+import com.mom.sensationsmusicplayer.service.NotificationService
 
 class MusicViewModel : ViewModel() {
     private val musicService : MusicService = MusicService()
+    private val notificationService : NotificationService = NotificationService()
     var song : Song ?= null
     var songList : List  <Song> ?= null
     var context : Context ?= null
 
     fun playSong() {
-        Log.d("PLAYING THE SONG ", song!!.title)
+        //notificationService.showNotification(context = context!!, song!!)
+        notificationService.playingInTheBackground(context!!,song!!,musicService)
         musicService.playSong(context = context!!, song!!)
     }
 
@@ -27,6 +29,10 @@ class MusicViewModel : ViewModel() {
 
     fun stopSong() {
         musicService.stopSong()
+    }
+
+    fun moveInTrack(position : Int){
+        musicService.seekTo(position )
     }
 
     fun pauseSong(){

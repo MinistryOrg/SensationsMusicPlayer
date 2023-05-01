@@ -80,7 +80,6 @@ fun SongScreen(musicViewModel: MusicViewModel, navController : NavController) {
                 onSongSelected = { selectedSong ->
                     selectedSongState.value = selectedSong // update the selected song
                 }, navController = navController)
-            Log.d("WTF", musicViewModel.song!!.title)
             musicViewModel.song = selectedSongState.value
         }, //[END OF BOTTOM BAR (PLAYER BAR)]
         content = {
