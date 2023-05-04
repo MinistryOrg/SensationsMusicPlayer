@@ -23,3 +23,5 @@ val PlayPauseBtnClr = Color(0xFF810105)
 //Colors for MusicPlayer Screen
 val BackBtnClr = Color(0xFFEF3036)
 val MainPlayPauseBtn = Color(0xFFEF3036)
+val SliderColor = Color(0xFFCB2B30)
+val InActiveTrackColor = Color(0xC8DDDDDD)
