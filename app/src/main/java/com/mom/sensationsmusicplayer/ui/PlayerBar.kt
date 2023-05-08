@@ -54,7 +54,6 @@ fun PlayerBar(
 ) {
 
     var isPlaying by remember { mutableStateOf(false) }
-    var index by remember { mutableStateOf(musicViewModel.songList!!.indexOf(musicViewModel.song)) }
     val updateSong = musicViewModel.updateSong.collectAsState()
 
     val icon = if (isPlaying) {
@@ -63,8 +62,6 @@ fun PlayerBar(
         R.drawable.pause_icon
     }
     musicViewModel.song = updateSong.value
-    //onSongSelected(musicViewModel.song!!)
-    index = musicViewModel.songList!!.indexOf(musicViewModel.song)
 
     Card(
         modifier = modifier
@@ -140,7 +137,6 @@ fun PlayerBar(
                     .clickable(
                         onClick = {
                             musicViewModel.nextSong()
-                            //onSongSelected(musicViewModel.song!!)
                         }
                     )
             )
@@ -160,7 +156,6 @@ fun PlayerBar(
                                 musicViewModel.stopSong()
                             } else {
                                 musicViewModel.playSong()
-                                //onSongSelected(musicViewModel.song!!)
                             }
                         }
                     ),
@@ -176,7 +171,6 @@ fun PlayerBar(
                     .clickable(
                         onClick = {
                             musicViewModel.prevSong()
-                           // onSongSelected(musicViewModel.song!!)
                         }
                     )
             )

@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -134,11 +135,9 @@ fun MainBody(musicViewModel: MusicViewModel){
 fun AlbumDetails(
     musicViewModel: MusicViewModel,
 ){
-    val songsList = musicViewModel.songList
 
-    var index by remember { mutableStateOf(songsList!!.indexOf(musicViewModel.song)) }
-    index = songsList!!.indexOf(musicViewModel.song)
-    musicViewModel.song = songsList[index]
+    val updateSong = musicViewModel.updateSong.collectAsState()
+    musicViewModel.song = updateSong.value
 
     val albumArtBitMap = remember {
         mutableStateOf<ImageBitmap?>(null) // initialize bit map
@@ -192,11 +191,11 @@ fun AlbumDetails(
 
     ) {
             Text(
-                songsList[index].title,
+                musicViewModel.song!!.title,
                 color = TextSong
             )
             Text(
-                songsList[index].artist,
+                musicViewModel.song!!.artist,
                 color = TextForArtist,
                 modifier = Modifier.padding(top=50.dp)
             )
@@ -239,9 +238,6 @@ fun AlbumDetails(
                         .size(40.dp)
                         .clickable {
                             musicViewModel.prevSong()
-                            if (index - 1 > 0) {
-                                index -= 1
-                            }
                         }
                 )
             }
@@ -275,9 +271,6 @@ fun AlbumDetails(
                         .size(40.dp)
                         .clickable {
                             musicViewModel.nextSong()
-                            if (index != -1 && index + 1 < songsList.size) {
-                                index += 1
-                            }
                         }
                 )
             }
