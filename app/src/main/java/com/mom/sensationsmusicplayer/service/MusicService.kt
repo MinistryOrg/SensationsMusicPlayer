@@ -69,8 +69,13 @@ class MusicService : Service() {
     }
 
     //  to move in track
-    fun seekTo(position: Int) {
-        mediaPlayer?.seekTo(position) // position is in milliseconds
+    fun seekTo(position: Float) {
+        mediaPlayer?.seekTo(convertMinToMilli(position)) // position is in milliseconds
+    }
+
+    private fun convertMinToMilli(position: Float) : Int{
+        val milli = position * 60000
+        return milli.toInt()
     }
 
     fun getCurrentPosition(): Int {

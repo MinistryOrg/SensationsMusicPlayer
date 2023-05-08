@@ -310,8 +310,7 @@ fun ProgSliderWithText(
             sliderValue = sliderValue_
         },
         onValueChangeFinished = {
-            // this is called when the user completed selecting the value
-//            Log.d("MainActivity", "sliderValue = $sliderValue")
+            musicViewModel.moveInTrack(sliderValue)
         },
         valueRange = 0f..10f,
         colors = SliderDefaults.colors(

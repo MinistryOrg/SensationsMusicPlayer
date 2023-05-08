@@ -39,8 +39,8 @@ class MusicViewModel : ViewModel(), MusicServiceCallback  {
         musicService.stopSong()
     }
 
-    fun moveInTrack(position : Int){
-        musicService.seekTo(position )
+    fun moveInTrack(position: Float){
+        musicService.seekTo(position)
     }
 
     fun pauseSong(){
