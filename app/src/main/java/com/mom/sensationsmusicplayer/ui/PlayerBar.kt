@@ -1,7 +1,6 @@
 package com.mom.sensationsmusicplayer.ui
 
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.MarqueeAnimationMode
@@ -23,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,24 +50,21 @@ import com.mom.sensationsmusicplayer.utill.Utill
 fun PlayerBar(
     modifier: Modifier = Modifier,
     musicViewModel: MusicViewModel,
-    onSongSelected: (Song) -> Unit,
     navController: NavController
 ) {
-    val context = musicViewModel.context
-    val songsList = musicViewModel.songList
-    val song = musicViewModel.song
 
     var isPlaying by remember { mutableStateOf(false) }
-    var index by remember { mutableStateOf(songsList!!.indexOf(song)) }
+    var index by remember { mutableStateOf(musicViewModel.songList!!.indexOf(musicViewModel.song)) }
+    val updateSong = musicViewModel.updateSong.collectAsState()
 
     val icon = if (isPlaying) {
         R.drawable.play_arrow_icon
     } else {
         R.drawable.pause_icon
     }
-
-    onSongSelected(song!!)
-    index = songsList!!.indexOf(musicViewModel.song)
+    musicViewModel.song = updateSong.value
+    //onSongSelected(musicViewModel.song!!)
+    index = musicViewModel.songList!!.indexOf(musicViewModel.song)
 
     Card(
         modifier = modifier
@@ -93,7 +90,7 @@ fun PlayerBar(
                     .align(Alignment.CenterStart)
                     .clip(RoundedCornerShape(12.dp))
             ) {
-                SongBox(song, context!!, navController)
+                SongBox(musicViewModel.song!!, musicViewModel.context!!, navController)
             }
             Box(
                 modifier = Modifier
@@ -143,7 +140,7 @@ fun PlayerBar(
                     .clickable(
                         onClick = {
                             musicViewModel.nextSong()
-                            onSongSelected(musicViewModel.song!!)
+                            //onSongSelected(musicViewModel.song!!)
                         }
                     )
             )
@@ -163,7 +160,7 @@ fun PlayerBar(
                                 musicViewModel.stopSong()
                             } else {
                                 musicViewModel.playSong()
-                                onSongSelected(musicViewModel.song!!)
+                                //onSongSelected(musicViewModel.song!!)
                             }
                         }
                     ),
@@ -179,7 +176,7 @@ fun PlayerBar(
                     .clickable(
                         onClick = {
                             musicViewModel.prevSong()
-                            onSongSelected(musicViewModel.song!!)
+                           // onSongSelected(musicViewModel.song!!)
                         }
                     )
             )

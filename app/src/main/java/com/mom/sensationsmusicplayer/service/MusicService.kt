@@ -9,7 +9,10 @@ import com.mom.sensationsmusicplayer.data.Song
 
 class MusicService : Service() {
     private var mediaPlayer: MediaPlayer? = null
+    var nextSongVal : Song ?= null
+    private var musicServiceCallback : MusicServiceCallback ?= null
     private var notificationService: NotificationService? = null
+
     override fun onBind(p0: Intent?): IBinder? {
         TODO("Not yet implemented")
     }
@@ -18,41 +21,46 @@ class MusicService : Service() {
         mediaPlayer = MediaPlayer()
     }
 
-    fun playSong(context: Context, song: Song) {
+    fun playSong(context: Context, songList: List<Song>, song: Song, musicServiceCallback: MusicServiceCallback){
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer()
         } else {
             mediaPlayer?.reset()
         }
+
         mediaPlayer?.setDataSource(context, song.songUri)
         mediaPlayer?.prepare()
         mediaPlayer?.start()
+
+        mediaPlayer?.setOnCompletionListener {
+           musicServiceCallback.onSongCompleted(nextSong(context,songList, song, musicServiceCallback))
+        }
         //seekTo(60000) testing is in milliseconds 60000 is one minute
     }
 
-    fun nextSong(context: Context, songList: List<Song>, song: Song): Song {
+    fun nextSong(context: Context, songList: List<Song>, song: Song, musicServiceCallback: MusicServiceCallback): Song {
         val songPos = songList.indexOf(song)
         val newSongPos = songPos + 1
         if (songPos != -1 && newSongPos < songList.size) {
             val nextSong = songList[newSongPos]
-            playSong(context, nextSong)
+            playSong(context, songList, nextSong, musicServiceCallback)
             return nextSong
         }
         return song
     }
 
-    fun prevSong(context: Context, songList: List<Song>, song: Song) : Song {
+    fun prevSong(context: Context, songList: List<Song>, song: Song, musicServiceCallback: MusicServiceCallback): Song {
         val songPos = songList.indexOf(song)
         val nextSongPos = songPos - 1
         if (nextSongPos > 0) {
             val prevSong = songList[nextSongPos]
-            playSong(context, prevSong)
+            playSong(context, songList, prevSong, musicServiceCallback)
             return prevSong
         }
-        return  song
+        return song
     }
 
-    fun pauseSong(){
+    fun pauseSong() {
         mediaPlayer?.pause()
     }
 

@@ -4,27 +4,35 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.service.MusicService
+import com.mom.sensationsmusicplayer.service.MusicServiceCallback
 import com.mom.sensationsmusicplayer.service.NotificationService
+import kotlinx.coroutines.flow.MutableStateFlow
 
-class MusicViewModel : ViewModel() {
+class MusicViewModel : ViewModel(), MusicServiceCallback  {
     private val musicService : MusicService = MusicService()
     private val notificationService : NotificationService = NotificationService()
     var song : Song ?= null
     var songList : List  <Song> ?= null
     var context : Context ?= null
 
+    lateinit var updateSong : MutableStateFlow<Song>
+
+    fun init(){
+        updateSong = MutableStateFlow(song!!)
+    }
+
     fun playSong() {
         //notificationService.showNotification(context = context!!, song!!)
-        notificationService.playingInTheBackground(context!!,song!!,musicService)
-        musicService.playSong(context = context!!, song!!)
+        musicService.playSong(context = context!!,songList!!, song!!,this)
+        notificationService.playingInTheBackground(context!!,updateSong.value,musicService)
     }
 
     fun nextSong() {
-        song = musicService.nextSong(context = context!!, songList!!, song!!)
+        updateSong.value = musicService.nextSong(context = context!!, songList!!, song!!,this)
     }
 
     fun prevSong() {
-        song = musicService.prevSong(context!!, songList!!, song!!)
+        updateSong.value = musicService.prevSong(context!!, songList!!, song!!,this)
     }
 
     fun stopSong() {
@@ -39,6 +47,10 @@ class MusicViewModel : ViewModel() {
         musicService.pauseSong()
     }
 
-
+    override fun onSongCompleted(nextSong: Song): Song {
+        updateSong.value = nextSong
+        song = nextSong
+        return nextSong
+    }
 }
 

@@ -23,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -52,14 +53,14 @@ import com.mom.sensationsmusicplayer.utill.Utill
 @Composable
 fun SongScreen(musicViewModel: MusicViewModel, navController : NavController) {
     musicViewModel.context = LocalContext.current
-    val songsState = remember { mutableStateOf(listOf<Song>()) }
     musicViewModel.songList = MusicRepoImpl().getSongs(musicViewModel.context!!)
-    songsState.value = musicViewModel.songList!!
-    val selectedSongState = remember { mutableStateOf(songsState.value[0]) }
 
     if (musicViewModel.song == null){
-        musicViewModel.song = selectedSongState.value
+        musicViewModel.song = musicViewModel.songList!![0]
+        musicViewModel.init()
     }
+    val updateSong = musicViewModel.updateSong.collectAsState()
+    musicViewModel.song = updateSong.value
 
     //[START OF SCAFFOLD]
     Scaffold(
@@ -76,11 +77,8 @@ fun SongScreen(musicViewModel: MusicViewModel, navController : NavController) {
                         )
                     )
                     .padding(bottom = 20.dp, start = 7.dp, end = 7.dp),
-                musicViewModel = musicViewModel,
-                onSongSelected = { selectedSong ->
-                    selectedSongState.value = selectedSong // update the selected song
-                }, navController = navController)
-            musicViewModel.song = selectedSongState.value
+                musicViewModel = musicViewModel, navController = navController)
+            //musicViewModel.song = selectedSongState.value
         }, //[END OF BOTTOM BAR (PLAYER BAR)]
         content = {
             //[START OF MAIN CONTENT OF THE SCREEN (SONG SCREEN)]
@@ -112,11 +110,10 @@ fun SongScreen(musicViewModel: MusicViewModel, navController : NavController) {
                         modifier = Modifier
                             .fillMaxHeight()
                     ) {
-                        items(songsState.value) { song ->
+                        items(musicViewModel.songList!!) { song ->
                             // call the bar to add the song
-                            SongItem( musicViewModel, song,selectedSongState.value, onSongSelected = { selectedSong ->
-                                selectedSongState.value = selectedSong // update the selected song
-                            })
+                            Log.d("Passed song ", song.title)
+                            SongItem( musicViewModel, song) // update the selected song
                         }
                     }
                     //[END OF LAZY VERTICAL GRID]
@@ -130,9 +127,7 @@ fun SongScreen(musicViewModel: MusicViewModel, navController : NavController) {
 @Composable
 fun SongItem(
     musicViewModel: MusicViewModel,
-    song: Song,
-    selectedState : Song,
-    onSongSelected: (Song) -> Unit // new parameter to handle song selection
+    song: Song
 ) {
     val context = musicViewModel.context
 
@@ -164,8 +159,8 @@ fun SongItem(
                 .height(135.dp)
                 .clickable {
                     isSelected.value = !isSelected.value // toggle selection state
-                    onSongSelected(song)
                     musicViewModel.song = song
+                    musicViewModel.updateSong.value = song
                     musicViewModel.playSong()
                 }) {
                 if (albumArtBitMap.value != null) {
