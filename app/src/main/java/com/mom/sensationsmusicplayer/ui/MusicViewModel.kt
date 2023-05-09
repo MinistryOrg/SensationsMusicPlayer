@@ -47,6 +47,10 @@ class MusicViewModel : ViewModel(), MusicServiceCallback  {
         musicService.pauseSong()
     }
 
+    fun getDuration() : String{
+        return musicService.getDuration()
+    }
+
     override fun onSongCompleted(nextSong: Song): Song {
         updateSong.value = nextSong
         song = nextSong

@@ -6,6 +6,7 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.os.IBinder
 import com.mom.sensationsmusicplayer.data.Song
+import java.util.concurrent.TimeUnit
 
 class MusicService : Service() {
     private var mediaPlayer: MediaPlayer? = null
@@ -78,12 +79,18 @@ class MusicService : Service() {
         return milli.toInt()
     }
 
-    fun getCurrentPosition(): Int {
-        return mediaPlayer?.currentPosition ?: 0
+    private fun convertMilli(duration: Int) : String{
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(duration.toLong())
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(duration.toLong()) - TimeUnit.MINUTES.toSeconds(minutes)
+        return String.format("%02d:%02d", minutes, seconds)
     }
 
-    fun getDuration(): Int {
-        return mediaPlayer?.duration ?: 0
+    fun getCurrentPosition(): String {
+        return convertMilli(mediaPlayer?.currentPosition ?: 0)
+    }
+
+    fun getDuration(): String {
+        return convertMilli(mediaPlayer?.duration ?: 0)
     }
 
     override fun onDestroy() {

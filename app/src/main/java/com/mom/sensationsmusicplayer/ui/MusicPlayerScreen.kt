@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -321,7 +322,6 @@ fun ProgSliderWithText(
     )
 
     Box(
-
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
@@ -331,10 +331,11 @@ fun ProgSliderWithText(
             color = TextWhite,
             textAlign = TextAlign.Start
         )
-//        Text(
-//            songsList[index].duration.toString(),
-//            textAlign = TextAlign.End,
-//            color = TextSong
-//        )
+        Spacer(modifier = Modifier.width(16.dp)) // απλά το έβαλα για να μπορώ να ξεχωρήσω το duration γιατί διαφορετικά ήταν ένα πάνω στο άλλο
+        Text(
+            musicViewModel.getDuration(),
+            textAlign = TextAlign.End,
+            color = TextSong
+        )
     }
 }
