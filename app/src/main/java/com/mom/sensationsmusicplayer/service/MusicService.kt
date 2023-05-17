@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.IBinder
+import android.util.Log
 import com.mom.sensationsmusicplayer.data.Song
 import java.util.concurrent.TimeUnit
 
@@ -52,9 +53,11 @@ class MusicService : Service() {
 
     fun prevSong(context: Context, songList: List<Song>, song: Song, musicServiceCallback: MusicServiceCallback): Song {
         val songPos = songList.indexOf(song)
-        val nextSongPos = songPos - 1
-        if (nextSongPos > 0) {
-            val prevSong = songList[nextSongPos]
+        val prevSongPos = songPos - 1
+        if (prevSongPos >= 0) {
+            val prevSong = songList[prevSongPos]
+            Log.d("prev song ", prevSong.title)
+            Log.d("prev song position", prevSongPos.toString())
             playSong(context, songList, prevSong, musicServiceCallback)
             return prevSong
         }
