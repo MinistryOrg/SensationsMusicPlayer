@@ -7,6 +7,7 @@ import android.media.MediaPlayer
 import android.os.IBinder
 import android.util.Log
 import com.mom.sensationsmusicplayer.data.Song
+import java.util.LinkedList
 import java.util.concurrent.TimeUnit
 
 class MusicService : Service() {
@@ -14,6 +15,7 @@ class MusicService : Service() {
     var nextSongVal : Song ?= null
     private var musicServiceCallback : MusicServiceCallback ?= null
     private var notificationService: NotificationService? = null
+    private val songQueue  =LinkedList<Song>()
 
     override fun onBind(p0: Intent?): IBinder? {
         TODO("Not yet implemented")
@@ -35,7 +37,14 @@ class MusicService : Service() {
         mediaPlayer?.start()
 
         mediaPlayer?.setOnCompletionListener {
-           musicServiceCallback.onSongCompleted(nextSong(context,songList, song, musicServiceCallback))
+            if (songQueue.isEmpty()){
+                musicServiceCallback.onSongCompleted(nextSong(context,songList, song, musicServiceCallback))
+            }
+            else{
+                // poll used to retrieve and remove the next song from the song queue
+                musicServiceCallback.onSongCompleted(nextSong(context,songList,
+                    songQueue.poll()!!, musicServiceCallback))
+            }
         }
         //seekTo(60000) testing is in milliseconds 60000 is one minute
     }
@@ -94,6 +103,10 @@ class MusicService : Service() {
 
     fun getDuration(): String {
         return convertMilli(mediaPlayer?.duration ?: 0)
+    }
+
+    fun queue(song: Song){
+        songQueue.add(song)
     }
 
     override fun onDestroy() {
