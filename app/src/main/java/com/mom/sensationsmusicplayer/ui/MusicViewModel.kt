@@ -16,6 +16,8 @@ class MusicViewModel() : ViewModel(), MusicServiceCallback{
     var songList : List  <Song> ?= null
     var context : Context ?= null
 
+    var isPlaying = false
+
     lateinit var updateSong : MutableStateFlow<Song>
 
     fun init(){
@@ -25,6 +27,7 @@ class MusicViewModel() : ViewModel(), MusicServiceCallback{
     fun playSong() {
         musicService.playSong(context = context!!, songList!!, song!!, this)
         notificationService.playingInTheBackground(context!!)
+        isPlaying = true
     }
     fun nextSong() {
         updateSong.value = musicService.nextSong(context = context!!, songList!!, song!!,this)
@@ -35,6 +38,7 @@ class MusicViewModel() : ViewModel(), MusicServiceCallback{
     }
 
     fun stopSong() {
+        isPlaying = false
         musicService.stopSong()
     }
 
@@ -43,6 +47,7 @@ class MusicViewModel() : ViewModel(), MusicServiceCallback{
     }
 
     fun pauseSong(){
+        isPlaying = false
         musicService.pauseSong()
     }
 

@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.onEach
 class NotificationService : Service() {
     fun playingInTheBackground(context: Context) {
         val musicViewModel = MusicViewModelProvider.getMusicViewModel()
-        musicViewModel.updateSong.onEach { song_ ->
+        musicViewModel.updateSong.onEach { _ -> // to update song every time the updateSong in ViewModel is changed
             val notification = createNotification(context)
             val notificationManager =
                 ContextCompat.getSystemService(context, NotificationManager::class.java)
@@ -53,8 +53,6 @@ class NotificationService : Service() {
 
         val mediaSession = MediaSessionCompat(context, "tag")
         var song = musicViewModel.updateSong.value
-
-
 
         // Set the metadata for the media session
         val metadataBuilder = MediaMetadataCompat.Builder()
@@ -90,6 +88,20 @@ class NotificationService : Service() {
                 channel
             )
 
+        val isPlaying = musicViewModel.isPlaying// Add this line to get the playback state
+
+        val playAction = NotificationCompat.Action(
+            R.drawable.play_arrow_icon,
+            "Play",
+            PendingIntent.getBroadcast(
+                context,
+                0,
+                Intent(context, MusicPlayerNotificationReceiver::class.java)
+                    .setAction(MusicPlayerNotificationReceiver.ACTION_PLAY),
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        )
+
         val pauseAction = NotificationCompat.Action(
             R.drawable.pause_icon,
             "Pause",
@@ -97,7 +109,7 @@ class NotificationService : Service() {
                 context,
                 0,
                 Intent(context, MusicPlayerNotificationReceiver::class.java)
-                    .setAction(MusicPlayerNotificationReceiver.ACTION_NEXT),
+                    .setAction(MusicPlayerNotificationReceiver.ACTION_PAUSE),
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
         )
@@ -126,6 +138,12 @@ class NotificationService : Service() {
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
         )
+
+        val playPauseAction = if (isPlaying) {
+            pauseAction
+        } else {
+            playAction
+        }
 
         val mediaStyle = androidx.media.app.NotificationCompat.MediaStyle()
             .setShowActionsInCompactView(0, 1, 2)
