@@ -8,7 +8,8 @@ import com.mom.sensationsmusicplayer.service.MusicServiceCallback
 import com.mom.sensationsmusicplayer.service.NotificationService
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class MusicViewModel : ViewModel(), MusicServiceCallback  {
+
+class MusicViewModel() : ViewModel(), MusicServiceCallback{
     private val musicService : MusicService = MusicService()
     private val notificationService : NotificationService = NotificationService()
     var song : Song ?= null
@@ -24,7 +25,7 @@ class MusicViewModel : ViewModel(), MusicServiceCallback  {
     fun playSong() {
         //notificationService.showNotification(context = context!!, song!!)
         musicService.playSong(context = context!!,songList!!, song!!,this)
-        notificationService.playingInTheBackground(context!!,updateSong.value,musicService)
+        notificationService.playingInTheBackground(context!!)
     }
 
     fun nextSong() {

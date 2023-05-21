@@ -43,16 +43,16 @@ import com.mom.sensationsmusicplayer.ui.theme.PlayPauseBtnClr
 import com.mom.sensationsmusicplayer.ui.theme.PlayerBarClr
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
+import com.mom.sensationsmusicplayer.utill.MusicViewModelProvider
 import com.mom.sensationsmusicplayer.utill.Utill
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PlayerBar(
     modifier: Modifier = Modifier,
-    musicViewModel: MusicViewModel,
     navController: NavController
 ) {
-
+    val musicViewModel = MusicViewModelProvider.getMusicViewModel()
     var isPlaying by remember { mutableStateOf(false) }
     val updateSong = musicViewModel.updateSong.collectAsState()
 

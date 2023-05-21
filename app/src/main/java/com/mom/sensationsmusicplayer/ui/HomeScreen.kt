@@ -44,7 +44,7 @@ fun HomeScreen(navController : NavController, musicViewModel : MusicViewModel){
                         )
                         //We call the tab layout
                         TitleOfTopBar()
-                        SongScreen(musicViewModel,navController)
+                        SongScreen(navController)
                     } }
                 ,
                 content = {

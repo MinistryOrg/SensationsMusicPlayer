@@ -54,12 +54,14 @@ import com.mom.sensationsmusicplayer.ui.theme.SliderColor
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.TextSong
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
+import com.mom.sensationsmusicplayer.utill.MusicViewModelProvider
 import com.mom.sensationsmusicplayer.utill.Utill
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MusicPlayerScreen(musicViewModel: MusicViewModel, navController: NavController ){
+fun MusicPlayerScreen(navController: NavController ){
     Scaffold(
         modifier =  Modifier
             .background(MainBackgroundColor)//To Change the background color
@@ -90,7 +92,7 @@ fun MusicPlayerScreen(musicViewModel: MusicViewModel, navController: NavControll
                     )
                 }
             },
-        content = { MainBody(musicViewModel) }
+        content = { MainBody() }
     )
 }
 
@@ -114,7 +116,7 @@ fun MusicPlIcon(){
 }
 
 @Composable
-fun MainBody(musicViewModel: MusicViewModel){
+fun MainBody(){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -128,15 +130,13 @@ fun MainBody(musicViewModel: MusicViewModel){
             .padding(top = 140.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        AlbumDetails(musicViewModel)
+        AlbumDetails()
     }
 }
 
 @Composable
-fun AlbumDetails(
-    musicViewModel: MusicViewModel,
-){
-
+fun AlbumDetails(){
+    val musicViewModel = MusicViewModelProvider.getMusicViewModel()
     val updateSong = musicViewModel.updateSong.collectAsState()
     musicViewModel.song = updateSong.value
 

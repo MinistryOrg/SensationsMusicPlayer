@@ -47,11 +47,13 @@ import com.mom.sensationsmusicplayer.ui.theme.SelectedSongArtist
 import com.mom.sensationsmusicplayer.ui.theme.SelectedSongTitle
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
+import com.mom.sensationsmusicplayer.utill.MusicViewModelProvider
 import com.mom.sensationsmusicplayer.utill.Utill
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SongScreen(musicViewModel: MusicViewModel, navController : NavController) {
+fun SongScreen(navController : NavController) {
+    val musicViewModel = MusicViewModelProvider.getMusicViewModel()
     musicViewModel.context = LocalContext.current
     musicViewModel.songList = MusicRepoImpl().getSongs(musicViewModel.context!!)
 
@@ -77,7 +79,7 @@ fun SongScreen(musicViewModel: MusicViewModel, navController : NavController) {
                         )
                     )
                     .padding(bottom = 20.dp, start = 7.dp, end = 7.dp),
-                musicViewModel = musicViewModel, navController = navController)
+              navController = navController)
             //musicViewModel.song = selectedSongState.value
         }, //[END OF BOTTOM BAR (PLAYER BAR)]
         content = {
@@ -113,7 +115,7 @@ fun SongScreen(musicViewModel: MusicViewModel, navController : NavController) {
                         items(musicViewModel.songList!!) { song ->
                             // call the bar to add the song
                             Log.d("Passed song ", song.title)
-                            SongItem( musicViewModel, song) // update the selected song
+                            SongItem(song) // update the selected song
                         }
                     }
                     //[END OF LAZY VERTICAL GRID]
@@ -126,9 +128,9 @@ fun SongScreen(musicViewModel: MusicViewModel, navController : NavController) {
 
 @Composable
 fun SongItem(
-    musicViewModel: MusicViewModel,
     song: Song
 ) {
+    val musicViewModel = MusicViewModelProvider.getMusicViewModel()
     val context = musicViewModel.context
 
     val albumArtBitMap = remember {
