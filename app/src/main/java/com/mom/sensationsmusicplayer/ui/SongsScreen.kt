@@ -1,7 +1,6 @@
 package com.mom.sensationsmusicplayer.ui
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -52,14 +51,15 @@ import com.mom.sensationsmusicplayer.utill.Utill
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SongScreen(navController : NavController) {
+fun SongScreen(navController: NavController) {
     val musicViewModel = MusicViewModelProvider.getMusicViewModel()
     musicViewModel.context = LocalContext.current
     musicViewModel.songList = MusicRepoImpl().getSongs(musicViewModel.context!!)
 
-    if (musicViewModel.song == null){
+    if (musicViewModel.song == null) {
         musicViewModel.song = musicViewModel.songList!![0]
         musicViewModel.init()
+
     }
     val updateSong = musicViewModel.updateSong.collectAsState()
     musicViewModel.song = updateSong.value
@@ -79,7 +79,8 @@ fun SongScreen(navController : NavController) {
                         )
                     )
                     .padding(bottom = 20.dp, start = 7.dp, end = 7.dp),
-              navController = navController)
+                navController = navController
+            )
             //musicViewModel.song = selectedSongState.value
         }, //[END OF BOTTOM BAR (PLAYER BAR)]
         content = {
@@ -114,7 +115,6 @@ fun SongScreen(navController : NavController) {
                     ) {
                         items(musicViewModel.songList!!) { song ->
                             // call the bar to add the song
-                            Log.d("Passed song ", song.title)
                             SongItem(song) // update the selected song
                         }
                     }
@@ -137,7 +137,7 @@ fun SongItem(
         mutableStateOf<ImageBitmap?>(null) // initialize bit map
     }
 
-    val utill  = Utill()
+    val utill = Utill()
 
     //Prospatheia mhpws otan clickareis to tragoudi na ginetai kokkinos o titlos kai otan clickareis se allo tragoudi na epanerxetai sto aspro
     val isSelected = remember { mutableStateOf(false) }

@@ -61,6 +61,7 @@ fun PlayerBar(
     } else {
         R.drawable.pause_icon
     }
+
     musicViewModel.song = updateSong.value
 
     Card(

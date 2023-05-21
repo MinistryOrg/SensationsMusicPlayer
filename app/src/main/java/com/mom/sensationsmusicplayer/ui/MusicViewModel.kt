@@ -23,11 +23,9 @@ class MusicViewModel() : ViewModel(), MusicServiceCallback{
     }
 
     fun playSong() {
-        //notificationService.showNotification(context = context!!, song!!)
-        musicService.playSong(context = context!!,songList!!, song!!,this)
+        musicService.playSong(context = context!!, songList!!, song!!, this)
         notificationService.playingInTheBackground(context!!)
     }
-
     fun nextSong() {
         updateSong.value = musicService.nextSong(context = context!!, songList!!, song!!,this)
     }

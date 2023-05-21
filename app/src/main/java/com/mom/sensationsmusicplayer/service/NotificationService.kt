@@ -12,20 +12,30 @@ import android.os.SystemClock
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.mom.sensationsmusicplayer.MainActivity
 import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.utill.MusicPlayerNotificationReceiver
 import com.mom.sensationsmusicplayer.utill.MusicViewModelProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class NotificationService : Service() {
     fun playingInTheBackground(context: Context) {
-        val notification = createNotification(context)
-        val notificationManager =
-            ContextCompat.getSystemService(context, NotificationManager::class.java)
-        notificationManager?.notify(1, notification)
+        val musicViewModel = MusicViewModelProvider.getMusicViewModel()
+        musicViewModel.updateSong.onEach { song_ ->
+            val notification = createNotification(context)
+            val notificationManager =
+                ContextCompat.getSystemService(context, NotificationManager::class.java)
+            notificationManager?.notify(1, notification)
+
+        }.launchIn(
+            CoroutineScope(Dispatchers.Default)
+        )
+
     }
 
     private fun createNotification(
@@ -42,11 +52,10 @@ class NotificationService : Service() {
         )
 
         val mediaSession = MediaSessionCompat(context, "tag")
+        var song = musicViewModel.updateSong.value
 
-        Log.d("M 1", musicViewModel.updateSong.value.title)
-        Log.d("M 2", musicViewModel.song!!.title)
 
-        val song = musicViewModel.updateSong.value
+
         // Set the metadata for the media session
         val metadataBuilder = MediaMetadataCompat.Builder()
         metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, song.title)
@@ -118,13 +127,10 @@ class NotificationService : Service() {
             )
         )
 
-        // returns the notification ui
-
-
         val mediaStyle = androidx.media.app.NotificationCompat.MediaStyle()
             .setShowActionsInCompactView(0, 1, 2)
             .setMediaSession(mediaSession.sessionToken)
-
+        // returns the notification ui
         return NotificationCompat.Builder(context, "MusicPlayerBar")
             .setSmallIcon(R.drawable.notif_icon)
             .setContentTitle(song.title)

@@ -11,8 +11,4 @@ object MusicViewModelProvider {
         }
         return musicViewModel!!
     }
-
-    fun clearMusicViewModel() {
-        musicViewModel = null
-    }
 }
