@@ -1,4 +1,4 @@
-package com.mom.sensationsmusicplayer.utill
+package com.mom.sensationsmusicplayer.util
 
 import android.content.Context
 import android.graphics.Bitmap

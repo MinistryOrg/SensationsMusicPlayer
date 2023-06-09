@@ -46,8 +46,8 @@ import com.mom.sensationsmusicplayer.ui.theme.SelectedSongArtist
 import com.mom.sensationsmusicplayer.ui.theme.SelectedSongTitle
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
-import com.mom.sensationsmusicplayer.utill.MusicViewModelProvider
-import com.mom.sensationsmusicplayer.utill.Utill
+import com.mom.sensationsmusicplayer.util.MusicViewModelProvider
+import com.mom.sensationsmusicplayer.util.Utill
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -59,7 +59,6 @@ fun SongScreen(navController: NavController) {
     if (musicViewModel.song == null) {
         musicViewModel.song = musicViewModel.songList!![0]
         musicViewModel.init()
-
     }
     val updateSong = musicViewModel.updateSong.collectAsState()
     musicViewModel.song = updateSong.value
@@ -87,7 +86,6 @@ fun SongScreen(navController: NavController) {
             //[START OF MAIN CONTENT OF THE SCREEN (SONG SCREEN)]
             Column(
                 modifier = Modifier
-                    .fillMaxSize() // To fill the max size of the screen
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(Color(0xFF14243C), Color(0xFF0B1422)),
@@ -95,8 +93,8 @@ fun SongScreen(navController: NavController) {
                             endY = Float.POSITIVE_INFINITY
                         )
                     )
-
-
+                    .padding(top = 80.dp)
+                    .fillMaxSize() // To fill the max size of the screen
             ) {
                 Row(
                     modifier = Modifier
@@ -139,7 +137,7 @@ fun SongItem(
 
     val utill = Utill()
 
-    //Prospatheia mhpws otan clickareis to tragoudi na ginetai kokkinos o titlos kai otan clickareis se allo tragoudi na epanerxetai sto aspro
+    //todo Prospatheia mhpws otan clickareis to tragoudi na ginetai kokkinos o titlos kai otan clickareis se allo tragoudi na epanerxetai sto aspro
     val isSelected = remember { mutableStateOf(false) }
     // is going to re-run every time the albumCover value changes
     LaunchedEffect(song.albumCover) {
@@ -156,7 +154,8 @@ fun SongItem(
             modifier = Modifier
                 .clip(RoundedCornerShape(15.dp))
         ) {
-            Box(modifier = Modifier
+            Box(
+                modifier = Modifier
                 .width(140.dp)
                 .height(135.dp)
                 .clickable {

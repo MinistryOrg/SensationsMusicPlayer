@@ -1,12 +1,18 @@
 package com.mom.sensationsmusicplayer.ui
 
 import android.content.Context
+import android.media.MediaPlayer
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.service.MusicService
 import com.mom.sensationsmusicplayer.service.MusicServiceCallback
 import com.mom.sensationsmusicplayer.service.NotificationService
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 
 class MusicViewModel() : ViewModel(), MusicServiceCallback{
@@ -15,6 +21,8 @@ class MusicViewModel() : ViewModel(), MusicServiceCallback{
     var song : Song ?= null
     var songList : List  <Song> ?= null
     var context : Context ?= null
+
+    private var mediaPlayer: MediaPlayer? = null
 
     var isPlaying = false
 
@@ -59,6 +67,28 @@ class MusicViewModel() : ViewModel(), MusicServiceCallback{
         updateSong.value = nextSong
         song = nextSong
         return nextSong
+    }
+
+    private val _currentPositionFlow = MutableStateFlow(0)
+    val currentPositionFlow: StateFlow<Int> = _currentPositionFlow.asStateFlow()
+
+    fun getCurrentPosition(): Int {
+        return mediaPlayer?.currentPosition ?: 0
+    }
+
+    private fun updateCurrentPosition() {
+        viewModelScope.launch {
+            while (true) {
+                val currentPosition = getCurrentPosition()
+                _currentPositionFlow.emit(currentPosition)
+                delay(1000) // Update every second
+            }
+        }
+    }
+
+    // Call this function when the song starts playing or when the song changes
+    fun startUpdatingCurrentPosition() {
+        updateCurrentPosition()
     }
 }
 

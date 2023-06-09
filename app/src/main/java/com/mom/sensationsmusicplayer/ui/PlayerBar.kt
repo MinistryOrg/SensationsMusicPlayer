@@ -43,8 +43,8 @@ import com.mom.sensationsmusicplayer.ui.theme.PlayPauseBtnClr
 import com.mom.sensationsmusicplayer.ui.theme.PlayerBarClr
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
-import com.mom.sensationsmusicplayer.utill.MusicViewModelProvider
-import com.mom.sensationsmusicplayer.utill.Utill
+import com.mom.sensationsmusicplayer.util.MusicViewModelProvider
+import com.mom.sensationsmusicplayer.util.Utill
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -71,15 +71,12 @@ fun PlayerBar(
             .padding(horizontal = 5.dp, vertical = 5.dp)
             .height(55.dp)
             .fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = PlayerBarClr,
-        ),
-
-        ) {
+        colors = CardDefaults.cardColors(containerColor = PlayerBarClr)
+        ){
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
         ) {
-
             Box(
                 modifier = Modifier
                     .padding(start = 8.dp)
@@ -95,7 +92,7 @@ fun PlayerBar(
                     .padding(start = 70.dp, end = 35.dp)
                     .align(Alignment.CenterStart)
             ) {
-
+                //animation for song title
                 Text(
                     text = musicViewModel.song!!.title,
                     fontSize = 14.sp,

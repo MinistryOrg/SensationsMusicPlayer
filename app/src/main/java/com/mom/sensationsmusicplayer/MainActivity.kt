@@ -12,7 +12,8 @@ import com.mom.sensationsmusicplayer.ui.HomeScreen
 import com.mom.sensationsmusicplayer.ui.MusicPlayerScreen
 import com.mom.sensationsmusicplayer.ui.Screen
 import com.mom.sensationsmusicplayer.ui.theme.SensationsMusicPlayerTheme
-import com.mom.sensationsmusicplayer.utill.MusicViewModelProvider
+import com.mom.sensationsmusicplayer.util.MusicViewModelProvider
+import com.mom.sensationsmusicplayer.util.SetUpNavGraph
 
 class MainActivity : ComponentActivity() {
     private val musicViewModel = MusicViewModelProvider.getMusicViewModel()
@@ -21,15 +22,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             SensationsMusicPlayerTheme {
                 val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = Screen.HomeScreen.route){
-                    composable(Screen.HomeScreen.route){
-                        HomeScreen(navController, musicViewModel)
-                    }
-                    composable(Screen.MusicPlayerScreen.route) {
-                        MusicPlayerScreen(navController = navController)
-                    }
-
-                }
+                SetUpNavGraph(navController = navController, musicViewModel)
             }
         }
     }

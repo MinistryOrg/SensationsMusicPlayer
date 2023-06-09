@@ -16,8 +16,8 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import com.mom.sensationsmusicplayer.MainActivity
 import com.mom.sensationsmusicplayer.R
-import com.mom.sensationsmusicplayer.utill.MusicPlayerNotificationReceiver
-import com.mom.sensationsmusicplayer.utill.MusicViewModelProvider
+import com.mom.sensationsmusicplayer.util.MusicPlayerNotificationReceiver
+import com.mom.sensationsmusicplayer.util.MusicViewModelProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
@@ -98,7 +98,7 @@ class NotificationService : Service() {
                 0,
                 Intent(context, MusicPlayerNotificationReceiver::class.java)
                     .setAction(MusicPlayerNotificationReceiver.ACTION_PLAY),
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_IMMUTABLE
             )
         )
 
@@ -110,7 +110,7 @@ class NotificationService : Service() {
                 0,
                 Intent(context, MusicPlayerNotificationReceiver::class.java)
                     .setAction(MusicPlayerNotificationReceiver.ACTION_PAUSE),
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_IMMUTABLE
             )
         )
 
@@ -122,7 +122,7 @@ class NotificationService : Service() {
                 0,
                 Intent(context, MusicPlayerNotificationReceiver::class.java)
                     .setAction(MusicPlayerNotificationReceiver.ACTION_NEXT),
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_IMMUTABLE
 
             )
         )
@@ -135,7 +135,7 @@ class NotificationService : Service() {
                 0,
                 Intent(context, MusicPlayerNotificationReceiver::class.java)
                     .setAction(MusicPlayerNotificationReceiver.ACTION_PREV),
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_IMMUTABLE
             )
         )
 

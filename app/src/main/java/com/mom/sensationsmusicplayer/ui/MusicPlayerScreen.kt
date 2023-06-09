@@ -54,8 +54,8 @@ import com.mom.sensationsmusicplayer.ui.theme.SliderColor
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.TextSong
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
-import com.mom.sensationsmusicplayer.utill.MusicViewModelProvider
-import com.mom.sensationsmusicplayer.utill.Utill
+import com.mom.sensationsmusicplayer.util.MusicViewModelProvider
+import com.mom.sensationsmusicplayer.util.Utill
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -254,7 +254,7 @@ fun AlbumDetails(){
                             onClick = {
                                 isPlaying = !isPlaying
                                 if (isPlaying) {     // == to true because is Boolean? and maybe return null
-                                    musicViewModel.stopSong()
+                                    musicViewModel.pauseSong()
                                 } else {
                                     musicViewModel.playSong()
                                 }
@@ -326,16 +326,22 @@ fun ProgSliderWithText(
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
     ){
-        Text(
-            text = sliderValue.toString(),
-            color = TextWhite,
-            textAlign = TextAlign.Start
-        )
+       Box(
+           modifier = Modifier.align(Alignment.CenterStart)
+       ) {
+           Text(
+               text = sliderValue.toString(),
+               color = TextWhite,
+               textAlign = TextAlign.Start
+           )
+       }
         Spacer(modifier = Modifier.width(16.dp)) // απλά το έβαλα για να μπορώ να ξεχωρήσω το duration γιατί διαφορετικά ήταν ένα πάνω στο άλλο
-        Text(
-            musicViewModel.getDuration(),
-            textAlign = TextAlign.End,
-            color = TextSong
-        )
+        Box(modifier = Modifier.align(Alignment.CenterEnd)){
+            Text(
+                text = musicViewModel.getDuration(),
+                textAlign = TextAlign.End,
+                color = TextSong
+            )
+        }
     }
 }

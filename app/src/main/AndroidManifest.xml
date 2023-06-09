@@ -34,7 +34,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name="com.mom.sensationsmusicplayer.utill.MusicPlayerNotificationReceiver" />
+        <receiver android:name="com.mom.sensationsmusicplayer.util.MusicPlayerNotificationReceiver" />
 
     </application>
 

@@ -1,4 +1,4 @@
-package com.mom.sensationsmusicplayer.utill
+package com.mom.sensationsmusicplayer.util
 
 import com.mom.sensationsmusicplayer.ui.MusicViewModel
 

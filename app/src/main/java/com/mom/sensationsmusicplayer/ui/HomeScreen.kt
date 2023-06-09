@@ -8,20 +8,16 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.mom.sensationsmusicplayer.R
 import com.mom.sensationsmusicplayer.ui.theme.DividerClr
 import com.mom.sensationsmusicplayer.ui.theme.MainBackgroundColor
-import com.mom.sensationsmusicplayer.ui.theme.TitleClr
 
 @SuppressLint("UnrememberedMutableState", "UnusedMaterial3ScaffoldPaddingParameter",
     "SuspiciousIndentation"
@@ -31,7 +27,6 @@ import com.mom.sensationsmusicplayer.ui.theme.TitleClr
 fun HomeScreen(navController : NavController, musicViewModel : MusicViewModel){
     //[START-TOP BAR]
             Scaffold(
-                modifier =  Modifier.background(MainBackgroundColor), //To Change the background color
                 topBar = {
                     Column(modifier = Modifier.background(MainBackgroundColor)){
                         //Center the image logo
@@ -41,13 +36,15 @@ fun HomeScreen(navController : NavController, musicViewModel : MusicViewModel){
                             colors = TopAppBarDefaults
                                 .centerAlignedTopAppBarColors(MainBackgroundColor)
                         )
-                        //We call the tab layout
-                        TitleOfTopBar()
-                        SongScreen(navController)
-                    } }
-                ,
+                        Divider(
+                            modifier = Modifier
+                                .padding(horizontal = 15.dp, vertical = 5.dp),
+                            color = DividerClr,
+                            thickness = 2.dp
+                        )
+                    } },
                 content = {
-
+                    SongScreen(navController)
                 }
             )
     //[END-TOP BAR]
@@ -74,28 +71,3 @@ fun TopNavBarLogo(){
 }
 // [END COMPOSABLE IMAGE-LOGO]
 
-@Composable
-fun TitleOfTopBar(){
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Songs",
-            fontSize = 18.sp,
-            color = TitleClr,
-            fontWeight = FontWeight.Bold
-        )
-    }
-    Column() {
-        Divider(
-            modifier = Modifier
-                .padding(horizontal = 15.dp, vertical = 5.dp),
-            color = DividerClr,
-            thickness = 2.dp
-        )
-    }
-}
