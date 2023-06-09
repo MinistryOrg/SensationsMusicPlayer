@@ -289,11 +289,10 @@ fun AlbumDetails(){
         }
     }
 }
-
 @Composable
 fun ProgSliderWithText(
     musicViewModel: MusicViewModel
-){
+) {
     val songsList = musicViewModel.songList
 
     var index by remember { mutableStateOf(songsList!!.indexOf(musicViewModel.song)) }
@@ -306,14 +305,14 @@ fun ProgSliderWithText(
 
     Slider(
         value = sliderValue,
-        modifier = Modifier.padding(horizontal = 20.dp)
-        ,onValueChange = { sliderValue_ ->
+        modifier = Modifier.padding(horizontal = 20.dp),
+        onValueChange = { sliderValue_ ->
             sliderValue = sliderValue_
         },
         onValueChangeFinished = {
-            musicViewModel.moveInTrack(sliderValue)
+            musicViewModel.moveInTrack(sliderValue) // <-- Remove this line
         },
-        valueRange = 0f..10f,
+        valueRange = 0f..100f,
         colors = SliderDefaults.colors(
             thumbColor = SliderColor,
             activeTrackColor = SliderColor,
@@ -325,23 +324,21 @@ fun ProgSliderWithText(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
-    ){
-       Box(
-           modifier = Modifier.align(Alignment.CenterStart)
-       ) {
-           Text(
-               text = sliderValue.toString(),
-               color = TextWhite,
-               textAlign = TextAlign.Start
-           )
-       }
-        Spacer(modifier = Modifier.width(16.dp)) // απλά το έβαλα για να μπορώ να ξεχωρήσω το duration γιατί διαφορετικά ήταν ένα πάνω στο άλλο
-        Box(modifier = Modifier.align(Alignment.CenterEnd)){
-            Text(
-                text = musicViewModel.getDuration(),
-                textAlign = TextAlign.End,
-                color = TextSong
-            )
-        }
+    ) {
+        Text(
+            text = sliderValue.toString(),
+            color = TextWhite,
+            textAlign = TextAlign.Start
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Text(
+            musicViewModel.getDuration(),
+            textAlign = TextAlign.End,
+            color = TextSong
+        )
+    }
+
+    LaunchedEffect(sliderValue) {
+        musicViewModel.moveInTrack(sliderValue) // <-- Add this line to update the position
     }
 }

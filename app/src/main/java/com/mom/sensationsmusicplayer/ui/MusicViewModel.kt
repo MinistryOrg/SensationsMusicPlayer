@@ -62,7 +62,9 @@ class MusicViewModel() : ViewModel(), MusicServiceCallback{
     fun getDuration() : String{
         return musicService.getDuration()
     }
-
+    fun testDur() : Float {
+        return musicService.testDur()
+    }
     override fun onSongCompleted(nextSong: Song): Song {
         updateSong.value = nextSong
         song = nextSong
@@ -73,7 +75,7 @@ class MusicViewModel() : ViewModel(), MusicServiceCallback{
     val currentPositionFlow: StateFlow<Int> = _currentPositionFlow.asStateFlow()
 
     fun getCurrentPosition(): Int {
-        return mediaPlayer?.currentPosition ?: 0
+        return musicService.getCurrentPosition();
     }
 
     private fun updateCurrentPosition() {

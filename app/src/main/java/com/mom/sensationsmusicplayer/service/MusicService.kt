@@ -16,6 +16,8 @@ class MusicService : Service() {
     private var musicServiceCallback : MusicServiceCallback ?= null
     private var notificationService: NotificationService? = null
     private val songQueue  =LinkedList<Song>()
+    private var pausedPosition: Int = 0
+
 
     override fun onBind(p0: Intent?): IBinder? {
         TODO("Not yet implemented")
@@ -34,6 +36,12 @@ class MusicService : Service() {
 
         mediaPlayer?.setDataSource(context, song.songUri)
         mediaPlayer?.prepare()
+
+        if (pausedPosition > 0) {
+            mediaPlayer?.seekTo(pausedPosition)
+            pausedPosition = 0
+        }
+
         mediaPlayer?.start()
 
         mediaPlayer?.setOnCompletionListener {
@@ -74,20 +82,24 @@ class MusicService : Service() {
     }
 
     fun pauseSong() {
-        mediaPlayer?.pause()
+        if (mediaPlayer?.isPlaying == true) {
+            mediaPlayer?.pause()
+            pausedPosition = mediaPlayer?.currentPosition ?: 0
+        }
     }
 
     fun stopSong() {
         mediaPlayer?.stop()
     }
 
-    //  to move in track
+
+//  to move in track
     fun seekTo(position: Float) {
         mediaPlayer?.seekTo(convertMinToMilli(position)) // position is in milliseconds
     }
 
     private fun convertMinToMilli(position: Float) : Int{
-        val milli = position * 60000
+        val milli = position * 1000
         return milli.toInt()
     }
 
@@ -97,12 +109,19 @@ class MusicService : Service() {
         return String.format("%02d:%02d", minutes, seconds)
     }
 
-    fun getCurrentPosition(): String {
-        return convertMilli(mediaPlayer?.currentPosition ?: 0)
+    fun getCurrentPosition(): Int {
+        return convertMilli(mediaPlayer?.currentPosition ?: 0).toInt()
     }
 
     fun getDuration(): String {
         return convertMilli(mediaPlayer?.duration ?: 0)
+    }
+
+    fun testDur() : Float {
+        val duration = mediaPlayer?.duration
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(duration!!.toLong())
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(duration!!.toLong()) - TimeUnit.MINUTES.toSeconds(minutes)
+        return String.format("%02d.%02d", minutes, seconds).toFloat()
     }
 
     fun queue(song: Song){
