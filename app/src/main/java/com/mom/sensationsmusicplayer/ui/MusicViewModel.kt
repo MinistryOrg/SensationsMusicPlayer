@@ -59,38 +59,28 @@ class MusicViewModel() : ViewModel(), MusicServiceCallback{
         musicService.pauseSong()
     }
 
-    fun getDuration() : String{
+    fun getDuration() : Float {
         return musicService.getDuration()
     }
-    fun testDur() : Float {
-        return musicService.testDur()
-    }
+
     override fun onSongCompleted(nextSong: Song): Song {
         updateSong.value = nextSong
         song = nextSong
         return nextSong
     }
 
+    fun getFormat(): String {
+        return musicService.formatTime()
+    }
+
     private val _currentPositionFlow = MutableStateFlow(0)
     val currentPositionFlow: StateFlow<Int> = _currentPositionFlow.asStateFlow()
 
-    fun getCurrentPosition(): Int {
-        return musicService.getCurrentPosition();
+    fun getCurrentPosition(action: String): String {
+        return musicService.getCurrentPosition(action);
     }
 
-    private fun updateCurrentPosition() {
-        viewModelScope.launch {
-            while (true) {
-                val currentPosition = getCurrentPosition()
-                _currentPositionFlow.emit(currentPosition)
-                delay(1000) // Update every second
-            }
-        }
-    }
 
-    // Call this function when the song starts playing or when the song changes
-    fun startUpdatingCurrentPosition() {
-        updateCurrentPosition()
-    }
+
 }
 

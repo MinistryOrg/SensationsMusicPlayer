@@ -1,6 +1,7 @@
 package com.mom.sensationsmusicplayer.ui
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -56,6 +57,8 @@ import com.mom.sensationsmusicplayer.ui.theme.TextSong
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
 import com.mom.sensationsmusicplayer.util.MusicViewModelProvider
 import com.mom.sensationsmusicplayer.util.Utill
+import kotlinx.coroutines.delay
+import java.util.concurrent.TimeUnit
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -299,20 +302,31 @@ fun ProgSliderWithText(
     index = songsList!!.indexOf(musicViewModel.song)
     musicViewModel.song = songsList[index]
 
-    var sliderValue by remember {
-        mutableStateOf(0f) // pass the initial value
+    val sliderValue = remember {
+        mutableStateOf<Float?>(0f)
+    }
+
+    val test = remember {
+        mutableStateOf<String?>("00:00")
+    }
+
+    LaunchedEffect(test.value) {
+        while (true) {
+            test.value = musicViewModel.getCurrentPosition("time")
+            sliderValue.value = musicViewModel.getCurrentPosition("slider").toFloat()
+            delay(1000) // Update every second
+        }
     }
 
     Slider(
-        value = sliderValue,
-        modifier = Modifier.padding(horizontal = 20.dp),
-        onValueChange = { sliderValue_ ->
-            sliderValue = sliderValue_
+        value = sliderValue.value!!,
+        modifier = Modifier.padding(horizontal = 20.dp), onValueChange = { sliderValue_ ->
+            sliderValue.value = sliderValue_
         },
         onValueChangeFinished = {
-            musicViewModel.moveInTrack(sliderValue) // <-- Remove this line
+            musicViewModel.moveInTrack(sliderValue.value!!)
         },
-        valueRange = 0f..100f,
+        valueRange = 0f..musicViewModel.getDuration(),
         colors = SliderDefaults.colors(
             thumbColor = SliderColor,
             activeTrackColor = SliderColor,
@@ -325,20 +339,27 @@ fun ProgSliderWithText(
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
     ) {
-        Text(
-            text = sliderValue.toString(),
-            color = TextWhite,
-            textAlign = TextAlign.Start
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(
-            musicViewModel.getDuration(),
-            textAlign = TextAlign.End,
-            color = TextSong
-        )
-    }
+        Box(modifier = Modifier.align(Alignment.CenterStart)){
+            Text(
+                text = test.value.toString(),
+                color = TextWhite,
+                textAlign = TextAlign.Start
+            )
+        }
 
-    LaunchedEffect(sliderValue) {
-        musicViewModel.moveInTrack(sliderValue) // <-- Add this line to update the position
+        Spacer(modifier = Modifier.width(16.dp)) // απλά το έβαλα για να μπορώ να ξεχωρήσω το duration γιατί διαφορετικά ήταν ένα πάνω στο άλλο
+        Box(modifier = Modifier.align(Alignment.CenterEnd)){
+            Text(
+                musicViewModel.getFormat(),
+                textAlign = TextAlign.End,
+                color = TextSong
+            )
+        }
     }
+}
+
+fun millisToFormattedTime(millis: Int): String {
+    val minutes = TimeUnit.MILLISECONDS.toMinutes(millis.toLong())
+    val seconds = TimeUnit.MILLISECONDS.toSeconds(millis.toLong()) - TimeUnit.MINUTES.toSeconds(minutes)
+    return String.format("%02d:%02d", minutes, seconds)
 }

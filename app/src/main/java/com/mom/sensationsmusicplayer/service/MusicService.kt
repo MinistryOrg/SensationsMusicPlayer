@@ -92,8 +92,7 @@ class MusicService : Service() {
         mediaPlayer?.stop()
     }
 
-
-//  to move in track
+    //  to move in track
     fun seekTo(position: Float) {
         mediaPlayer?.seekTo(convertMinToMilli(position)) // position is in milliseconds
     }
@@ -103,25 +102,36 @@ class MusicService : Service() {
         return milli.toInt()
     }
 
-    private fun convertMilli(duration: Int) : String{
+    private fun convertMilli(duration: Int) : Float{
         val minutes = TimeUnit.MILLISECONDS.toMinutes(duration.toLong())
         val seconds = TimeUnit.MILLISECONDS.toSeconds(duration.toLong()) - TimeUnit.MINUTES.toSeconds(minutes)
-        return String.format("%02d:%02d", minutes, seconds)
+        return (minutes * 60 + seconds).toFloat()
     }
 
-    fun getCurrentPosition(): Int {
-        return convertMilli(mediaPlayer?.currentPosition ?: 0).toInt()
+    fun getCurrentPosition(action: String): String {
+        when(action){
+            "slider" ->  return convertMilli(mediaPlayer?.currentPosition ?: 0).toString()
+            "time" -> return formatTimeSlider(mediaPlayer?.currentPosition ?: 0)
+        }
+        return ""
     }
 
-    fun getDuration(): String {
+    fun getDuration(): Float {
         return convertMilli(mediaPlayer?.duration ?: 0)
     }
 
-    fun testDur() : Float {
-        val duration = mediaPlayer?.duration
-        val minutes = TimeUnit.MILLISECONDS.toMinutes(duration!!.toLong())
-        val seconds = TimeUnit.MILLISECONDS.toSeconds(duration!!.toLong()) - TimeUnit.MINUTES.toSeconds(minutes)
-        return String.format("%02d.%02d", minutes, seconds).toFloat()
+    fun formatTime(): String {
+        val totalSeconds = (mediaPlayer!!.duration / 1000).toInt()
+        val minutes = totalSeconds / 60
+        val seconds = totalSeconds % 60
+        return String.format("%02d:%02d", minutes, seconds)
+    }
+
+    fun formatTimeSlider(duration: Int): String {
+        val totalSeconds = (duration / 1000).toInt()
+        val minutes = totalSeconds / 60
+        val seconds = totalSeconds % 60
+        return String.format("%02d:%02d", minutes, seconds)
     }
 
     fun queue(song: Song){
