@@ -82,7 +82,7 @@ fun MusicPlayerScreen(navController: NavController ){
                         .centerAlignedTopAppBarColors(MainBackgroundColor),
                     //[NAVIGATION BUTTON TO GO BACK]
                     navigationIcon = {
-                        IconButton(onClick = { navController.navigate(Screen.HomeScreen.route) }) {
+                        IconButton(onClick = { navController.popBackStack() }) {
                             Icon(
                                 painter = painterResource(id = R.drawable.back_icon),
                                 contentDescription = "Back",
@@ -95,7 +95,7 @@ fun MusicPlayerScreen(navController: NavController ){
                     )
                 }
             },
-        content = { MainBody() }
+        content = { MainBody(navController) }
     )
 }
 
@@ -119,7 +119,7 @@ fun MusicPlIcon(){
 }
 
 @Composable
-fun MainBody(){
+fun MainBody(navController: NavController){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -133,12 +133,12 @@ fun MainBody(){
             .padding(top = 140.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        AlbumDetails()
+        AlbumDetails(navController)
     }
 }
 
 @Composable
-fun AlbumDetails(){
+fun AlbumDetails( navController: NavController){
     val musicViewModel = MusicViewModelProvider.getMusicViewModel()
     val updateSong = musicViewModel.updateSong.collectAsState()
     musicViewModel.song = updateSong.value
@@ -286,6 +286,9 @@ fun AlbumDetails(){
                     tint = TextWhite,
                     modifier = Modifier
                         .size(40.dp)
+                        .clickable {
+                            navController.navigate(Screen.QueueScreen.route)
+                        }
                 )
             }
 

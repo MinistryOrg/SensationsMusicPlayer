@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import com.mom.sensationsmusicplayer.ui.HomeScreen
 import com.mom.sensationsmusicplayer.ui.MusicPlayerScreen
 import com.mom.sensationsmusicplayer.ui.MusicViewModel
+import com.mom.sensationsmusicplayer.ui.QueueScreen
 import com.mom.sensationsmusicplayer.ui.Screen
 
 @Composable
@@ -27,6 +28,11 @@ fun SetUpNavGraph(
             Screen.MusicPlayerScreen.route
         ){
             MusicPlayerScreen(navController )
+        }
+        composable(
+            Screen.QueueScreen.route
+        ){
+            QueueScreen(navController)
         }
     }
 }
