@@ -9,15 +9,18 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -156,14 +159,14 @@ fun SongItem(
         ) {
             Box(
                 modifier = Modifier
-                .width(140.dp)
-                .height(135.dp)
-                .clickable {
-                    isSelected.value = !isSelected.value // toggle selection state
-                    musicViewModel.song = song
-                    musicViewModel.updateSong.value = song
-                    musicViewModel.playSong()
-                }) {
+                    .width(140.dp)
+                    .height(135.dp)
+                    .clickable {
+                        isSelected.value = !isSelected.value // toggle selection state
+                        musicViewModel.song = song
+                        musicViewModel.updateSong.value = song
+                        musicViewModel.playSong()
+                    }) {
                 if (albumArtBitMap.value != null) {
                     Image(
                         bitmap = albumArtBitMap.value!!, // Replace with your image resource
@@ -177,6 +180,19 @@ fun SongItem(
                         contentDescription = "Image",
                         modifier = Modifier
                             .align(Alignment.Center)
+                    )
+                }
+                Box(modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(10.dp)
+                ){
+                    Icon(
+                        painter = painterResource(id = R.drawable.queue_add),
+                        contentDescription = "queue_add",
+                        tint = SelectedSongTitle,
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clickable { /*todo*/ },
                     )
                 }
             }
