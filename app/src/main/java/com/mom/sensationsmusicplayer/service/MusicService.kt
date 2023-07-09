@@ -121,13 +121,13 @@ class MusicService : Service() {
     }
 
     fun formatTime(): String {
-        val totalSeconds = (mediaPlayer!!.duration / 1000).toInt()
+        val totalSeconds = ((mediaPlayer?.duration ?: 0) / 1000).toInt()
         val minutes = totalSeconds / 60
         val seconds = totalSeconds % 60
         return String.format("%02d:%02d", minutes, seconds)
     }
 
-    fun formatTimeSlider(duration: Int): String {
+    private fun formatTimeSlider(duration: Int): String {
         val totalSeconds = (duration / 1000).toInt()
         val minutes = totalSeconds / 60
         val seconds = totalSeconds % 60
