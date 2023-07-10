@@ -151,7 +151,7 @@ fun PlayerBar(
                         onClick = {
                             isPlaying = !isPlaying
                             if (isPlaying) {     // == to true because is Boolean? and maybe return null
-                                musicViewModel.stopSong()
+                                musicViewModel.pauseSong()
                             } else {
                                 musicViewModel.playSong()
                             }

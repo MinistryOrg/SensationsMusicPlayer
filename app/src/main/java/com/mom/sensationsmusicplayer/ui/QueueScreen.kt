@@ -110,22 +110,22 @@ fun QueueScreen( navController: NavController, musicViewModel: MusicViewModel) {
                     verticalArrangement = Arrangement.spacedBy(15.dp),
                     content = {
 
-                    // Add 5 items
-                    items(musicViewModel.songQueue) { song ->
-                        Text(
-                            text = song.title,
-                            color = TextSong,
-                            fontSize = 17.sp
-                        )
-                        Divider(
-                            modifier = Modifier
-                                .padding(horizontal = 1.dp, vertical = 5.dp),
-                            color = DividerClr,
-                            thickness = 1.dp
-                        )
-                    }
+                        // Add 5 items
+                        items(musicViewModel.songQueue) { song ->
+                            Text(
+                                text = song.title,
+                                color = TextSong,
+                                fontSize = 17.sp
+                            )
+                            Divider(
+                                modifier = Modifier
+                                    .padding(horizontal = 1.dp, vertical = 5.dp),
+                                color = DividerClr,
+                                thickness = 1.dp
+                            )
+                        }
 
-                })
+                    })
             }
         }
     )

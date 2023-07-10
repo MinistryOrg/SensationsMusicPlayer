@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.IBinder
-import android.util.Log
 import com.mom.sensationsmusicplayer.data.Song
 import java.util.LinkedList
 import java.util.concurrent.TimeUnit
@@ -142,19 +141,18 @@ class MusicService : Service() {
     }
 
     fun formatTime(): String {
-        val totalSeconds = ((mediaPlayer?.duration ?: 0) / 1000).toInt()
+        val totalSeconds = ((mediaPlayer?.duration ?: 0) / 1000)
         val minutes = totalSeconds / 60
         val seconds = totalSeconds % 60
         return String.format("%02d:%02d", minutes, seconds)
     }
 
     private fun formatTimeSlider(duration: Int): String {
-        val totalSeconds = (duration / 1000).toInt()
+        val totalSeconds = (duration / 1000)
         val minutes = totalSeconds / 60
         val seconds = totalSeconds % 60
         return String.format("%02d:%02d", minutes, seconds)
     }
-
 
     override fun onDestroy() {
         mediaPlayer?.release()

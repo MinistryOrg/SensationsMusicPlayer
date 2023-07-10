@@ -24,6 +24,7 @@ class MusicViewModel() : ViewModel(), MusicServiceCallback{
     private var mediaPlayer: MediaPlayer? = null
 
     var isPlaying = false
+    var stopPlaying = false
 
     lateinit var updateSong : MutableStateFlow<Song>
 
@@ -32,22 +33,29 @@ class MusicViewModel() : ViewModel(), MusicServiceCallback{
     }
 
     fun playSong() {
-        musicService.playSong(context = context!!, songList!!,songQueue!!, song!!, this)
+        musicService.playSong(context = context!!, songList!!, songQueue, song!!, this)
         notificationService.playingInTheBackground(context!!)
         isPlaying = true
+        stopPlaying = false
     }
 
     fun nextSong() {
-        updateSong.value = musicService.nextSong(context = context!!, songList!!,songQueue!!, song!!,this)
+        updateSong.value = musicService.nextSong(context = context!!, songList!!,
+            songQueue, song!!,this)
+        isPlaying = true
+        stopPlaying = false
     }
 
     fun prevSong() {
-        updateSong.value = musicService.prevSong(context!!, songList!!,songQueue!!, song!!,this)
+        updateSong.value = musicService.prevSong(context!!, songList!!, songQueue, song!!,this)
+        isPlaying = true
+        stopPlaying = false
     }
 
     fun stopSong() {
-        isPlaying = false
         musicService.stopSong()
+        isPlaying = false
+        stopPlaying = true
     }
 
     fun moveInTrack(position: Float){
@@ -81,10 +89,8 @@ class MusicViewModel() : ViewModel(), MusicServiceCallback{
     }
 
     fun addToQueue(song: Song){
-        songQueue!!.add(song)
+        songQueue.add(song)
     }
-
-
 
 }
 

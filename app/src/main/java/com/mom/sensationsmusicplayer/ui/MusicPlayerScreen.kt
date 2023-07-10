@@ -58,15 +58,14 @@ import com.mom.sensationsmusicplayer.ui.theme.TextWhite
 import com.mom.sensationsmusicplayer.util.MusicViewModelProvider
 import com.mom.sensationsmusicplayer.util.Utill
 import kotlinx.coroutines.delay
-import java.util.concurrent.TimeUnit
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MusicPlayerScreen(navController: NavController ){
+fun MusicPlayerScreen(navController: NavController) {
     Scaffold(
-        modifier =  Modifier
+        modifier = Modifier
             .background(MainBackgroundColor)//To Change the background color
         ,
         topBar = {
@@ -89,18 +88,18 @@ fun MusicPlayerScreen(navController: NavController ){
                                 tint = BackBtnClr,
                                 modifier = Modifier
                                     .size(100.dp),
-                                )
-                            }
+                            )
                         }
-                    )
-                }
-            },
+                    }
+                )
+            }
+        },
         content = { MainBody(navController) }
     )
 }
 
 @Composable
-fun MusicPlIcon(){
+fun MusicPlIcon() {
     Column(
         verticalArrangement = Arrangement.SpaceAround,
         horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier
@@ -119,7 +118,8 @@ fun MusicPlIcon(){
 }
 
 @Composable
-fun MainBody(navController: NavController){
+fun MainBody(navController: NavController) {
+    var isPlaying by remember { mutableStateOf(false) }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -138,37 +138,43 @@ fun MainBody(navController: NavController){
 }
 
 @Composable
-fun AlbumDetails( navController: NavController){
+fun AlbumDetails(navController: NavController) {
     val musicViewModel = MusicViewModelProvider.getMusicViewModel()
     val updateSong = musicViewModel.updateSong.collectAsState()
     musicViewModel.song = updateSong.value
 
     val albumArtBitMap = remember {
-        mutableStateOf<ImageBitmap?>(null) // initialize bit map
+        mutableStateOf<ImageBitmap?>(null)
     }
 
     // When Play or Pause Button is pressed then it changes
-    var isPlaying by remember{ mutableStateOf(false)}
-    val icon = if(isPlaying){
+    var isPlaying by remember { mutableStateOf(false) }
+    var stopClicked by remember { mutableStateOf(false) }
+
+
+    val utill = Utill()
+
+    LaunchedEffect(musicViewModel.song!!.albumCover, musicViewModel.isPlaying) {
+        albumArtBitMap.value =
+            utill.loadAlbumArtBitmap(musicViewModel.song!!.albumCover, musicViewModel.context!!)
+                ?.asImageBitmap()
+        Log.d("Is playing", musicViewModel.isPlaying.toString())
+        //isPlaying = musicViewModel.isPlaying
+    }
+
+    val icon = if (isPlaying) {
         R.drawable.play_circle_icon
-    }else{
+    } else {
         R.drawable.pause_circle_icon
     }
 
-    val utill  = Utill()
-
-    // is going to re-run every time the albumCover value changes
-    LaunchedEffect(musicViewModel.song!!.albumCover) {
-        albumArtBitMap.value = utill.loadAlbumArtBitmap(musicViewModel.song!!.albumCover, musicViewModel.context!!)?.asImageBitmap()
-    }
-
-    //[Box that contains the album cover of the song. If the Album cover exists then it shows normanly. In other case it shows the unknown album cover image]
-    Box(modifier = Modifier
-        .clip(RoundedCornerShape(10.dp))
-    ){
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(10.dp))
+    ) {
         if (albumArtBitMap.value != null) {
             Image(
-                bitmap = albumArtBitMap.value!!, // Replace with your image resource
+                bitmap = albumArtBitMap.value!!,
                 contentDescription = "Album Cover Image",
                 modifier = Modifier
                     .align(Alignment.Center)
@@ -178,7 +184,7 @@ fun AlbumDetails( navController: NavController){
             )
         } else {
             Image(
-                painter = painterResource(id = R.drawable.unknown_song), // Replace with your image resource
+                painter = painterResource(id = R.drawable.unknown_song),
                 contentDescription = "No Album Cover Image",
                 modifier = Modifier
                     .align(Alignment.Center)
@@ -187,41 +193,36 @@ fun AlbumDetails( navController: NavController){
             )
         }
     }
-    //[Box that contains the Title of the song and the artist]
+
     Box(
         modifier = Modifier
             .fillMaxWidth(),
         contentAlignment = Alignment.Center
-
     ) {
-            Text(
-                musicViewModel.song!!.title,
-                color = TextSong
-            )
-            Text(
-                musicViewModel.song!!.artist,
-                color = TextForArtist,
-                modifier = Modifier.padding(top=50.dp)
-            )
+        Text(
+            musicViewModel.song!!.title,
+            color = TextSong
+        )
+        Text(
+            musicViewModel.song!!.artist,
+            color = TextForArtist,
+            modifier = Modifier.padding(top = 50.dp)
+        )
     }
 
-    //[Composable Function tha contains the slider]
-    ProgSliderWithText( musicViewModel )
+    ProgSliderWithText(musicViewModel)
 
-    // [Player buttons]
     Box(
         modifier = Modifier
             .padding(vertical = 20.dp, horizontal = 30.dp)
             .fillMaxWidth(),
         contentAlignment = Alignment.BottomCenter
-    ){
+    ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(20.dp),
             verticalAlignment = Alignment.Bottom
-        ){
-            //[STOP SONG BUTTON]
+        ) {
             Column {
                 Icon(
                     painter = painterResource(id = R.drawable.stop_icon),
@@ -229,10 +230,13 @@ fun AlbumDetails( navController: NavController){
                     tint = TextWhite,
                     modifier = Modifier
                         .size(40.dp)
-                        .clickable { musicViewModel.stopSong() }
+                        .clickable {
+                            musicViewModel.stopSong()
+                            isPlaying = !isPlaying
+                            stopClicked = !stopClicked
+                        }
                 )
             }
-            //[SKIP TO PREV SONG BUTTON]
             Column {
                 Icon(
                     painter = painterResource(id = R.drawable.skip_previous_icon),
@@ -245,7 +249,6 @@ fun AlbumDetails( navController: NavController){
                         }
                 )
             }
-            //[PLAY AND PAUSE SONG BUTTON]
             Column {
                 Icon(
                     painter = painterResource(id = icon),
@@ -256,8 +259,13 @@ fun AlbumDetails( navController: NavController){
                         .clickable(
                             onClick = {
                                 isPlaying = !isPlaying
-                                if (isPlaying) {     // == to true because is Boolean? and maybe return null
-                                    musicViewModel.pauseSong()
+                                if (isPlaying) {
+                                    if (stopClicked) {
+                                        musicViewModel.stopSong()
+                                        stopClicked = !stopClicked
+                                    } else {
+                                        musicViewModel.pauseSong()
+                                    }
                                 } else {
                                     musicViewModel.playSong()
                                 }
@@ -265,7 +273,6 @@ fun AlbumDetails( navController: NavController){
                         )
                 )
             }
-            //[SKIP TO NEXT SONG BUTTON]
             Column {
                 Icon(
                     painter = painterResource(id = R.drawable.skip_next_icon),
@@ -278,7 +285,6 @@ fun AlbumDetails( navController: NavController){
                         }
                 )
             }
-            //[QUEUE SONG BUTTON]
             Column {
                 Icon(
                     painter = painterResource(id = R.drawable.queue_music_icon),
@@ -291,13 +297,13 @@ fun AlbumDetails( navController: NavController){
                         }
                 )
             }
-
         }
     }
 }
+
 @Composable
 fun ProgSliderWithText(
-    musicViewModel: MusicViewModel
+    musicViewModel: MusicViewModel,
 ) {
     val songsList = musicViewModel.songList
 
@@ -306,28 +312,39 @@ fun ProgSliderWithText(
     musicViewModel.song = songsList[index]
 
     val sliderValue = remember {
-        mutableStateOf<Float?>(0f)
+        mutableStateOf(0f)
     }
 
     val test = remember {
-        mutableStateOf<String?>("00:00")
+        mutableStateOf("00:00")
     }
 
-    LaunchedEffect(test.value) {
+    val stopPlaying = remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(test.value, stopPlaying.value) {
         while (true) {
             test.value = musicViewModel.getCurrentPosition("time")
             sliderValue.value = musicViewModel.getCurrentPosition("slider").toFloat()
-            delay(1000) // Update every second
+            stopPlaying.value = musicViewModel.stopPlaying
+            delay(1000)
         }
     }
 
+    if (musicViewModel.stopPlaying) {
+        sliderValue.value = 0f
+        test.value = "00:00"
+    }
+
     Slider(
-        value = sliderValue.value!!,
-        modifier = Modifier.padding(horizontal = 20.dp), onValueChange = { sliderValue_ ->
+        value = sliderValue.value,
+        modifier = Modifier.padding(horizontal = 20.dp),
+        onValueChange = { sliderValue_ ->
             sliderValue.value = sliderValue_
         },
         onValueChangeFinished = {
-            musicViewModel.moveInTrack(sliderValue.value!!)
+            musicViewModel.moveInTrack(sliderValue.value)
         },
         valueRange = 0f..musicViewModel.getDuration(),
         colors = SliderDefaults.colors(
@@ -342,16 +359,16 @@ fun ProgSliderWithText(
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
     ) {
-        Box(modifier = Modifier.align(Alignment.CenterStart)){
+        Box(modifier = Modifier.align(Alignment.CenterStart)) {
             Text(
-                text = test.value.toString(),
+                text = test.value,
                 color = TextWhite,
                 textAlign = TextAlign.Start
             )
         }
 
-        Spacer(modifier = Modifier.width(16.dp)) // απλά το έβαλα για να μπορώ να ξεχωρήσω το duration γιατί διαφορετικά ήταν ένα πάνω στο άλλο
-        Box(modifier = Modifier.align(Alignment.CenterEnd)){
+        Spacer(modifier = Modifier.width(16.dp))
+        Box(modifier = Modifier.align(Alignment.CenterEnd)) {
             Text(
                 musicViewModel.getFormat(),
                 textAlign = TextAlign.End,
@@ -359,10 +376,4 @@ fun ProgSliderWithText(
             )
         }
     }
-}
-
-fun millisToFormattedTime(millis: Int): String {
-    val minutes = TimeUnit.MILLISECONDS.toMinutes(millis.toLong())
-    val seconds = TimeUnit.MILLISECONDS.toSeconds(millis.toLong()) - TimeUnit.MINUTES.toSeconds(minutes)
-    return String.format("%02d:%02d", minutes, seconds)
 }

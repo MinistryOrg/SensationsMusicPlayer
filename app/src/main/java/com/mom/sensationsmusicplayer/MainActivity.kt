@@ -8,9 +8,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.mom.sensationsmusicplayer.ui.HomeScreen
-import com.mom.sensationsmusicplayer.ui.MusicPlayerScreen
-import com.mom.sensationsmusicplayer.ui.Screen
 import com.mom.sensationsmusicplayer.ui.theme.SensationsMusicPlayerTheme
 import com.mom.sensationsmusicplayer.util.MusicViewModelProvider
 import com.mom.sensationsmusicplayer.util.SetUpNavGraph
