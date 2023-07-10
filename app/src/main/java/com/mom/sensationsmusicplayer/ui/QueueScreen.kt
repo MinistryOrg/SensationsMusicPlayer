@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,7 +38,7 @@ import com.mom.sensationsmusicplayer.ui.theme.TextSong
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun QueueScreen( navController: NavController) {
+fun QueueScreen( navController: NavController, musicViewModel: MusicViewModel) {
     Scaffold(
         modifier =  Modifier
             .background(MainBackgroundColor)//To Change the background color
@@ -110,9 +111,9 @@ fun QueueScreen( navController: NavController) {
                     content = {
 
                     // Add 5 items
-                    items(5) { index ->
+                    items(musicViewModel.songQueue) { song ->
                         Text(
-                            text = "Item: $index",
+                            text = song.title,
                             color = TextSong,
                             fontSize = 17.sp
                         )

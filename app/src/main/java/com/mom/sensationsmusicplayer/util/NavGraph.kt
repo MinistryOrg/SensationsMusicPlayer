@@ -32,7 +32,7 @@ fun SetUpNavGraph(
         composable(
             Screen.QueueScreen.route
         ) {
-            QueueScreen(navController)
+            QueueScreen(navController, musicViewModel = musicViewModel)
         }
     }
 }
