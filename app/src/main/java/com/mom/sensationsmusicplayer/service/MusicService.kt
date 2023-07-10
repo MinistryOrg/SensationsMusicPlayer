@@ -12,10 +12,6 @@ import java.util.concurrent.TimeUnit
 
 class MusicService : Service() {
     private var mediaPlayer: MediaPlayer? = null
-    var nextSongVal : Song ?= null
-    private var musicServiceCallback : MusicServiceCallback ?= null
-    private var notificationService: NotificationService? = null
-    private val songQueue  =LinkedList<Song>()
     private var pausedPosition: Int = 0
 
 
@@ -27,7 +23,13 @@ class MusicService : Service() {
         mediaPlayer = MediaPlayer()
     }
 
-    fun playSong(context: Context, songList: List<Song>, song: Song, musicServiceCallback: MusicServiceCallback){
+    fun playSong(
+        context: Context,
+        songList: List<Song>,
+        songQueue: LinkedList<Song>,
+        song: Song,
+        musicServiceCallback: MusicServiceCallback
+    ) {
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer()
         } else {
@@ -45,37 +47,55 @@ class MusicService : Service() {
         mediaPlayer?.start()
 
         mediaPlayer?.setOnCompletionListener {
-            if (songQueue.isEmpty()){
-                musicServiceCallback.onSongCompleted(nextSong(context,songList, song, musicServiceCallback))
-            }
-            else{
-                // poll used to retrieve and remove the next song from the song queue
-                musicServiceCallback.onSongCompleted(nextSong(context,songList,
-                    songQueue.poll()!!, musicServiceCallback))
-            }
+            musicServiceCallback.onSongCompleted(
+                nextSong(
+                    context,
+                    songList,
+                    songQueue,
+                    song,
+                    musicServiceCallback
+                )
+            )
         }
         //seekTo(60000) testing is in milliseconds 60000 is one minute
     }
 
-    fun nextSong(context: Context, songList: List<Song>, song: Song, musicServiceCallback: MusicServiceCallback): Song {
-        val songPos = songList.indexOf(song)
-        val newSongPos = songPos + 1
-        if (songPos != -1 && newSongPos < songList.size) {
-            val nextSong = songList[newSongPos]
-            playSong(context, songList, nextSong, musicServiceCallback)
-            return nextSong
+
+    fun nextSong(
+        context: Context,
+        songList: List<Song>,
+        songQueue: LinkedList<Song>,
+        song: Song,
+        musicServiceCallback: MusicServiceCallback
+    ): Song {
+        if (songQueue.isEmpty()) {
+            val songPos = songList.indexOf(song)
+            val newSongPos = songPos + 1
+            if (songPos != -1 && newSongPos < songList.size) {
+                val nextSong = songList[newSongPos]
+                playSong(context, songList, songQueue, nextSong, musicServiceCallback)
+                return nextSong
+            }
+        } else {
+            val songQ: Song = songQueue.pollFirst()!!
+            playSong(context, songList, songQueue, songQ, musicServiceCallback)
+            return songQ
         }
         return song
     }
 
-    fun prevSong(context: Context, songList: List<Song>, song: Song, musicServiceCallback: MusicServiceCallback): Song {
+    fun prevSong(
+        context: Context,
+        songList: List<Song>,
+        songQueue: LinkedList<Song>,
+        song: Song,
+        musicServiceCallback: MusicServiceCallback
+    ): Song {
         val songPos = songList.indexOf(song)
         val prevSongPos = songPos - 1
         if (prevSongPos >= 0) {
             val prevSong = songList[prevSongPos]
-            Log.d("prev song ", prevSong.title)
-            Log.d("prev song position", prevSongPos.toString())
-            playSong(context, songList, prevSong, musicServiceCallback)
+            playSong(context, songList, songQueue, prevSong, musicServiceCallback)
             return prevSong
         }
         return song
@@ -97,20 +117,21 @@ class MusicService : Service() {
         mediaPlayer?.seekTo(convertMinToMilli(position)) // position is in milliseconds
     }
 
-    private fun convertMinToMilli(position: Float) : Int{
+    private fun convertMinToMilli(position: Float): Int {
         val milli = position * 1000
         return milli.toInt()
     }
 
-    private fun convertMilli(duration: Int) : Float{
+    private fun convertMilli(duration: Int): Float {
         val minutes = TimeUnit.MILLISECONDS.toMinutes(duration.toLong())
-        val seconds = TimeUnit.MILLISECONDS.toSeconds(duration.toLong()) - TimeUnit.MINUTES.toSeconds(minutes)
+        val seconds =
+            TimeUnit.MILLISECONDS.toSeconds(duration.toLong()) - TimeUnit.MINUTES.toSeconds(minutes)
         return (minutes * 60 + seconds).toFloat()
     }
 
     fun getCurrentPosition(action: String): String {
-        when(action){
-            "slider" ->  return convertMilli(mediaPlayer?.currentPosition ?: 0).toString()
+        when (action) {
+            "slider" -> return convertMilli(mediaPlayer?.currentPosition ?: 0).toString()
             "time" -> return formatTimeSlider(mediaPlayer?.currentPosition ?: 0)
         }
         return ""
@@ -134,9 +155,6 @@ class MusicService : Service() {
         return String.format("%02d:%02d", minutes, seconds)
     }
 
-    fun queue(song: Song){
-        songQueue.add(song)
-    }
 
     override fun onDestroy() {
         mediaPlayer?.release()

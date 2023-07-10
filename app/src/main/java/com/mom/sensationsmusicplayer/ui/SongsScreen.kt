@@ -187,12 +187,14 @@ fun SongItem(
                     .padding(10.dp)
                 ){
                     Icon(
-                        painter = painterResource(id = R.drawable.queue_add),
+                        painter = painterResource(id = R.drawable.queue_music_icon),
                         contentDescription = "queue_add",
                         tint = SelectedSongTitle,
                         modifier = Modifier
                             .size(20.dp)
-                            .clickable { /*todo*/ },
+                            .clickable {
+                                musicViewModel.addToQueue(song)
+                            },
                     )
                 }
             }

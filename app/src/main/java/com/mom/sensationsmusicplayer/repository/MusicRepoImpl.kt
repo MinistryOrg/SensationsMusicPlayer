@@ -5,7 +5,8 @@ import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
 import com.mom.sensationsmusicplayer.data.Song
-class MusicRepoImpl : MusicRepo{
+
+class MusicRepoImpl : MusicRepo {
     override fun getSongs(context: Context): List<Song> {
         val songsList = mutableListOf<Song>()
         val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
@@ -38,9 +39,10 @@ class MusicRepoImpl : MusicRepo{
                 val duration = cursor.getLong(durationColumn)
                 val album = cursor.getString(albumColumns)
                 val albumCover = ContentUris.withAppendedId(albumArtUri, albumId)
-                val songUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id)
+                val songUri =
+                    ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, id)
 
-                val song = Song(id, title, artist,album,albumCover.toString(), duration, songUri)
+                val song = Song(id, title, artist, album, albumCover.toString(), duration, songUri)
 
                 songsList.add(song)
             }

@@ -3,16 +3,14 @@ package com.mom.sensationsmusicplayer.ui
 import android.content.Context
 import android.media.MediaPlayer
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.mom.sensationsmusicplayer.data.Song
 import com.mom.sensationsmusicplayer.service.MusicService
 import com.mom.sensationsmusicplayer.service.MusicServiceCallback
 import com.mom.sensationsmusicplayer.service.NotificationService
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import java.util.LinkedList
 
 
 class MusicViewModel() : ViewModel(), MusicServiceCallback{
@@ -20,6 +18,7 @@ class MusicViewModel() : ViewModel(), MusicServiceCallback{
     private val notificationService : NotificationService = NotificationService()
     var song : Song ?= null
     var songList : List  <Song> ?= null
+    var songQueue : LinkedList <Song> = LinkedList()
     var context : Context ?= null
 
     private var mediaPlayer: MediaPlayer? = null
@@ -33,16 +32,17 @@ class MusicViewModel() : ViewModel(), MusicServiceCallback{
     }
 
     fun playSong() {
-        musicService.playSong(context = context!!, songList!!, song!!, this)
+        musicService.playSong(context = context!!, songList!!,songQueue!!, song!!, this)
         notificationService.playingInTheBackground(context!!)
         isPlaying = true
     }
+
     fun nextSong() {
-        updateSong.value = musicService.nextSong(context = context!!, songList!!, song!!,this)
+        updateSong.value = musicService.nextSong(context = context!!, songList!!,songQueue!!, song!!,this)
     }
 
     fun prevSong() {
-        updateSong.value = musicService.prevSong(context!!, songList!!, song!!,this)
+        updateSong.value = musicService.prevSong(context!!, songList!!,songQueue!!, song!!,this)
     }
 
     fun stopSong() {
@@ -78,6 +78,10 @@ class MusicViewModel() : ViewModel(), MusicServiceCallback{
 
     fun getCurrentPosition(action: String): String {
         return musicService.getCurrentPosition(action);
+    }
+
+    fun addToQueue(song: Song){
+        songQueue!!.add(song)
     }
 
 

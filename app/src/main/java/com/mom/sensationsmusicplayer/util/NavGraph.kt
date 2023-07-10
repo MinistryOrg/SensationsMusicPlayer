@@ -18,20 +18,20 @@ fun SetUpNavGraph(
     NavHost(
         navController = navController,
         startDestination = Screen.HomeScreen.route
-    ){
+    ) {
         composable(
             route = Screen.HomeScreen.route
-        ){
+        ) {
             HomeScreen(navController, musicViewModel)
         }
         composable(
             Screen.MusicPlayerScreen.route
-        ){
-            MusicPlayerScreen(navController )
+        ) {
+            MusicPlayerScreen(navController)
         }
         composable(
             Screen.QueueScreen.route
-        ){
+        ) {
             QueueScreen(navController)
         }
     }
