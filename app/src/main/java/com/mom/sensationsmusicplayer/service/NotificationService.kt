@@ -139,7 +139,7 @@ class NotificationService : Service() {
                 PendingIntent.FLAG_IMMUTABLE
             )
         )
-
+        //we tried to change the button when pressed. Not working
         val playPauseAction = if (isPlaying) {
             pauseAction
         } else {

@@ -44,6 +44,7 @@ import com.mom.sensationsmusicplayer.ui.theme.PlayerBarClr
 import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
 import com.mom.sensationsmusicplayer.util.MusicViewModelProvider
+import com.mom.sensationsmusicplayer.util.Screen
 import com.mom.sensationsmusicplayer.util.Utill
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -63,7 +64,7 @@ fun PlayerBar(
     }
 
     musicViewModel.song = updateSong.value
-
+    //Composable Card
     Card(
         modifier = modifier
             .clip(RoundedCornerShape(15.dp))
@@ -77,6 +78,7 @@ fun PlayerBar(
             modifier = Modifier
                 .fillMaxSize()
         ) {
+            //Show Album cover
             Box(
                 modifier = Modifier
                     .padding(start = 8.dp)
@@ -87,6 +89,7 @@ fun PlayerBar(
             ) {
                 SongBox(musicViewModel.song!!, musicViewModel.context!!, navController)
             }
+            //Show Title and artist of song
             Box(
                 modifier = Modifier
                     .padding(start = 70.dp, end = 35.dp)
@@ -125,6 +128,7 @@ fun PlayerBar(
                 )
             }
 
+            //Next Song Button
             Icon( // go to next song
                 painter = painterResource(id = R.drawable.skip_next_icon),
                 contentDescription = "Next Song",
@@ -138,6 +142,8 @@ fun PlayerBar(
                         }
                     )
             )
+
+            //Play Pause Button
             Icon(
                 // play and pause
                 painter = painterResource(id = icon),
@@ -158,6 +164,8 @@ fun PlayerBar(
                         }
                     ),
             )
+
+            //Prev Song button
             Icon( // go to previous song
                 painter = painterResource(id = R.drawable.skip_previous_icon),
                 contentDescription = "Previous song",

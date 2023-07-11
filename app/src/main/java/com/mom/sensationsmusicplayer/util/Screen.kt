@@ -1,4 +1,4 @@
-package com.mom.sensationsmusicplayer.ui
+package com.mom.sensationsmusicplayer.util
 
 sealed class Screen(val route: String) {
     object HomeScreen : Screen("home_screen")

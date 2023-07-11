@@ -81,9 +81,6 @@ class MusicViewModel() : ViewModel(), MusicServiceCallback{
         return musicService.formatTime()
     }
 
-    private val _currentPositionFlow = MutableStateFlow(0)
-    val currentPositionFlow: StateFlow<Int> = _currentPositionFlow.asStateFlow()
-
     fun getCurrentPosition(action: String): String {
         return musicService.getCurrentPosition(action);
     }

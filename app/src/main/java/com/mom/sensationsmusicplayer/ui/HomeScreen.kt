@@ -24,7 +24,7 @@ import com.mom.sensationsmusicplayer.ui.theme.MainBackgroundColor
 )
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navController : NavController, musicViewModel : MusicViewModel){
+fun HomeScreen(navController : NavController){
     //[START-TOP BAR]
             Scaffold(
                 topBar = {

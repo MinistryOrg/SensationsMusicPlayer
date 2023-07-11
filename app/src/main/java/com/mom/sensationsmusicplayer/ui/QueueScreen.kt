@@ -82,6 +82,7 @@ fun QueueScreen( navController: NavController, musicViewModel: MusicViewModel) {
                     )
                     .padding(top = 75.dp)
             ) {
+                //title
                 Box(
                     modifier = Modifier
                         .fillMaxWidth(),
@@ -110,7 +111,7 @@ fun QueueScreen( navController: NavController, musicViewModel: MusicViewModel) {
                     verticalArrangement = Arrangement.spacedBy(15.dp),
                     content = {
 
-                        // Add 5 items
+                        //add song to queue
                         items(musicViewModel.songQueue) { song ->
                             Text(
                                 text = song.title,

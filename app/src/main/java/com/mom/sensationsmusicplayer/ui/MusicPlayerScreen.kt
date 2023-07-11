@@ -1,7 +1,6 @@
 package com.mom.sensationsmusicplayer.ui
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -56,6 +55,7 @@ import com.mom.sensationsmusicplayer.ui.theme.TextForArtist
 import com.mom.sensationsmusicplayer.ui.theme.TextSong
 import com.mom.sensationsmusicplayer.ui.theme.TextWhite
 import com.mom.sensationsmusicplayer.util.MusicViewModelProvider
+import com.mom.sensationsmusicplayer.util.Screen
 import com.mom.sensationsmusicplayer.util.Utill
 import kotlinx.coroutines.delay
 
@@ -64,6 +64,7 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MusicPlayerScreen(navController: NavController) {
+    //[START-TOP BAR]
     Scaffold(
         modifier = Modifier
             .background(MainBackgroundColor)//To Change the background color
@@ -96,6 +97,7 @@ fun MusicPlayerScreen(navController: NavController) {
         },
         content = { MainBody(navController) }
     )
+    //[END-TOP BAR]
 }
 
 @Composable
@@ -119,8 +121,7 @@ fun MusicPlIcon() {
 
 @Composable
 fun MainBody(navController: NavController) {
-    var isPlaying by remember { mutableStateOf(false) }
-    Column(
+    Column( //column to center the composable items
         modifier = Modifier
             .fillMaxSize()
             .background(
@@ -133,12 +134,12 @@ fun MainBody(navController: NavController) {
             .padding(top = 140.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        AlbumDetails(navController)
+        SongDetails(navController) //call composable function that shows the album cover, song title, artist, player controls and slider.
     }
 }
 
 @Composable
-fun AlbumDetails(navController: NavController) {
+fun SongDetails(navController: NavController) {
     val musicViewModel = MusicViewModelProvider.getMusicViewModel()
     val updateSong = musicViewModel.updateSong.collectAsState()
     musicViewModel.song = updateSong.value
@@ -158,20 +159,20 @@ fun AlbumDetails(navController: NavController) {
         albumArtBitMap.value =
             utill.loadAlbumArtBitmap(musicViewModel.song!!.albumCover, musicViewModel.context!!)
                 ?.asImageBitmap()
-        Log.d("Is playing", musicViewModel.isPlaying.toString())
-        //isPlaying = musicViewModel.isPlaying
     }
 
+    //when icon is pressed change to the right icon
     val icon = if (isPlaying) {
         R.drawable.play_circle_icon
     } else {
         R.drawable.pause_circle_icon
     }
-
+    //Album Cover
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(10.dp))
     ) {
+        //if album cover exists show it else show a default image
         if (albumArtBitMap.value != null) {
             Image(
                 bitmap = albumArtBitMap.value!!,
@@ -194,6 +195,7 @@ fun AlbumDetails(navController: NavController) {
         }
     }
 
+    //Song Name, Artist
     Box(
         modifier = Modifier
             .fillMaxWidth(),
@@ -210,8 +212,10 @@ fun AlbumDetails(navController: NavController) {
         )
     }
 
+    //Call function with slider
     ProgSliderWithText(musicViewModel)
 
+    //Player Controlls
     Box(
         modifier = Modifier
             .padding(vertical = 20.dp, horizontal = 30.dp)
@@ -223,6 +227,7 @@ fun AlbumDetails(navController: NavController) {
             horizontalArrangement = Arrangement.spacedBy(20.dp),
             verticalAlignment = Alignment.Bottom
         ) {
+            //Stop Button
             Column {
                 Icon(
                     painter = painterResource(id = R.drawable.stop_icon),
@@ -237,6 +242,7 @@ fun AlbumDetails(navController: NavController) {
                         }
                 )
             }
+            //Prev Song Button
             Column {
                 Icon(
                     painter = painterResource(id = R.drawable.skip_previous_icon),
@@ -249,6 +255,7 @@ fun AlbumDetails(navController: NavController) {
                         }
                 )
             }
+            //Play & Pause Button
             Column {
                 Icon(
                     painter = painterResource(id = icon),
@@ -273,6 +280,7 @@ fun AlbumDetails(navController: NavController) {
                         )
                 )
             }
+            //Next Song Button
             Column {
                 Icon(
                     painter = painterResource(id = R.drawable.skip_next_icon),
@@ -285,6 +293,7 @@ fun AlbumDetails(navController: NavController) {
                         }
                 )
             }
+            //Queue Button
             Column {
                 Icon(
                     painter = painterResource(id = R.drawable.queue_music_icon),
@@ -315,7 +324,7 @@ fun ProgSliderWithText(
         mutableStateOf(0f)
     }
 
-    val test = remember {
+    val timeValue = remember {
         mutableStateOf("00:00")
     }
 
@@ -323,9 +332,9 @@ fun ProgSliderWithText(
         mutableStateOf(false)
     }
 
-    LaunchedEffect(test.value, stopPlaying.value) {
+    LaunchedEffect(timeValue.value, stopPlaying.value) {
         while (true) {
-            test.value = musicViewModel.getCurrentPosition("time")
+            timeValue.value = musicViewModel.getCurrentPosition("time")
             sliderValue.value = musicViewModel.getCurrentPosition("slider").toFloat()
             stopPlaying.value = musicViewModel.stopPlaying
             delay(1000)
@@ -334,9 +343,10 @@ fun ProgSliderWithText(
 
     if (musicViewModel.stopPlaying) {
         sliderValue.value = 0f
-        test.value = "00:00"
+        timeValue.value = "00:00"
     }
 
+    //Composable slider
     Slider(
         value = sliderValue.value,
         modifier = Modifier.padding(horizontal = 20.dp),
@@ -354,6 +364,7 @@ fun ProgSliderWithText(
         )
     )
 
+    //Show times
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -361,7 +372,7 @@ fun ProgSliderWithText(
     ) {
         Box(modifier = Modifier.align(Alignment.CenterStart)) {
             Text(
-                text = test.value,
+                text = timeValue.value,
                 color = TextWhite,
                 textAlign = TextAlign.Start
             )

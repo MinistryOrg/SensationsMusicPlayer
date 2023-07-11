@@ -52,7 +52,7 @@ import com.mom.sensationsmusicplayer.ui.theme.TextWhite
 import com.mom.sensationsmusicplayer.util.MusicViewModelProvider
 import com.mom.sensationsmusicplayer.util.Utill
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "InvalidColorHexValue")
 @Composable
 fun SongScreen(navController: NavController) {
     val musicViewModel = MusicViewModelProvider.getMusicViewModel()
@@ -83,7 +83,7 @@ fun SongScreen(navController: NavController) {
                     .padding(bottom = 20.dp, start = 7.dp, end = 7.dp),
                 navController = navController
             )
-            //musicViewModel.song = selectedSongState.value
+
         }, //[END OF BOTTOM BAR (PLAYER BAR)]
         content = {
             //[START OF MAIN CONTENT OF THE SCREEN (SONG SCREEN)]
@@ -140,7 +140,7 @@ fun SongItem(
 
     val utill = Utill()
 
-    //todo Prospatheia mhpws otan clickareis to tragoudi na ginetai kokkinos o titlos kai otan clickareis se allo tragoudi na epanerxetai sto aspro
+
     val isSelected = remember { mutableStateOf(false) }
     // is going to re-run every time the albumCover value changes
     LaunchedEffect(song.albumCover) {

@@ -8,7 +8,6 @@ import com.mom.sensationsmusicplayer.ui.HomeScreen
 import com.mom.sensationsmusicplayer.ui.MusicPlayerScreen
 import com.mom.sensationsmusicplayer.ui.MusicViewModel
 import com.mom.sensationsmusicplayer.ui.QueueScreen
-import com.mom.sensationsmusicplayer.ui.Screen
 
 @Composable
 fun SetUpNavGraph(
@@ -22,7 +21,7 @@ fun SetUpNavGraph(
         composable(
             route = Screen.HomeScreen.route
         ) {
-            HomeScreen(navController, musicViewModel)
+            HomeScreen(navController)
         }
         composable(
             Screen.MusicPlayerScreen.route

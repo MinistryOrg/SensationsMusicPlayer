@@ -11,8 +11,7 @@ val TextForArtist = Color(0xFFB8B7B7)
 val SelectedSongTitle = Color(0xFFEF3036)
 val SelectedSongArtist = Color(0xFFA3262B)
 
-//Title and divider colors
-val TitleClr = Color(0xFFC73237)
+//Divider colors
 val DividerClr = Color(0xFF8C95A2)
 
 
