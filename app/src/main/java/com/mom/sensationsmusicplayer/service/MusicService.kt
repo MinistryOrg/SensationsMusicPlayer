@@ -13,7 +13,6 @@ class MusicService : Service() {
     private var mediaPlayer: MediaPlayer? = null
     private var pausedPosition: Int = 0
 
-
     override fun onBind(p0: Intent?): IBinder? {
         TODO("Not yet implemented")
     }
@@ -34,20 +33,20 @@ class MusicService : Service() {
         } else {
             mediaPlayer?.reset()
         }
-
+        // set the data source for the media player
         mediaPlayer?.setDataSource(context, song.songUri)
         mediaPlayer?.prepare()
-
+        // to resume the song from where it left if the user pause it
         if (pausedPosition > 0) {
-            mediaPlayer?.seekTo(pausedPosition)
-            pausedPosition = 0
+            mediaPlayer?.seekTo(pausedPosition) // goes to the previous position
+            pausedPosition = 0 // reset the position to zero so if the user go to the next song to start from the beg
         }
 
-        mediaPlayer?.start()
-
+        mediaPlayer?.start() /// start playing the song
+        // when a song finish
         mediaPlayer?.setOnCompletionListener {
             musicServiceCallback.onSongCompleted(
-                nextSong(
+                nextSong( // go to the next song when the curr song is finish
                     context,
                     songList,
                     songQueue,
@@ -56,10 +55,10 @@ class MusicService : Service() {
                 )
             )
         }
-        //seekTo(60000) testing is in milliseconds 60000 is one minute
+
     }
 
-
+    // play the next song in the queue or the next song in the song list
     fun nextSong(
         context: Context,
         songList: List<Song>,
@@ -67,17 +66,17 @@ class MusicService : Service() {
         song: Song,
         musicServiceCallback: MusicServiceCallback
     ): Song {
-        if (songQueue.isEmpty()) {
-            val songPos = songList.indexOf(song)
-            val newSongPos = songPos + 1
-            if (songPos != -1 && newSongPos < songList.size) {
-                val nextSong = songList[newSongPos]
-                playSong(context, songList, songQueue, nextSong, musicServiceCallback)
+        if (songQueue.isEmpty()) { // if the song queue is empty, play the next song in the list
+            val songPos = songList.indexOf(song) // find the position of the current song
+            val newSongPos = songPos + 1 // set a new position for the next song
+            if (songPos != -1 && newSongPos < songList.size) { // check if get out of bounds
+                val nextSong = songList[newSongPos] // set the next song
+                playSong(context, songList, songQueue, nextSong, musicServiceCallback) // play the next song
                 return nextSong
             }
-        } else {
-            val songQ: Song = songQueue.pollFirst()!!
-            playSong(context, songList, songQueue, songQ, musicServiceCallback)
+        } else { // play the song that is in the queue
+            val songQ: Song = songQueue.pollFirst()!! // remove from the queue the first song that is added
+            playSong(context, songList, songQueue, songQ, musicServiceCallback) // play the first song in the queue
             return songQ
         }
         return song
@@ -101,7 +100,7 @@ class MusicService : Service() {
     }
 
     fun pauseSong() {
-        if (mediaPlayer?.isPlaying == true) {
+        if (mediaPlayer?.isPlaying == true) { // check if the song is playing then pause it
             mediaPlayer?.pause()
             pausedPosition = mediaPlayer?.currentPosition ?: 0
         }

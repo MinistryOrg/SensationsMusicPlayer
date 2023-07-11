@@ -26,7 +26,8 @@ import kotlinx.coroutines.flow.onEach
 class NotificationService : Service() {
     fun playingInTheBackground(context: Context) {
         val musicViewModel = MusicViewModelProvider.getMusicViewModel()
-        musicViewModel.updateSong.onEach { _ -> // to update song every time the updateSong in ViewModel is changed
+        // get the updateSong from the music view mode
+        musicViewModel.updateSong.onEach {   // to update song every time the updateSong in ViewModel is changed
             val notification = createNotification(context)
             val notificationManager =
                 ContextCompat.getSystemService(context, NotificationManager::class.java)
@@ -42,7 +43,7 @@ class NotificationService : Service() {
         context: Context,
     ): Notification {
         val musicViewModel = MusicViewModelProvider.getMusicViewModel()
-
+        // Create a notification intent to open the MainActivity
         val notificationIntent = Intent(context, MainActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             context,
@@ -50,9 +51,9 @@ class NotificationService : Service() {
             notificationIntent,
             PendingIntent.FLAG_IMMUTABLE
         )
-
+        // Create a media session for controlling playback
         val mediaSession = MediaSessionCompat(context, "tag")
-        var song = musicViewModel.updateSong.value
+        val song = musicViewModel.updateSong.value
 
         // Set the metadata for the media session
         val metadataBuilder = MediaMetadataCompat.Builder()
@@ -80,7 +81,7 @@ class NotificationService : Service() {
         //  must have the same names.
         val channelId = "MusicPlayerBar"
         val channelName = "MusicPlayerBar"
-
+        // Create a notification channel
         val importance = NotificationManager.IMPORTANCE_LOW
         val channel = NotificationChannel(channelId, channelName, importance)
         ContextCompat.getSystemService(context, NotificationManager::class.java)
@@ -88,7 +89,7 @@ class NotificationService : Service() {
                 channel
             )
 
-        val isPlaying = musicViewModel.isPlaying// Add this line to get the playback state
+        val isPlaying = musicViewModel.isPlaying//  get the playback state
 
         val playAction = NotificationCompat.Action(
             R.drawable.play_arrow_icon,
@@ -144,7 +145,7 @@ class NotificationService : Service() {
         } else {
             playAction
         }
-
+        // Create a media style notification with actions
         val mediaStyle = androidx.media.app.NotificationCompat.MediaStyle()
             .setShowActionsInCompactView(0, 1, 2)
             .setMediaSession(mediaSession.sessionToken)

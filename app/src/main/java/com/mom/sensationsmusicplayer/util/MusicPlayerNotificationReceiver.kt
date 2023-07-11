@@ -3,7 +3,6 @@ package com.mom.sensationsmusicplayer.util
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 
 class MusicPlayerNotificationReceiver : BroadcastReceiver() {
     private val musicViewModel = MusicViewModelProvider.getMusicViewModel()
@@ -17,15 +16,13 @@ class MusicPlayerNotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         when (intent.action) {
-            ACTION_NEXT -> musicViewModel.nextSong()
-            ACTION_PREV -> musicViewModel.prevSong()
+            ACTION_NEXT -> musicViewModel.nextSong() // trigger the next song action
+            ACTION_PREV -> musicViewModel.prevSong() // trigger the prev song action
             ACTION_PAUSE -> {
                 if (musicViewModel.isPlaying) {
-                    Log.d("Where 1", "1")
-                    musicViewModel.pauseSong()
+                    musicViewModel.pauseSong() // trigger the pause
                 } else {
-                    Log.d("Where 1", "2")
-                    musicViewModel.playSong()
+                    musicViewModel.playSong() // trigger the play
                 }
             }
         }
