@@ -17,4 +17,4 @@ Functionalities of the Music Player App:
 
 # App Preview
 
-![Group 163](https://github.com/MinistryOrg/SensationsMusicPlayer/assets/29844061/eac6a04f-fc19-43bd-ba3f-3eeea05c311b)
+![Group 163](https://github.com/MinistryOrg/SensationsMusicPlayer/assets/29844061/89b318f7-41b1-4fc3-8690-7f4efbc3874d)
